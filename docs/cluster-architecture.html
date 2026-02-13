@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wessley.ai — Cluster Architecture & Data Flow</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0b0f1a; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  
+  h1 { text-align: center; padding: 28px 0 4px; font-size: 26px; color: #fff; letter-spacing: -0.5px; }
+  .subtitle { text-align: center; color: #6b7280; font-size: 13px; margin-bottom: 24px; }
+  
+  svg { display: block; margin: 0 auto; }
+  
+  /* Tooltip */
+  .tip { display: none; position: fixed; background: #1e2433; border: 1px solid #334155; border-radius: 10px; padding: 14px 16px; max-width: 320px; z-index: 999; box-shadow: 0 12px 40px rgba(0,0,0,0.7); font-size: 12px; line-height: 1.6; color: #cbd5e1; pointer-events: none; }
+  .tip.show { display: block; }
+  .tip b { color: #fff; }
+  
+  /* Legend */
+  .legend { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; padding: 16px; }
+  .legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #94a3b8; }
+  .legend i { width: 28px; height: 3px; border-radius: 2px; display: inline-block; }
+  
+  .footer { text-align: center; color: #475569; font-size: 11px; padding: 12px; }
+</style>
+</head>
+<body>
+
+<h1>⚡ Wessley.ai — Cluster Architecture</h1>
+<p class="subtitle">Service Topology · Data Flow · K8s Target State</p>
+
+<div class="legend">
+  <span><i style="background:#60a5fa"></i> Sync (REST/gRPC)</span>
+  <span><i style="background:#a78bfa"></i> Async (NATS JetStream)</span>
+  <span><i style="background:#f97316"></i> ML Pipeline</span>
+  <span><i style="background:#4ade80"></i> Data Read/Write</span>
+  <span><i style="background:#f43f5e; opacity:0.5"></i> External / CDN</span>
+</div>
+
+<svg viewBox="0 0 1200 920" width="100%" style="max-width:1200px">
+  <defs>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#60a5fa"/></marker>
+    <marker id="arr-purple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#a78bfa"/></marker>
+    <marker id="arr-orange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f97316"/></marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#4ade80"/></marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f43f5e"/></marker>
+    
+    <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    
+    <!-- Box styles -->
+    <linearGradient id="g-ext" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="g-gw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e3a5f"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="g-svc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2744"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="g-ml" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d1b4e"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="g-data" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a3a2a"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="g-infra" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1f2937"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LAYER 0: EXTERNAL / USER                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="600" y="28" text-anchor="middle" fill="#475569" font-size="10" letter-spacing="3">EXTERNAL</text>
+  
+  <!-- User / Browser -->
+  <rect x="80" y="40" width="150" height="56" rx="10" fill="url(#g-ext)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>User Browser</b><br>Next.js 15 SPA on Vercel. Auth via Supabase JWT. Communicates with API Gateway over HTTPS."/>
+  <text x="155" y="64" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🌐 Browser / PWA</text>
+  <text x="155" y="80" text-anchor="middle" fill="#94a3b8" font-size="10">Next.js 15 · Vercel</text>
+  
+  <!-- Mobile -->
+  <rect x="280" y="40" width="140" height="56" rx="10" fill="url(#g-ext)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>Mobile (Future)</b><br>React Native or Flutter. Same API gateway."/>
+  <text x="350" y="64" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">📱 Mobile (Future)</text>
+  <text x="350" y="80" text-anchor="middle" fill="#64748b" font-size="10">React Native</text>
+  
+  <!-- External Data Sources -->
+  <rect x="780" y="40" width="340" height="56" rx="10" fill="url(#g-ext)" stroke="#f43f5e" stroke-width="0.5" stroke-opacity="0.4" class="node" data-tip="<b>External Sources</b><br>Reddit, YouTube, forums, iFixit, NHTSA, parts catalogs. Scraped by Crawler service on schedule."/>
+  <text x="950" y="64" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🌍 External Sources</text>
+  <text x="950" y="80" text-anchor="middle" fill="#94a3b8" font-size="10">Reddit · YouTube · iFixit · NHTSA · Forums · Parts DBs</text>
+  
+  <!-- CDN -->
+  <rect x="480" y="40" width="140" height="56" rx="10" fill="url(#g-ext)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>CDN (CloudFront / R2)</b><br>Serves 3D model GLB files, thumbnails, static assets. Populated by 3D Model Service."/>
+  <text x="550" y="64" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">☁️ CDN</text>
+  <text x="550" y="80" text-anchor="middle" fill="#94a3b8" font-size="10">GLB models · Assets</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- ARROWS: External → Gateway                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <line x1="155" y1="96" x2="155" y2="150" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arr-blue)" opacity="0.7"/>
+  <text x="168" y="128" fill="#60a5fa" font-size="9" opacity="0.8">HTTPS</text>
+  
+  <line x1="350" y1="96" x2="270" y2="150" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arr-blue)" opacity="0.7"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LAYER 1: INGRESS / API GATEWAY (K8s)        -->
+  <!-- ═══════════════════════════════════════════ -->
+  
+  <!-- K8s cluster boundary -->
+  <rect x="30" y="140" width="720" height="740" rx="16" fill="none" stroke="#1e3a5f" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+  <text x="50" y="162" fill="#3b82f6" font-size="10" letter-spacing="2" opacity="0.7">K8S CLUSTER (GKE / EKS)</text>
+  
+  <!-- API Gateway -->
+  <rect x="60" y="175" width="320" height="64" rx="10" fill="url(#g-gw)" stroke="#3b82f6" stroke-width="1" class="node" data-tip="<b>API Gateway (Go)</b><br>Single entry point. Supabase JWT validation, rate limiting (Redis-backed), request routing, gRPC-to-REST transcoding. Handles WebSocket upgrade for chat + 3D editing."/>
+  <text x="220" y="200" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">🚪 API Gateway</text>
+  <text x="220" y="218" text-anchor="middle" fill="#60a5fa" font-size="10">Go · JWT Auth · Rate Limit · gRPC Transcoding</text>
+  
+  <!-- WebSocket Hub -->
+  <rect x="420" y="175" width="180" height="64" rx="10" fill="url(#g-gw)" stroke="#3b82f6" stroke-width="1" class="node" data-tip="<b>WebSocket Hub</b><br>Part of API Gateway. Manages persistent connections for real-time chat and 3D model editing sessions. Broadcasts model edits to viewers."/>
+  <text x="510" y="200" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔌 WebSocket Hub</text>
+  <text x="510" y="218" text-anchor="middle" fill="#60a5fa" font-size="10">Chat · 3D Edit Sync</text>
+  
+  <!-- Arrows from gateway down -->
+  <line x1="150" y1="239" x2="150" y2="290" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arr-blue)" opacity="0.6"/>
+  <line x1="290" y1="239" x2="370" y2="290" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arr-blue)" opacity="0.6"/>
+  <line x1="220" y1="239" x2="560" y2="290" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arr-blue)" opacity="0.6"/>
+  <text x="132" y="268" fill="#60a5fa" font-size="8" opacity="0.7">gRPC</text>
+  <text x="310" y="268" fill="#60a5fa" font-size="8" opacity="0.7">gRPC</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- NATS BUS (horizontal bar)                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="60" y="270" width="670" height="24" rx="6" fill="#1a1033" stroke="#a78bfa" stroke-width="1" opacity="0.8"/>
+  <text x="395" y="286" text-anchor="middle" fill="#c4b5fd" font-size="11" font-weight="600" letter-spacing="4">NATS JETSTREAM — EVENT BUS</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LAYER 2: CORE SERVICES                      -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="50" y="318" fill="#475569" font-size="10" letter-spacing="2">CORE SERVICES</text>
+  
+  <!-- RAG / Chat Service -->
+  <rect x="60" y="330" width="195" height="100" rx="10" fill="url(#g-svc)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>RAG Chat Service (Go + Python worker)</b><br>1. Receives user query via gRPC<br>2. Embeds query → Qdrant vector search<br>3. Retrieves top-k chunks + Neo4j context<br>4. Builds prompt with citations<br>5. Streams LLM response back<br>6. Publishes feedback events to NATS"/>
+  <text x="157" y="355" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🧠 RAG Chat</text>
+  <text x="157" y="372" text-anchor="middle" fill="#94a3b8" font-size="10">Go orchestrator</text>
+  <text x="157" y="387" text-anchor="middle" fill="#94a3b8" font-size="9">+ Python embedding worker</text>
+  <text x="157" y="404" text-anchor="middle" fill="#64748b" font-size="9">Query→Embed→Retrieve→LLM→Stream</text>
+  <text x="157" y="420" text-anchor="middle" fill="#a78bfa" font-size="8">📤 chat.query.completed</text>
+
+  <!-- 3D Model Service -->
+  <rect x="275" y="330" width="195" height="100" rx="10" fill="url(#g-svc)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>3D Model Service (Go)</b><br>Generates GLB models from vehicle specs. Supports runtime editing via WebSocket: user chats or drags → edits applied → broadcast to viewers. Edits published as training signals via NATS."/>
+  <text x="372" y="355" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🧊 3D Model Gen</text>
+  <text x="372" y="372" text-anchor="middle" fill="#94a3b8" font-size="10">Go · GLB generation</text>
+  <text x="372" y="387" text-anchor="middle" fill="#94a3b8" font-size="9">Runtime editing (chat + drag)</text>
+  <text x="372" y="404" text-anchor="middle" fill="#64748b" font-size="9">70% auto-gen → user refines</text>
+  <text x="372" y="420" text-anchor="middle" fill="#a78bfa" font-size="8">📤 model.edited · model.generated</text>
+
+  <!-- Knowledge Scraper -->
+  <rect x="490" y="330" width="195" height="100" rx="10" fill="url(#g-svc)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>Knowledge Scraper (Go)</b><br>Scheduled scraping of external sources. Each source is a plugin (Reddit, YouTube, iFixit, forums, NHTSA, parts). Deduplicates, normalizes, publishes raw docs to NATS for ingestion."/>
+  <text x="587" y="355" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🕷️ Scraper</text>
+  <text x="587" y="372" text-anchor="middle" fill="#94a3b8" font-size="10">Go · Plugin architecture</text>
+  <text x="587" y="387" text-anchor="middle" fill="#94a3b8" font-size="9">Reddit · YT · iFixit · NHTSA</text>
+  <text x="587" y="404" text-anchor="middle" fill="#64748b" font-size="9">Scheduled + on-demand crawl</text>
+  <text x="587" y="420" text-anchor="middle" fill="#a78bfa" font-size="8">📤 scraper.doc.raw</text>
+
+  <!-- Arrow: External sources → Scraper -->
+  <line x1="950" y1="96" x2="650" y2="330" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arr-red)" opacity="0.4" stroke-dasharray="4,3"/>
+  <text x="820" y="200" fill="#f43f5e" font-size="9" opacity="0.6" transform="rotate(-30 820 200)">HTTP scrape</text>
+
+  <!-- Arrow: CDN ← 3D service -->
+  <line x1="420" y1="330" x2="550" y2="96" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arr-red)" opacity="0.4" stroke-dasharray="4,3"/>
+  <text x="510" y="210" fill="#f43f5e" font-size="9" opacity="0.6">Upload GLB</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LAYER 3: PROCESSING SERVICES                -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="50" y="465" fill="#475569" font-size="10" letter-spacing="2">PROCESSING & ML</text>
+  
+  <!-- Ingestion Service -->
+  <rect x="60" y="478" width="185" height="90" rx="10" fill="url(#g-svc)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>Ingestion Service (Go + Python)</b><br>Consumes scraper.doc.raw from NATS. Chunks documents, deduplicates, extracts metadata. Sends chunks to embedding worker. Writes vectors to Qdrant, metadata to Supabase."/>
+  <text x="152" y="502" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">📥 Ingestion</text>
+  <text x="152" y="518" text-anchor="middle" fill="#94a3b8" font-size="10">Go + Python worker</text>
+  <text x="152" y="533" text-anchor="middle" fill="#94a3b8" font-size="9">Chunk → Embed → Store</text>
+  <text x="152" y="550" text-anchor="middle" fill="#a78bfa" font-size="8">📥 scraper.doc.raw</text>
+  <text x="152" y="560" text-anchor="middle" fill="#4ade80" font-size="8">→ Qdrant + Supabase</text>
+
+  <!-- Graph Service -->
+  <rect x="265" y="478" width="185" height="90" rx="10" fill="url(#g-svc)" stroke="#334155" stroke-width="1" class="node" data-tip="<b>Graph Service (Go)</b><br>Manages Neo4j knowledge graph. Vehicle → System → Component → Wire relationships. Consumes ingestion events to build graph edges. Provides graph traversal API for RAG context enrichment."/>
+  <text x="357" y="502" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔗 Graph Service</text>
+  <text x="357" y="518" text-anchor="middle" fill="#94a3b8" font-size="10">Go · Neo4j driver</text>
+  <text x="357" y="533" text-anchor="middle" fill="#94a3b8" font-size="9">Vehicle→System→Component→Wire</text>
+  <text x="357" y="550" text-anchor="middle" fill="#a78bfa" font-size="8">📥 ingestion.complete</text>
+  <text x="357" y="560" text-anchor="middle" fill="#4ade80" font-size="8">→ Neo4j</text>
+
+  <!-- Semantic Service -->
+  <rect x="470" y="478" width="185" height="90" rx="10" fill="url(#g-ml)" stroke="#7c3aed" stroke-width="0.5" class="node" data-tip="<b>Semantic Service (Go + Python)</b><br>Embedding generation (sentence-transformers). Used by Ingestion for document vectors and by RAG Chat for query vectors. Runs as gRPC service with Python ML worker."/>
+  <text x="562" y="502" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔮 Semantic</text>
+  <text x="562" y="518" text-anchor="middle" fill="#c4b5fd" font-size="10">Go + Python (transformers)</text>
+  <text x="562" y="533" text-anchor="middle" fill="#94a3b8" font-size="9">Embedding generation</text>
+  <text x="562" y="550" text-anchor="middle" fill="#60a5fa" font-size="8">gRPC: Embed(text) → vec[]</text>
+
+  <!-- Arrows: services → NATS (up) and NATS → services (down) -->
+  <!-- Scraper publishes to NATS -->
+  <path d="M587,430 L587,294" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arr-purple)" opacity="0.5" fill="none"/>
+  <!-- NATS → Ingestion -->
+  <path d="M200,294 L152,478" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arr-purple)" opacity="0.5" fill="none"/>
+  <!-- Ingestion → NATS (publishes completion) -->
+  <path d="M120,478 L120,294" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arr-purple)" opacity="0.3" fill="none"/>
+  <!-- NATS → Graph (consumes ingestion events) -->
+  <path d="M340,294 L357,478" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arr-purple)" opacity="0.5" fill="none"/>
+  
+  <!-- RAG → Semantic (gRPC) -->
+  <line x1="255" y1="380" x2="470" y2="510" stroke="#60a5fa" stroke-width="1" marker-end="url(#arr-blue)" opacity="0.4" stroke-dasharray="3,2"/>
+  <text x="350" y="460" fill="#60a5fa" font-size="8" opacity="0.6">embed query</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LAYER 4: ML / NETLISTIFY                    -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="50" y="600" fill="#475569" font-size="10" letter-spacing="2">ML PIPELINE</text>
+  
+  <!-- Netlistify -->
+  <rect x="60" y="612" width="260" height="90" rx="10" fill="url(#g-ml)" stroke="#7c3aed" stroke-width="1" class="node" data-tip="<b>Netlistify ML Pipeline (Python)</b><br>Wiring diagram understanding. Phases:<br>1. Symbol library collection<br>2. Synthetic schematic generation<br>3. LLM bulk labeling (GPT-4V)<br>4. YOLO fine-tuning for component detection<br>5. RAG cross-validation feedback loop<br><br>8 weeks, $150-400 budget"/>
+  <text x="190" y="636" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔬 Netlistify</text>
+  <text x="190" y="653" text-anchor="middle" fill="#c4b5fd" font-size="10">Python · YOLO · GPT-4V labeling</text>
+  <text x="190" y="668" text-anchor="middle" fill="#94a3b8" font-size="9">Symbol detect → Wire trace → Netlist</text>
+  <text x="190" y="685" text-anchor="middle" fill="#f97316" font-size="8">Feeds from RAG data · Edits = training</text>
+  <text x="190" y="696" text-anchor="middle" fill="#64748b" font-size="8">8wk · $150-400</text>
+  
+  <!-- Learning Service -->
+  <rect x="340" y="612" width="195" height="90" rx="10" fill="url(#g-ml)" stroke="#7c3aed" stroke-width="0.5" class="node" data-tip="<b>Learning Service (Go + Python)</b><br>Consumes model.edited and chat.feedback events from NATS. Aggregates quality signals, retrains embeddings, updates Netlistify training sets. The flywheel: user edits → better models."/>
+  <text x="437" y="636" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔄 Learning</text>
+  <text x="437" y="653" text-anchor="middle" fill="#c4b5fd" font-size="10">Go + Python</text>
+  <text x="437" y="668" text-anchor="middle" fill="#94a3b8" font-size="9">Feedback → Retrain → Improve</text>
+  <text x="437" y="685" text-anchor="middle" fill="#a78bfa" font-size="8">📥 model.edited · chat.feedback</text>
+
+  <!-- Arrows: NATS → Learning -->
+  <path d="M430,294 L437,612" stroke="#a78bfa" stroke-width="1" marker-end="url(#arr-purple)" opacity="0.3" fill="none" stroke-dasharray="4,3"/>
+  <!-- Learning → Netlistify -->
+  <line x1="340" y1="657" x2="320" y2="657" stroke="#f97316" stroke-width="1.2" marker-end="url(#arr-orange)" opacity="0.5"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- LAYER 5: DATA STORES                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <text x="50" y="740" fill="#475569" font-size="10" letter-spacing="2">DATA LAYER</text>
+  
+  <!-- Supabase -->
+  <rect x="60" y="755" width="145" height="64" rx="10" fill="url(#g-data)" stroke="#4ade80" stroke-width="0.8" class="node" data-tip="<b>Supabase (PostgreSQL)</b><br>Auth, profiles, workspaces, vehicles, chat history, expenses, marketplace, analytics. 13 migrations applied. Row-Level Security enabled."/>
+  <text x="132" y="780" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🐘 Supabase</text>
+  <text x="132" y="797" text-anchor="middle" fill="#4ade80" font-size="9">Postgres · Auth · RLS</text>
+  <text x="132" y="810" text-anchor="middle" fill="#64748b" font-size="8">13 migrations</text>
+  
+  <!-- Neo4j -->
+  <rect x="225" y="755" width="135" height="64" rx="10" fill="url(#g-data)" stroke="#4ade80" stroke-width="0.8" class="node" data-tip="<b>Neo4j</b><br>Knowledge graph. Nodes: Vehicle, System, Component, Wire, Connector. Relationships model the vehicle electrical topology. Used by RAG for context enrichment."/>
+  <text x="292" y="780" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🔗 Neo4j</text>
+  <text x="292" y="797" text-anchor="middle" fill="#4ade80" font-size="9">Knowledge Graph</text>
+  <text x="292" y="810" text-anchor="middle" fill="#64748b" font-size="8">Vehicle topology</text>
+  
+  <!-- Qdrant -->
+  <rect x="380" y="755" width="135" height="64" rx="10" fill="url(#g-data)" stroke="#4ade80" stroke-width="0.8" class="node" data-tip="<b>Qdrant</b><br>Vector database. Collections: scraped_knowledge (RAG), wiring_diagrams (Netlistify). Used for semantic search during chat and for ML training data retrieval."/>
+  <text x="447" y="780" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">🎯 Qdrant</text>
+  <text x="447" y="797" text-anchor="middle" fill="#4ade80" font-size="9">Vector Search</text>
+  <text x="447" y="810" text-anchor="middle" fill="#64748b" font-size="8">scraped_knowledge · diagrams</text>
+  
+  <!-- Redis -->
+  <rect x="535" y="755" width="135" height="64" rx="10" fill="url(#g-data)" stroke="#4ade80" stroke-width="0.8" class="node" data-tip="<b>Redis</b><br>Rate limiting, session cache, pub/sub for WebSocket fan-out, job queues for scraper scheduling. Ephemeral data only."/>
+  <text x="602" y="780" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">⚡ Redis</text>
+  <text x="602" y="797" text-anchor="middle" fill="#4ade80" font-size="9">Cache · Rate Limit</text>
+  <text x="602" y="810" text-anchor="middle" fill="#64748b" font-size="8">Queues · Pub/Sub</text>
+
+  <!-- Data arrows (green, from services down to stores) -->
+  <!-- RAG → Qdrant (read) -->
+  <line x1="157" y1="430" x2="430" y2="755" stroke="#4ade80" stroke-width="1" marker-end="url(#arr-green)" opacity="0.3" stroke-dasharray="3,2"/>
+  <!-- RAG → Neo4j (read) -->
+  <line x1="130" y1="430" x2="280" y2="755" stroke="#4ade80" stroke-width="1" marker-end="url(#arr-green)" opacity="0.3" stroke-dasharray="3,2"/>
+  <!-- Ingestion → Qdrant (write) -->
+  <line x1="170" y1="568" x2="440" y2="755" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr-green)" opacity="0.4"/>
+  <!-- Ingestion → Supabase (write) -->
+  <line x1="130" y1="568" x2="132" y2="755" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr-green)" opacity="0.4"/>
+  <!-- Graph → Neo4j (write) -->
+  <line x1="357" y1="568" x2="292" y2="755" stroke="#4ade80" stroke-width="1.2" marker-end="url(#arr-green)" opacity="0.4"/>
+  <!-- Gateway → Redis (rate limit) -->
+  <line x1="380" y1="207" x2="602" y2="755" stroke="#4ade80" stroke-width="0.8" marker-end="url(#arr-green)" opacity="0.2" stroke-dasharray="3,2"/>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- INFRA SIDEBAR (outside cluster)             -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="780" y="140" width="380" height="250" rx="12" fill="url(#g-infra)" stroke="#334155" stroke-width="1"/>
+  <text x="970" y="164" text-anchor="middle" fill="#94a3b8" font-size="10" letter-spacing="2">INFRASTRUCTURE</text>
+  
+  <text x="800" y="190" fill="#fff" font-size="11" font-weight="600">☸️ Kubernetes (GKE/EKS)</text>
+  <text x="820" y="206" fill="#94a3b8" font-size="9">Namespaces: wessley-prod, wessley-staging</text>
+  <text x="820" y="220" fill="#94a3b8" font-size="9">Helm charts per service · HPA autoscaling</text>
+  
+  <text x="800" y="245" fill="#fff" font-size="11" font-weight="600">🔄 CI/CD (GitHub Actions)</text>
+  <text x="820" y="261" fill="#94a3b8" font-size="9">PR → lint/test → build image → deploy staging</text>
+  <text x="820" y="275" fill="#94a3b8" font-size="9">Tag → deploy prod (manual approval)</text>
+  
+  <text x="800" y="300" fill="#fff" font-size="11" font-weight="600">📊 Observability</text>
+  <text x="820" y="316" fill="#94a3b8" font-size="9">Prometheus + Grafana (metrics)</text>
+  <text x="820" y="330" fill="#94a3b8" font-size="9">Loki (logs) · Jaeger (traces)</text>
+  
+  <text x="800" y="355" fill="#fff" font-size="11" font-weight="600">🔐 Secrets</text>
+  <text x="820" y="371" fill="#94a3b8" font-size="9">K8s Secrets / External Secrets Operator</text>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- DATA FLOW SUMMARY                           -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="780" y="420" width="380" height="300" rx="12" fill="#0d1117" stroke="#1e293b" stroke-width="1"/>
+  <text x="970" y="444" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">📊 Data Flow Paths</text>
+  
+  <text x="800" y="472" fill="#60a5fa" font-size="11" font-weight="600">① User Query → Answer</text>
+  <text x="815" y="488" fill="#94a3b8" font-size="9">Browser → Gateway → RAG Chat → Semantic(embed)</text>
+  <text x="815" y="502" fill="#94a3b8" font-size="9">→ Qdrant(search) + Neo4j(context) → LLM → Stream back</text>
+  
+  <text x="800" y="528" fill="#a78bfa" font-size="11" font-weight="600">② Knowledge Ingestion</text>
+  <text x="815" y="544" fill="#94a3b8" font-size="9">Scraper → NATS[scraper.doc.raw] → Ingestion</text>
+  <text x="815" y="558" fill="#94a3b8" font-size="9">→ Chunk → Semantic(embed) → Qdrant + Supabase</text>
+  <text x="815" y="572" fill="#94a3b8" font-size="9">→ NATS[ingestion.complete] → Graph Service → Neo4j</text>
+  
+  <text x="800" y="598" fill="#f97316" font-size="11" font-weight="600">③ 3D Model Lifecycle</text>
+  <text x="815" y="614" fill="#94a3b8" font-size="9">User request → 3D Gen → GLB → CDN</text>
+  <text x="815" y="628" fill="#94a3b8" font-size="9">Runtime edits (chat/drag) → WS Hub → broadcast</text>
+  <text x="815" y="642" fill="#94a3b8" font-size="9">→ NATS[model.edited] → Learning → retrain signal</text>
+
+  <text x="800" y="668" fill="#22c55e" font-size="11" font-weight="600">④ ML Flywheel</text>
+  <text x="815" y="684" fill="#94a3b8" font-size="9">RAG data → Netlistify training (cross-validation)</text>
+  <text x="815" y="698" fill="#94a3b8" font-size="9">User 3D edits → Learning Service → better models</text>
+  <text x="815" y="712" fill="#94a3b8" font-size="9">Chat feedback → embedding quality scores → retune</text>
+  
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PROTO / COMMS DETAIL                        -->
+  <!-- ═══════════════════════════════════════════ -->
+  <rect x="780" y="740" width="380" height="80" rx="10" fill="#0d1117" stroke="#1e293b" stroke-width="1"/>
+  <text x="970" y="762" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">🔌 Service Communication</text>
+  <text x="800" y="782" fill="#60a5fa" font-size="9">Sync: gRPC (protobuf schemas in shared/proto/)</text>
+  <text x="800" y="796" fill="#a78bfa" font-size="9">Async: NATS JetStream (event-driven, at-least-once)</text>
+  <text x="800" y="810" fill="#4ade80" font-size="9">Data: Direct driver connections (pgx, neo4j-go, qdrant-go)</text>
+
+  <!-- Footer -->
+  <text x="600" y="860" text-anchor="middle" fill="#334155" font-size="10">Wessley.ai · Go + Python (ML) · K8s · NATS · gRPC · 2026</text>
+  <text x="600" y="878" text-anchor="middle" fill="#1e293b" font-size="9">MVP Path: Scraper → Ingestion → RAG Chat → 3D Gen</text>
+</svg>
+
+<div class="tip" id="tip"></div>
+
+<script>
+  const tip = document.getElementById('tip');
+  document.querySelectorAll('.node').forEach(n => {
+    n.style.cursor = 'pointer';
+    n.addEventListener('mouseenter', e => {
+      const t = n.getAttribute('data-tip');
+      if (!t) return;
+      tip.innerHTML = t;
+      tip.classList.add('show');
+    });
+    n.addEventListener('mousemove', e => {
+      tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 340) + 'px';
+      tip.style.top = (e.clientY + 14) + 'px';
+    });
+    n.addEventListener('mouseleave', () => tip.classList.remove('show'));
+  });
+</script>
+
+<div class="footer">Hover/tap any service for details · Generated from architecture review 2026-02-12</div>
+</body>
+</html>
