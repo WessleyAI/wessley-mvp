@@ -50,7 +50,7 @@ type RedditScraper struct {
     clientID       string
     clientSecret   string
     userAgent      string
-    rateLimiter    *rate.Limiter
+    rateLimiter    *resilience.Limiter  // shared pkg/resilience rate limiter (not custom)
 }
 
 type ScrapedPost struct {
@@ -65,12 +65,43 @@ func (s *RedditScraper) ScrapeComments(ctx context.Context, id string, limit int
 func RedditStage(scraper *RedditScraper) fn.Stage[ScrapeOpts, []ScrapedPost]
 ```
 
+## Rate Limiting
+
+Uses the shared `pkg/resilience.Limiter` (token bucket) — NOT a custom rate limiter. Configured per-source:
+
+```go
+redditLimiter := resilience.NewLimiter(resilience.LimiterConfig{
+    Rate:  1.0,  // 60 req/min
+    Burst: 5,
+})
+scraper := NewRedditScraper(cfg, redditLimiter)
+```
+
+## Bulkhead Pattern
+
+Each subreddit gets its own goroutine pool to prevent one slow/failing subreddit from blocking others:
+
+```go
+// Each subreddit scrapes independently with bounded concurrency
+func (s *RedditScraper) Scrape(ctx context.Context, opts ScrapeOpts) <-chan fn.Result[ScrapedPost] {
+    out := make(chan fn.Result[ScrapedPost])
+    for _, sub := range s.subreddits {
+        go func(sub string) {
+            // own goroutine pool per subreddit (bounded)
+            sem := make(chan struct{}, opts.MaxConcurrentPerSub) // default: 3
+            // scrape sub with semaphore-bounded workers
+        }(sub)
+    }
+    return out
+}
+```
+
 ## Reddit API
 
 - OAuth2: POST `https://www.reddit.com/api/v1/access_token` → bearer token
 - Hot: `GET /r/{sub}/hot?limit=100` on `oauth.reddit.com`
 - Search: `GET /r/{sub}/search?q={q}&limit=100&restrict_sr=true`
-- Rate limit: 60 req/min via `golang.org/x/time/rate`
+- Rate limit: via shared pkg/resilience.Limiter
 - Skip selftext-empty posts (link-only)
 - Retry on 429, 500, 503
 
@@ -78,7 +109,8 @@ func RedditStage(scraper *RedditScraper) fn.Stage[ScrapeOpts, []ScrapedPost]
 
 - [ ] Scrapes all 7 subreddits
 - [ ] OAuth2 token acquisition and refresh
-- [ ] Rate limiting (configurable RPM, default 60)
+- [ ] Uses shared pkg/resilience rate limiter (not custom)
+- [ ] Bulkhead pattern: each subreddit gets its own goroutine pool
 - [ ] Vehicle pattern extraction matches Python behavior
 - [ ] Skips deleted/removed/link-only posts
 - [ ] Channel-based async output
@@ -90,7 +122,7 @@ func RedditStage(scraper *RedditScraper) fn.Stage[ScrapeOpts, []ScrapedPost]
 
 ## Dependencies
 
-- `pkg/fn`, `golang.org/x/time/rate`, `net/http` (no external Reddit lib)
+- `pkg/fn`, `pkg/resilience`, `net/http` (no external Reddit lib)
 
 ## Reference
 
