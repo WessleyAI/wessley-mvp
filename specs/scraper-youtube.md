@@ -104,3 +104,52 @@ func CleanTranscript(text string) string
 
 - Python: `services/knowledge-scraper/src/scrapers/youtube.py`
 - FINAL_ARCHITECTURE.md §8.2
+
+
+## Feb 15 Refinement: Scraper Operational Concerns
+
+### Incremental Scraping
+
+Track `last_scraped` timestamp per channel in Redis to avoid re-processing old videos:
+
+```go
+lastScraped, _ := redis.Get(ctx, "scraper:youtube:last_scraped:"+channel).Time()
+
+// Use publishedAfter parameter in YouTube API search to only get new videos
+// After successful scrape, update timestamp
+redis.Set(ctx, "scraper:youtube:last_scraped:"+channel, time.Now(), 0)
+```
+
+### Session/Token Refresh
+
+YouTube Data API uses API keys (no OAuth2 for public data), but quota resets daily. Track quota usage:
+
+```go
+// Track daily quota usage in Redis
+quotaKey := "scraper:youtube:quota:" + time.Now().Format("2006-01-02")
+used, _ := redis.Incr(ctx, quotaKey).Result()
+redis.Expire(ctx, quotaKey, 25*time.Hour) // auto-cleanup
+
+if used > quotaLimit {
+    return fn.Err[[]ScrapedPost](ErrQuotaExhausted)
+}
+```
+
+### Content-Hash Dedup
+
+Deduplicate scraped videos using content hash in Redis:
+
+```go
+hash := sha256.Sum256([]byte("youtube" + videoID + transcript))
+key := "scraper:dedup:" + hex.EncodeToString(hash[:])
+
+if !redis.SetNX(ctx, key, 1, 30*24*time.Hour).Val() {
+    return // skip duplicate
+}
+```
+
+### Additional acceptance criteria
+- [ ] Incremental scraping via `last_scraped` per channel in Redis
+- [ ] Daily quota tracking in Redis with auto-expiry
+- [ ] Content-hash dedup in Redis (SHA-256, 30-day TTL)
+- [ ] New dependency: Redis client
