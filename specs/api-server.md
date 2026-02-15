@@ -128,3 +128,16 @@ natsutil.Publish(nc, "engine.scrape", ScrapeRequest{URLs: urls})
 ## Reference
 
 - FINAL_ARCHITECTURE.md §8.8
+
+
+## Feb 15 Refinement: Monolith for MVP
+
+The api-server is **no longer a standalone binary**. It is merged into the `cmd/wessley/` monolith alongside all engine packages.
+
+**Impact on this spec:**
+- `cmd/api/main.go` → merged into `cmd/wessley/main.go`
+- `api/` package still exists as a Go package, but is imported by `cmd/wessley/`, not built separately
+- `engine/rag` is imported directly via Go imports — no gRPC or network call between api and engine
+- The `NewServer()` constructor receives real Go objects (`*rag.RAGService`), not gRPC clients
+- Only 2 deployed services: `wessley` (this monolith) + `ml-worker` (Python gRPC)
+- The monolith binary starts HTTP server, NATS subscribers, scraper schedulers — all in one process
