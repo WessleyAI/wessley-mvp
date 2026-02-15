@@ -8,7 +8,7 @@
 
 ## Scope
 
-Docker Compose configuration for the full MVP stack: all 3 services + infrastructure.
+Docker Compose configuration for the full MVP stack: all services + infrastructure.
 
 ### Files
 
@@ -25,6 +25,18 @@ Dockerfile.engine             # Go Engine service
 Dockerfile.ml-worker          # Python ML worker
 Makefile                      # Convenience commands
 ```
+
+## Engine Variants
+
+`cmd/engine` supports 3 build variants, but **MVP runs all-in-one**:
+
+| Variant | Description |
+|---------|-------------|
+| `engine` | All-in-one: ingest + scraper + RAG (MVP default) |
+| `engine-scraper` | Scraper-only mode (future: separate scaling) |
+| `engine-core` | Ingest + RAG only, no scraping (future: separate scaling) |
+
+For MVP, only the `engine` (all-in-one) variant is used in compose.
 
 ## Services
 
@@ -45,8 +57,9 @@ services:
   ml-worker:
     build: { dockerfile: Dockerfile.ml-worker }
     ports: ["50051:50051"]
-    env: [OLLAMA_HOST, QDRANT_ADDR, EMBEDDING_MODEL]
-    depends_on: [ollama, qdrant]
+    env: [OLLAMA_HOST, EMBEDDING_MODEL]
+    depends_on: [ollama]
+    # NOTE: ml-worker no longer depends on Qdrant — search is owned by engine/semantic
 
   web:
     build: { context: web/ }
@@ -83,7 +96,6 @@ services:
     image: ollama/ollama:latest
     ports: ["11434:11434"]
     volumes: [ollama_data:/root/.ollama]
-    # Pull model on first run via seed script
 
 volumes:
   neo4j_data:
@@ -110,6 +122,8 @@ test:         go test ./...
 
 - [ ] `docker compose up` starts all services
 - [ ] Health checks on all infra services
+- [ ] ml-worker does NOT depend on Qdrant (Qdrant owned by engine only)
+- [ ] cmd/engine supports 3 variants but MVP runs all-in-one
 - [ ] Ollama model seeding script
 - [ ] .env.example with all required vars
 - [ ] Dev overrides with hot reload for Go (air) and Next.js
