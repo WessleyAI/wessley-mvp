@@ -125,3 +125,14 @@ if err := domain.ValidateScrapedPost(post); err != nil {
 ## Reference
 
 - FINAL_ARCHITECTURE.md §8.7 (ingestion pipeline validation)
+
+
+## Feb 15 Refinement: Monolith for MVP — Direct Import
+
+Domain validation is **directly imported** by other engine packages and the api layer within the `cmd/wessley/` monolith.
+
+**Impact on this spec:**
+- `engine/domain` is imported as a Go package — no service boundary
+- Used directly by `engine/ingest`, `engine/scraper/*`, and `api/handler/` within the same binary
+- No serialization overhead — validation types are plain Go structs passed by value/pointer
+- The monolith (`cmd/wessley/`) compiles all engine packages including domain into a single binary
