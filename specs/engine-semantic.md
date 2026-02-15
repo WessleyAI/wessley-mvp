@@ -1,4 +1,4 @@
-# Spec: engine-semantic — Qdrant Vector Search
+# Spec: engine-semantic — Qdrant Vector Store (Sole Owner)
 
 **Branch:** `spec/engine-semantic`
 **Effort:** 2-3 days
@@ -8,12 +8,12 @@
 
 ## Scope
 
-Qdrant vector store integration for storing and searching document embeddings. Provides semantic search for the RAG pipeline.
+Qdrant vector store integration — the **sole owner** of all Qdrant operations. Handles both embedding storage during ingestion AND similarity search during RAG. No other service accesses Qdrant directly (ml-worker does NOT touch Qdrant).
 
 ### Files
 
 ```
-engine/semantic/store.go       # Qdrant operations
+engine/semantic/store.go       # Qdrant operations (read + write)
 engine/semantic/model.go       # Search types
 engine/semantic/store_test.go
 ```
@@ -50,17 +50,32 @@ func New(addr string, collection string) (*VectorStore, error)
 // Ensure collection exists with correct dimensions
 func (v *VectorStore) EnsureCollection(ctx context.Context, dims int) error
 
-// Store embeddings
+// === WRITE (ingestion) ===
+
+// Store embeddings — called by engine/ingest during ingestion pipeline
 func (v *VectorStore) Upsert(ctx context.Context, records []VectorRecord) error
 
-// Search by embedding vector
+// Delete by doc ID (for re-ingestion)
+func (v *VectorStore) DeleteByDocID(ctx context.Context, docID string) error
+
+// === READ (RAG search) ===
+
+// Search by embedding vector — called by engine/rag during query
 func (v *VectorStore) Search(ctx context.Context, embedding []float32, topK int) ([]SearchResult, error)
 
 // Search with metadata filter (e.g. vehicle, source)
 func (v *VectorStore) SearchFiltered(ctx context.Context, embedding []float32, topK int, filters map[string]string) ([]SearchResult, error)
+```
 
-// Delete by doc ID (for re-ingestion)
-func (v *VectorStore) DeleteByDocID(ctx context.Context, docID string) error
+## Ownership Model
+
+```
+engine/semantic is the SOLE Qdrant owner:
+  ├── WRITES: called by engine/ingest (ingestion pipeline stores embeddings)
+  └── READS:  called by engine/rag (RAG pipeline searches vectors)
+
+ml-worker does NOT access Qdrant.
+ml-worker only provides: embeddings (EmbedService) + chat (ChatService).
 ```
 
 ## Collection Schema
@@ -75,10 +90,11 @@ Distance: Cosine
 ## Acceptance Criteria
 
 - [ ] Create/ensure Qdrant collection on startup
-- [ ] Batch upsert vectors with metadata
-- [ ] Similarity search with top-K
+- [ ] Batch upsert vectors with metadata (ingestion path)
+- [ ] Similarity search with top-K (RAG path)
 - [ ] Filtered search by vehicle/source
 - [ ] Delete by doc ID
+- [ ] Sole owner of Qdrant — no other service accesses it directly
 - [ ] Handles connection errors gracefully
 - [ ] Unit tests with testcontainers or mock
 
@@ -89,4 +105,4 @@ Distance: Cosine
 
 ## Reference
 
-- FINAL_ARCHITECTURE.md §8.3 (semantic mentions)
+- FINAL_ARCHITECTURE.md §8.3
