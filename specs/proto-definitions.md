@@ -142,3 +142,15 @@ plugins:
 
 - FINAL_ARCHITECTURE.md §8.1
 - ml-worker spec for service definitions
+
+
+## Feb 15 Refinement: Monolith for MVP
+
+With the monolith decision, proto definitions are **only used for wessley ↔ ml-worker communication**. There is no inter-service gRPC between api and engine — they are merged into a single binary (`cmd/wessley/`).
+
+**Impact on this spec:**
+- Proto files define the contract between `wessley` (Go monolith) and `ml-worker` (Python) only
+- No proto definitions needed for api↔engine communication (direct Go imports instead)
+- Only 2 services exist: `wessley` + `ml-worker`
+- `buf generate` outputs: Go stubs into `ml/proto/` (used by wessley binary), Python stubs into `ml-worker/proto/`
+- All internal engine packages (rag, semantic, graph, ingest, scraper, domain) are imported directly via Go imports within the wessley binary
