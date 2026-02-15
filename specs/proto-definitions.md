@@ -10,6 +10,8 @@
 
 Protocol Buffer definitions for the ml-worker gRPC contract. Shared between Go (client) and Python (server). Managed with Buf.
 
+**Only two services remain: ChatService + EmbedService.** SearchService has been removed — search is now handled by engine/semantic (Go, direct Qdrant access).
+
 ### Files
 
 ```
@@ -18,8 +20,7 @@ proto/
 ├── buf.gen.yaml          # Code generation config (Go + Python)
 ├── ml/v1/
 │   ├── chat.proto        # ChatService
-│   ├── embed.proto       # EmbedService
-│   └── search.proto      # SearchService
+│   └── embed.proto       # EmbedService
 ml/proto/                 # Generated Go code (output)
 ml-worker/proto/          # Generated Python code (output)
 ```
@@ -89,36 +90,9 @@ message EmbedBatchResponse {
 }
 ```
 
-### search.proto
+### search.proto — REMOVED
 
-```protobuf
-syntax = "proto3";
-package wessley.ml.v1;
-option go_package = "wessley-mvp/ml/proto;mlpb";
-
-service SearchService {
-    rpc Search(SearchRequest) returns (SearchResponse);
-}
-
-message SearchRequest {
-    string query = 1;
-    int32 top_k = 2;
-    map<string, string> filters = 3;
-}
-
-message SearchResult {
-    string id = 1;
-    float score = 2;
-    string content = 3;
-    string doc_id = 4;
-    string source = 5;
-    map<string, string> metadata = 6;
-}
-
-message SearchResponse {
-    repeated SearchResult results = 1;
-}
-```
+SearchService has been removed from ml-worker proto. Vector search is now owned by `engine/semantic` which accesses Qdrant directly via Go client. No gRPC proxy needed.
 
 ## Buf Config
 
@@ -151,12 +125,13 @@ plugins:
 
 ## Acceptance Criteria
 
-- [ ] All 3 proto files compile with `buf build`
+- [ ] 2 proto files compile with `buf build` (chat + embed only)
 - [ ] Go code generates to `ml/proto/`
 - [ ] Python code generates to `ml-worker/proto/`
 - [ ] Lint passes with `buf lint`
 - [ ] Breaking change detection with `buf breaking`
 - [ ] Makefile target: `make proto`
+- [ ] No SearchService — removed, search owned by engine/semantic
 
 ## Dependencies
 
@@ -165,5 +140,5 @@ plugins:
 
 ## Reference
 
-- FINAL_ARCHITECTURE.md §8.1 (NATS helpers reference proto patterns)
-- ml-worker spec for full message definitions
+- FINAL_ARCHITECTURE.md §8.1
+- ml-worker spec for service definitions
