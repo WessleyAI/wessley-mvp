@@ -147,3 +147,56 @@ Always mention the vehicle year/make/model when relevant.
 ## Reference
 
 - FINAL_ARCHITECTURE.md §8.5, §8.6
+
+
+## Feb 15 Refinement: Separate Embed vs Chat Workers
+
+ml-worker supports a `--mode` flag to run as embed-only, chat-only, or both. This enables independent scaling of embedding and chat workloads.
+
+### Mode Flag
+
+```
+ml-worker --mode=embed   # Only EmbedService, subscribes to ml.embed.*
+ml-worker --mode=chat    # Only ChatService, subscribes to ml.chat.*
+ml-worker --mode=all     # Both services (MVP default)
+```
+
+### NATS Subjects
+
+| Mode | NATS Subject | Ack Timeout | Rationale |
+|------|-------------|-------------|-----------|
+| embed | `ml.embed.*` | 30s | Embeddings are fast (CPU, batched) |
+| chat | `ml.chat.*` | 120s | LLM generation is slow (GPU-bound) |
+| all | `ml.embed.*` + `ml.chat.*` | per-subject | Single process handles both |
+
+### Implementation
+
+```python
+# ml-worker/src/server.py
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--mode", choices=["embed", "chat", "all"], default="all")
+args = parser.parse_args()
+
+if args.mode in ("embed", "all"):
+    server.add_insecure_port(...)  # EmbedService
+    # Subscribe to ml.embed.* with 30s ack timeout
+
+if args.mode in ("chat", "all"):
+    server.add_insecure_port(...)  # ChatService
+    # Subscribe to ml.chat.* with 120s ack timeout
+```
+
+### Scaling Strategy
+
+- **MVP:** Single `ml-worker --mode=all` process handles everything
+- **Scale:** Separate `ml-worker --mode=embed` (CPU nodes) and `ml-worker --mode=chat` (GPU nodes)
+- NATS subject separation ensures messages route to the correct worker type
+
+### Additional acceptance criteria
+- [ ] `--mode=embed|chat|all` flag controls which services start
+- [ ] Different NATS subjects: `ml.embed.*` vs `ml.chat.*`
+- [ ] Different ack timeouts: 30s for embed, 120s for chat
+- [ ] MVP runs `--mode=all` (single process, both services)
+- [ ] Can scale by running separate embed and chat workers
