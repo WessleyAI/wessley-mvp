@@ -139,3 +139,34 @@ test:         go test ./...
 ## Reference
 
 - FINAL_ARCHITECTURE.md §2 (service architecture)
+
+
+## Feb 15 Refinement: Monolith for MVP — Only 2 Services
+
+The MVP runs exactly **2 services** (plus infrastructure):
+
+| Service | Binary | Description |
+|---------|--------|-------------|
+| `wessley` | `cmd/wessley/` | Go monolith: HTTP API + engine (ingest, scraper, RAG, semantic, graph, domain) |
+| `ml-worker` | `ml-worker/` | Python gRPC: chat + embed via Ollama |
+
+**Impact on compose:**
+- Remove separate `api` and `engine` services — replaced by single `wessley` service
+- `wessley` service imports all engine packages directly (no gRPC between api/engine)
+- No engine variants needed for MVP — the single binary does everything
+- Compose services: `wessley`, `ml-worker`, `web`, `nats`, `neo4j`, `qdrant`, `redis`, `ollama`
+
+```yaml
+services:
+  wessley:
+    build: { dockerfile: Dockerfile, target: wessley }
+    ports: ["8080:8080"]
+    env: [NATS_URL, NEO4J_URI, QDRANT_ADDR, REDIS_ADDR, ML_WORKER_ADDR]
+    depends_on: [nats, neo4j, qdrant, redis, ml-worker]
+
+  ml-worker:
+    build: { dockerfile: Dockerfile.ml-worker }
+    ports: ["50051:50051"]
+    env: [OLLAMA_HOST, EMBEDDING_MODEL]
+    depends_on: [ollama]
+```
