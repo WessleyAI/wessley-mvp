@@ -128,3 +128,62 @@ func (s *RedditScraper) Scrape(ctx context.Context, opts ScrapeOpts) <-chan fn.R
 
 - Python: `services/knowledge-scraper/src/scrapers/reddit.py`
 - FINAL_ARCHITECTURE.md §8.2
+
+
+## Feb 15 Refinement: Scraper Operational Concerns
+
+### Incremental Scraping
+
+Track `last_scraped` timestamp per subreddit in Redis to avoid re-scraping old content:
+
+```go
+// Before scraping, check last_scraped timestamp
+lastScraped, _ := redis.Get(ctx, "scraper:reddit:last_scraped:"+subreddit).Time()
+
+// Only fetch posts newer than lastScraped
+// After successful scrape, update timestamp
+redis.Set(ctx, "scraper:reddit:last_scraped:"+subreddit, time.Now(), 0)
+```
+
+### Session/Token Refresh
+
+Reddit OAuth2 tokens expire after 1 hour. Implement proactive refresh:
+
+```go
+type tokenManager struct {
+    token     string
+    expiresAt time.Time
+    mu        sync.Mutex
+}
+
+func (t *tokenManager) Token(ctx context.Context) (string, error) {
+    t.mu.Lock()
+    defer t.mu.Unlock()
+    if time.Now().After(t.expiresAt.Add(-5 * time.Minute)) {
+        // Refresh token proactively 5 min before expiry
+    }
+    return t.token, nil
+}
+```
+
+### Content-Hash Dedup
+
+Deduplicate scraped posts using content hash stored in Redis:
+
+```go
+// SHA-256 hash of (source + sourceID + content)
+hash := sha256.Sum256([]byte(post.Source + post.SourceID + post.Content))
+key := "scraper:dedup:" + hex.EncodeToString(hash[:])
+
+// SETNX — if key exists, post is a duplicate
+if !redis.SetNX(ctx, key, 1, 30*24*time.Hour).Val() {
+    // Skip duplicate
+    return
+}
+```
+
+### Additional acceptance criteria
+- [ ] Incremental scraping via `last_scraped` per subreddit in Redis
+- [ ] Proactive OAuth2 token refresh (5 min before expiry)
+- [ ] Content-hash dedup in Redis (SHA-256, 30-day TTL)
+- [ ] New dependency: Redis client
