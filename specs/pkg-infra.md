@@ -89,3 +89,65 @@ All use `encoding/json`. Subscribe drops malformed messages. Request uses `nats.
 ## Reference
 
 FINAL_ARCHITECTURE.md §6 (mid), §7 (repo), §8.1 (natsutil)
+
+
+## Feb 15 Refinement: OpenTelemetry Middleware
+
+Add OTel instrumentation to HTTP and gRPC middleware, plus trace ID propagation in NATS messages.
+
+**Impact on this spec:**
+
+### HTTP Middleware (`pkg/mid/`)
+
+```go
+// OTel middleware for HTTP — creates spans for each request
+func OTel(serviceName string) Middleware {
+    return func(next http.Handler) http.Handler {
+        return otelhttp.NewHandler(next, serviceName)
+    }
+}
+```
+
+Add `OTel` to the middleware chain in api server setup.
+
+### gRPC Middleware
+
+For ml-worker Go client, use OTel gRPC interceptors:
+
+```go
+import "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+
+conn, _ := grpc.Dial(addr,
+    grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
+    grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()),
+)
+```
+
+### NATS Trace Propagation (`pkg/natsutil/`)
+
+```go
+// Publish injects trace context into NATS message headers
+func Publish[T any](nc *nats.Conn, subject string, v T) error {
+    msg := &nats.Msg{Subject: subject}
+    msg.Data, _ = json.Marshal(v)
+    // Inject OTel trace context into NATS headers
+    otel.GetTextMapPropagator().Inject(ctx, natsHeaderCarrier(msg))
+    return nc.PublishMsg(msg)
+}
+
+// Subscribe extracts trace context from NATS message headers
+func Subscribe[T any](nc *nats.Conn, subject string, handler func(context.Context, T)) (*nats.Subscription, error) {
+    // Extract OTel trace context from NATS headers
+    // ctx := otel.GetTextMapPropagator().Extract(context.Background(), natsHeaderCarrier(msg))
+    // handler(ctx, parsed)
+}
+```
+
+Note: `Publish` and `Subscribe` signatures gain a `context.Context` parameter for trace propagation.
+
+### Additional acceptance criteria
+- [ ] `mid.OTel()` middleware creates HTTP spans via `otelhttp`
+- [ ] gRPC client uses OTel interceptors for ml-worker calls
+- [ ] NATS Publish/Subscribe propagate trace IDs via message headers
+- [ ] Trace IDs flow end-to-end: HTTP → NATS → subscriber → gRPC
+- [ ] New dependencies: `go.opentelemetry.io/otel`, `go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp`, `go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc`
