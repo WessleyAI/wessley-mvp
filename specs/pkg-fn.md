@@ -130,3 +130,55 @@ None — this is the foundation package.
 ## Reference
 
 FINAL_ARCHITECTURE.md §5 — contains complete implementation code.
+
+
+## Feb 15 Refinement: OpenTelemetry Trace Propagation in Pipeline
+
+Pipeline stages must propagate OpenTelemetry traces. Each stage creates a **child span** so the full pipeline execution is visible as a trace tree.
+
+**Impact on this spec:**
+
+### Stage Instrumentation
+
+```go
+// Each Stage execution creates a child span
+type Stage[In, Out any] func(context.Context, In) Result[Out]
+
+// Then creates child spans for each composed stage
+func Then[A, B, C any](first Stage[A, B], second Stage[B, C]) Stage[A, C] {
+    return func(ctx context.Context, a A) Result[C] {
+        ctx, span := otel.Tracer("pkg/fn").Start(ctx, "stage.first")
+        r := first(ctx, a)
+        span.End()
+        if r.IsErr() { return Err[C](r.err) }
+        ctx, span = otel.Tracer("pkg/fn").Start(ctx, "stage.second")
+        defer span.End()
+        return second(ctx, r.val)
+    }
+}
+```
+
+### TracedStage wrapper
+
+```go
+// TracedStage wraps a stage with OTel span creation
+func TracedStage[In, Out any](name string, stage Stage[In, Out]) Stage[In, Out] {
+    return func(ctx context.Context, in In) Result[Out] {
+        ctx, span := otel.Tracer("pkg/fn").Start(ctx, name)
+        defer span.End()
+        result := stage(ctx, in)
+        if result.IsErr() {
+            span.RecordError(result.err)
+            span.SetStatus(codes.Error, result.err.Error())
+        }
+        return result
+    }
+}
+```
+
+### Additional acceptance criteria
+- [ ] `TracedStage` wrapper creates child spans with stage name
+- [ ] `Then` propagates context with trace spans through composed stages
+- [ ] Pipeline stages appear as child spans in trace tree
+- [ ] Errors are recorded on spans via `span.RecordError()`
+- [ ] New dependency: `go.opentelemetry.io/otel` (trace API only, no SDK in pkg/fn)
