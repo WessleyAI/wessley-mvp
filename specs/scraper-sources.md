@@ -97,3 +97,57 @@ type ScrapeOpts struct { Query string; Limit int }
 ## Reference
 
 - Python: `services/knowledge-scraper/src/scrapers/forum.py`
+
+
+## Feb 15 Refinement: Scraper Operational Concerns
+
+### Incremental Scraping
+
+Track `last_scraped` per source (forum name, "nhtsa", "ifixit") in Redis:
+
+```go
+lastScraped, _ := redis.Get(ctx, "scraper:source:last_scraped:"+sourceName).Time()
+
+// For forums: check thread dates against lastScraped, skip older threads
+// For NHTSA: use date range in API query
+// For iFixit: compare guide modified dates
+
+redis.Set(ctx, "scraper:source:last_scraped:"+sourceName, time.Now(), 0)
+```
+
+### Session/Token Refresh
+
+Forums may require session cookies. Implement cookie jar refresh:
+
+```go
+type sessionManager struct {
+    jar    http.CookieJar
+    config ForumConfig
+    mu     sync.Mutex
+}
+
+// RefreshSession re-fetches the forum homepage to get fresh session cookies
+func (s *sessionManager) RefreshSession(ctx context.Context) error {
+    resp, err := http.Get(s.config.BaseURL)
+    // Update cookie jar from response
+}
+```
+
+### Content-Hash Dedup
+
+Shared dedup across all source scrapers using Redis:
+
+```go
+hash := sha256.Sum256([]byte(source + sourceID + content))
+key := "scraper:dedup:" + hex.EncodeToString(hash[:])
+
+if !redis.SetNX(ctx, key, 1, 30*24*time.Hour).Val() {
+    return // skip duplicate
+}
+```
+
+### Additional acceptance criteria
+- [ ] Incremental scraping via `last_scraped` per source in Redis
+- [ ] Session/cookie refresh for forum scrapers
+- [ ] Content-hash dedup in Redis (SHA-256, 30-day TTL)
+- [ ] New dependency: Redis client
