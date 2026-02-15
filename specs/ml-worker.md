@@ -1,14 +1,14 @@
 # Spec: ml-worker — Python gRPC Server with Ollama
 
 **Branch:** `spec/ml-worker`
-**Effort:** 3-4 days
+**Effort:** 2-3 days
 **Priority:** P1 — Phase 3
 
 ---
 
 ## Scope
 
-Python gRPC server that wraps Ollama (self-hosted LLM) and a local embedding model. Zero API costs. Provides chat completion, embedding generation, and search to Go services.
+Python gRPC server that wraps Ollama (self-hosted LLM) and a local embedding model. Zero API costs. Provides **only** chat completion and embedding generation. Does NOT access Qdrant — search is handled by engine/semantic.
 
 ### Files
 
@@ -19,7 +19,6 @@ ml-worker/
 │   ├── server.py           # gRPC server entrypoint
 │   ├── chat.py             # Ollama chat completion
 │   ├── embed.py            # Local embedding model
-│   ├── search.py           # Qdrant search proxy
 │   └── config.py           # Environment config
 ├── requirements.txt
 ├── Dockerfile
@@ -33,9 +32,10 @@ ml-worker/
 |-----------|-------|---------|
 | **Chat** | Mistral 7B or Llama 3 8B via Ollama | RAG response generation |
 | **Embeddings** | all-MiniLM-L6-v2 (sentence-transformers) | 384-dim embeddings, runs on CPU |
-| **Vector search** | Qdrant direct client | Similarity search |
 
 ## gRPC Services
+
+Only two services — ChatService and EmbedService. SearchService has been removed (search is owned by engine/semantic).
 
 ```protobuf
 service ChatService {
@@ -46,10 +46,6 @@ service ChatService {
 service EmbedService {
     rpc Embed(EmbedRequest) returns (EmbedResponse);
     rpc EmbedBatch(EmbedBatchRequest) returns (EmbedBatchResponse);
-}
-
-service SearchService {
-    rpc Search(SearchRequest) returns (SearchResponse);
 }
 
 message ChatRequest {
@@ -84,24 +80,6 @@ message EmbedBatchRequest {
 
 message EmbedBatchResponse {
     repeated EmbedResponse embeddings = 1;
-}
-
-message SearchRequest {
-    string query = 1;
-    int32 top_k = 2;
-    map<string, string> filters = 3;
-}
-
-message SearchResult {
-    string id = 1;
-    float score = 2;
-    string content = 3;
-    string doc_id = 4;
-    string source = 5;
-}
-
-message SearchResponse {
-    repeated SearchResult results = 1;
 }
 ```
 
@@ -152,7 +130,7 @@ Always mention the vehicle year/make/model when relevant.
 - [ ] Streaming chat responses
 - [ ] Local embeddings via sentence-transformers (all-MiniLM-L6-v2)
 - [ ] Batch embedding support
-- [ ] Qdrant search with filters
+- [ ] NO Qdrant access — search removed, owned by engine/semantic
 - [ ] Health check endpoint
 - [ ] Graceful shutdown
 - [ ] Dockerfile with Python 3.11 slim
@@ -165,7 +143,6 @@ Always mention the vehicle year/make/model when relevant.
 - `ollama` Python package + Ollama server (Docker)
 - `sentence-transformers`
 - `grpcio`, `protobuf`
-- `qdrant-client`
 
 ## Reference
 
