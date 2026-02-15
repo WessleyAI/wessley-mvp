@@ -97,3 +97,16 @@ func (s *RAGService) Stage() fn.Stage[RAGQuery, RAGResponse] {
 ## Reference
 
 - FINAL_ARCHITECTURE.md §8.8
+
+
+## Feb 15 Refinement: Monolith for MVP — Direct Import
+
+The RAG service is **directly imported** by the api layer within the `cmd/wessley/` monolith. There is no network boundary between api and engine.
+
+**Impact on this spec:**
+- `engine/rag` is imported as a Go package by `api/handler/chat.go`
+- No gRPC client/server between api and RAG — direct function calls
+- `rag.RAGService` is instantiated in `cmd/wessley/main.go` and injected into the API server
+- `ml.Client` (gRPC to ml-worker) is the only network dependency for LLM/embedding calls
+- `semantic.VectorStore` and `graph.Store` are also direct Go imports within the same binary
+- This keeps the code modular (separate packages) while avoiding network overhead for MVP
