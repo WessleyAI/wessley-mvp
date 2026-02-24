@@ -1,0 +1,25 @@
+syntax = "proto3";
+package wessley.ml.v1;
+option go_package = "wessley-mvp/ml/proto;mlpb";
+
+service EmbedService {
+    rpc Embed(EmbedRequest) returns (EmbedResponse);
+    rpc EmbedBatch(EmbedBatchRequest) returns (EmbedBatchResponse);
+}
+
+message EmbedRequest {
+    string text = 1;
+}
+
+message EmbedResponse {
+    repeated float values = 1;
+    int32 dimensions = 2;
+}
+
+message EmbedBatchRequest {
+    repeated string texts = 1;
+}
+
+message EmbedBatchResponse {
+    repeated EmbedResponse embeddings = 1;
+}

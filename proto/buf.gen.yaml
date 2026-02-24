@@ -1,0 +1,12 @@
+version: v2
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: ../ml/proto
+    opt: paths=source_relative
+  - remote: buf.build/grpc/go
+    out: ../ml/proto
+    opt: paths=source_relative
+  - remote: buf.build/protocolbuffers/python
+    out: ../ml-worker/proto
+  - remote: buf.build/grpc/python
+    out: ../ml-worker/proto
