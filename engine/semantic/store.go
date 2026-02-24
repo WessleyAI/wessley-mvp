@@ -9,12 +9,26 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// PointsAPI is the subset of pb.PointsClient we use.
+type PointsAPI interface {
+	Upsert(ctx context.Context, in *pb.UpsertPoints, opts ...grpc.CallOption) (*pb.PointsOperationResponse, error)
+	Delete(ctx context.Context, in *pb.DeletePoints, opts ...grpc.CallOption) (*pb.PointsOperationResponse, error)
+	Search(ctx context.Context, in *pb.SearchPoints, opts ...grpc.CallOption) (*pb.SearchResponse, error)
+}
+
+// CollectionsAPI is the subset of pb.CollectionsClient we use.
+type CollectionsAPI interface {
+	List(ctx context.Context, in *pb.ListCollectionsRequest, opts ...grpc.CallOption) (*pb.ListCollectionsResponse, error)
+	Create(ctx context.Context, in *pb.CreateCollection, opts ...grpc.CallOption) (*pb.CollectionOperationResponse, error)
+	Delete(ctx context.Context, in *pb.DeleteCollection, opts ...grpc.CallOption) (*pb.CollectionOperationResponse, error)
+}
+
 // VectorStore is the sole owner of all Qdrant operations.
 type VectorStore struct {
-	conn       *grpc.ClientConn
-	points     pb.PointsClient
-	collections pb.CollectionsClient
-	collection string
+	conn        *grpc.ClientConn
+	points      PointsAPI
+	collections CollectionsAPI
+	collection  string
 }
 
 // New creates a VectorStore connected to Qdrant at the given gRPC address.
@@ -31,14 +45,25 @@ func New(addr string, collection string) (*VectorStore, error) {
 	}, nil
 }
 
+// NewWithClients creates a VectorStore with injected clients (for testing).
+func NewWithClients(points PointsAPI, collections CollectionsAPI, collection string) *VectorStore {
+	return &VectorStore{
+		points:      points,
+		collections: collections,
+		collection:  collection,
+	}
+}
+
 // Close closes the underlying gRPC connection.
 func (v *VectorStore) Close() error {
-	return v.conn.Close()
+	if v.conn != nil {
+		return v.conn.Close()
+	}
+	return nil
 }
 
 // EnsureCollection creates the collection if it doesn't exist.
 func (v *VectorStore) EnsureCollection(ctx context.Context, dims int) error {
-	// Check if collection exists.
 	list, err := v.collections.List(ctx, &pb.ListCollectionsRequest{})
 	if err != nil {
 		return fmt.Errorf("semantic: list collections: %w", err)
@@ -78,7 +103,7 @@ func (v *VectorStore) DeleteCollection(ctx context.Context) error {
 	return nil
 }
 
-// Upsert stores embedding records into Qdrant. Called by engine/ingest.
+// Upsert stores embedding records into Qdrant.
 func (v *VectorStore) Upsert(ctx context.Context, records []VectorRecord) error {
 	if len(records) == 0 {
 		return nil
@@ -129,7 +154,7 @@ func (v *VectorStore) Upsert(ctx context.Context, records []VectorRecord) error 
 	return nil
 }
 
-// DeleteByDocID removes all points matching a doc_id. Used for re-ingestion.
+// DeleteByDocID removes all points matching a doc_id.
 func (v *VectorStore) DeleteByDocID(ctx context.Context, docID string) error {
 	wait := true
 	_, err := v.points.Delete(ctx, &pb.DeletePoints{
@@ -151,7 +176,7 @@ func (v *VectorStore) DeleteByDocID(ctx context.Context, docID string) error {
 	return nil
 }
 
-// Search performs k-NN similarity search. Called by engine/rag.
+// Search performs k-NN similarity search.
 func (v *VectorStore) Search(ctx context.Context, embedding []float32, topK int) ([]SearchResult, error) {
 	return v.SearchFiltered(ctx, embedding, topK, nil)
 }
