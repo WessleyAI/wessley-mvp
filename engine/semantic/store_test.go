@@ -2,107 +2,284 @@ package semantic
 
 import (
 	"context"
-	"os"
+	"errors"
 	"testing"
+
+	pb "github.com/qdrant/go-client/qdrant"
+	"google.golang.org/grpc"
 )
 
-// Integration test — requires QDRANT_ADDR env (e.g. localhost:6334).
-// Skipped by default; run with: QDRANT_ADDR=localhost:6334 go test ./engine/semantic/
-func qdrantAddr(t *testing.T) string {
-	t.Helper()
-	addr := os.Getenv("QDRANT_ADDR")
-	if addr == "" {
-		t.Skip("QDRANT_ADDR not set, skipping integration test")
-	}
-	return addr
+// --- Mocks ---
+
+type mockPoints struct {
+	upsertResp *pb.PointsOperationResponse
+	upsertErr  error
+	deleteResp *pb.PointsOperationResponse
+	deleteErr  error
+	searchResp *pb.SearchResponse
+	searchErr  error
 }
 
-func TestUpsertAndSearch(t *testing.T) {
-	addr := qdrantAddr(t)
-	ctx := context.Background()
+func (m *mockPoints) Upsert(_ context.Context, _ *pb.UpsertPoints, _ ...grpc.CallOption) (*pb.PointsOperationResponse, error) {
+	return m.upsertResp, m.upsertErr
+}
+func (m *mockPoints) Delete(_ context.Context, _ *pb.DeletePoints, _ ...grpc.CallOption) (*pb.PointsOperationResponse, error) {
+	return m.deleteResp, m.deleteErr
+}
+func (m *mockPoints) Search(_ context.Context, _ *pb.SearchPoints, _ ...grpc.CallOption) (*pb.SearchResponse, error) {
+	return m.searchResp, m.searchErr
+}
 
-	store, err := New(addr, "test_semantic")
-	if err != nil {
-		t.Fatalf("New: %v", err)
-	}
-	defer store.Close()
-	defer store.DeleteCollection(ctx) //nolint:errcheck
+type mockCollections struct {
+	listResp   *pb.ListCollectionsResponse
+	listErr    error
+	createResp *pb.CollectionOperationResponse
+	createErr  error
+	deleteResp *pb.CollectionOperationResponse
+	deleteErr  error
+}
 
-	if err := store.EnsureCollection(ctx, 4); err != nil {
-		t.Fatalf("EnsureCollection: %v", err)
+func (m *mockCollections) List(_ context.Context, _ *pb.ListCollectionsRequest, _ ...grpc.CallOption) (*pb.ListCollectionsResponse, error) {
+	return m.listResp, m.listErr
+}
+func (m *mockCollections) Create(_ context.Context, _ *pb.CreateCollection, _ ...grpc.CallOption) (*pb.CollectionOperationResponse, error) {
+	return m.createResp, m.createErr
+}
+func (m *mockCollections) Delete(_ context.Context, _ *pb.DeleteCollection, _ ...grpc.CallOption) (*pb.CollectionOperationResponse, error) {
+	return m.deleteResp, m.deleteErr
+}
+
+// --- Tests ---
+
+func TestNewWithClients(t *testing.T) {
+	vs := NewWithClients(&mockPoints{}, &mockCollections{}, "test")
+	if vs == nil {
+		t.Fatal("expected non-nil")
 	}
+	if err := vs.Close(); err != nil {
+		t.Fatalf("Close: %v", err)
+	}
+}
+
+func TestEnsureCollection_AlreadyExists(t *testing.T) {
+	cols := &mockCollections{
+		listResp: &pb.ListCollectionsResponse{
+			Collections: []*pb.CollectionDescription{{Name: "test"}},
+		},
+	}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.EnsureCollection(context.Background(), 4); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestEnsureCollection_Creates(t *testing.T) {
+	cols := &mockCollections{
+		listResp:   &pb.ListCollectionsResponse{Collections: []*pb.CollectionDescription{}},
+		createResp: &pb.CollectionOperationResponse{Result: true},
+	}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.EnsureCollection(context.Background(), 128); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestEnsureCollection_ListError(t *testing.T) {
+	cols := &mockCollections{listErr: errors.New("rpc fail")}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.EnsureCollection(context.Background(), 4); err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestEnsureCollection_CreateError(t *testing.T) {
+	cols := &mockCollections{
+		listResp:  &pb.ListCollectionsResponse{Collections: []*pb.CollectionDescription{}},
+		createErr: errors.New("create fail"),
+	}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.EnsureCollection(context.Background(), 4); err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestDeleteCollection_Success(t *testing.T) {
+	cols := &mockCollections{deleteResp: &pb.CollectionOperationResponse{Result: true}}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.DeleteCollection(context.Background()); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestDeleteCollection_Error(t *testing.T) {
+	cols := &mockCollections{deleteErr: errors.New("fail")}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.DeleteCollection(context.Background()); err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestUpsert_Empty(t *testing.T) {
+	vs := NewWithClients(&mockPoints{}, &mockCollections{}, "test")
+	if err := vs.Upsert(context.Background(), nil); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestUpsert_Success(t *testing.T) {
+	pts := &mockPoints{upsertResp: &pb.PointsOperationResponse{}}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
 
 	records := []VectorRecord{
-		{ID: "00000000-0000-0000-0000-000000000001", Embedding: []float32{1, 0, 0, 0}, Payload: map[string]any{"content": "oil change", "doc_id": "doc1", "source": "reddit", "vehicle_make": "toyota"}},
-		{ID: "00000000-0000-0000-0000-000000000002", Embedding: []float32{0, 1, 0, 0}, Payload: map[string]any{"content": "brake pads", "doc_id": "doc2", "source": "youtube", "vehicle_make": "honda"}},
-		{ID: "00000000-0000-0000-0000-000000000003", Embedding: []float32{0.9, 0.1, 0, 0}, Payload: map[string]any{"content": "synthetic oil", "doc_id": "doc1", "source": "reddit", "vehicle_make": "toyota"}},
+		{
+			ID:        "id1",
+			Embedding: []float32{1, 0, 0, 0},
+			Payload: map[string]any{
+				"content":  "hello",
+				"count":    42,
+				"count64":  int64(99),
+				"score":    3.14,
+				"active":   true,
+				"other":    []int{1, 2}, // default case
+			},
+		},
 	}
-
-	if err := store.Upsert(ctx, records); err != nil {
-		t.Fatalf("Upsert: %v", err)
+	if err := vs.Upsert(context.Background(), records); err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
+}
 
-	// Unfiltered search — should return closest to [1,0,0,0].
-	results, err := store.Search(ctx, []float32{1, 0, 0, 0}, 2)
+func TestUpsert_Error(t *testing.T) {
+	pts := &mockPoints{upsertErr: errors.New("fail")}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+
+	records := []VectorRecord{{ID: "id1", Embedding: []float32{1, 0}}}
+	if err := vs.Upsert(context.Background(), records); err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestDeleteByDocID_Success(t *testing.T) {
+	pts := &mockPoints{deleteResp: &pb.PointsOperationResponse{}}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+	if err := vs.DeleteByDocID(context.Background(), "doc1"); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestDeleteByDocID_Error(t *testing.T) {
+	pts := &mockPoints{deleteErr: errors.New("fail")}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+	if err := vs.DeleteByDocID(context.Background(), "doc1"); err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestSearch_Success(t *testing.T) {
+	pts := &mockPoints{
+		searchResp: &pb.SearchResponse{
+			Result: []*pb.ScoredPoint{
+				{
+					Id:    &pb.PointId{PointIdOptions: &pb.PointId_Uuid{Uuid: "p1"}},
+					Score: 0.95,
+					Payload: map[string]*pb.Value{
+						"content": {Kind: &pb.Value_StringValue{StringValue: "oil change"}},
+						"doc_id":  {Kind: &pb.Value_StringValue{StringValue: "d1"}},
+						"source":  {Kind: &pb.Value_StringValue{StringValue: "reddit"}},
+						"extra":   {Kind: &pb.Value_StringValue{StringValue: "val"}},
+					},
+				},
+			},
+		},
+	}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+	results, err := vs.Search(context.Background(), []float32{1, 0}, 5)
 	if err != nil {
-		t.Fatalf("Search: %v", err)
+		t.Fatalf("unexpected error: %v", err)
 	}
-	if len(results) != 2 {
-		t.Fatalf("expected 2 results, got %d", len(results))
+	if len(results) != 1 {
+		t.Fatalf("expected 1, got %d", len(results))
 	}
 	if results[0].Content != "oil change" {
-		t.Errorf("expected 'oil change', got %q", results[0].Content)
+		t.Errorf("wrong content: %s", results[0].Content)
 	}
-
-	// Filtered search — only honda.
-	filtered, err := store.SearchFiltered(ctx, []float32{1, 0, 0, 0}, 10, map[string]string{"vehicle_make": "honda"})
-	if err != nil {
-		t.Fatalf("SearchFiltered: %v", err)
+	if results[0].DocID != "d1" {
+		t.Errorf("wrong doc_id: %s", results[0].DocID)
 	}
-	if len(filtered) != 1 {
-		t.Fatalf("expected 1 filtered result, got %d", len(filtered))
+	if results[0].Source != "reddit" {
+		t.Errorf("wrong source: %s", results[0].Source)
 	}
-	if filtered[0].Content != "brake pads" {
-		t.Errorf("expected 'brake pads', got %q", filtered[0].Content)
+	if results[0].Meta["extra"] != "val" {
+		t.Errorf("wrong meta: %v", results[0].Meta)
 	}
-
-	// DeleteByDocID — remove doc1.
-	if err := store.DeleteByDocID(ctx, "doc1"); err != nil {
-		t.Fatalf("DeleteByDocID: %v", err)
-	}
-	afterDel, err := store.Search(ctx, []float32{1, 0, 0, 0}, 10)
-	if err != nil {
-		t.Fatalf("Search after delete: %v", err)
-	}
-	if len(afterDel) != 1 {
-		t.Fatalf("expected 1 result after delete, got %d", len(afterDel))
+	if results[0].ID != "p1" || results[0].Score != 0.95 {
+		t.Error("wrong id/score")
 	}
 }
 
-func TestUpsertEmpty(t *testing.T) {
-	// Upsert with empty records should be a no-op (no connection needed).
-	store := &VectorStore{collection: "test"}
-	if err := store.Upsert(context.Background(), nil); err != nil {
-		t.Errorf("Upsert(nil): %v", err)
+func TestSearch_Error(t *testing.T) {
+	pts := &mockPoints{searchErr: errors.New("fail")}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+	_, err := vs.Search(context.Background(), []float32{1}, 5)
+	if err == nil {
+		t.Fatal("expected error")
 	}
 }
 
-func TestEnsureCollectionIdempotent(t *testing.T) {
-	addr := qdrantAddr(t)
-	ctx := context.Background()
-
-	store, err := New(addr, "test_idempotent")
+func TestSearchFiltered_WithFilters(t *testing.T) {
+	pts := &mockPoints{
+		searchResp: &pb.SearchResponse{
+			Result: []*pb.ScoredPoint{
+				{
+					Id:      &pb.PointId{PointIdOptions: &pb.PointId_Uuid{Uuid: "p1"}},
+					Score:   0.8,
+					Payload: map[string]*pb.Value{},
+				},
+			},
+		},
+	}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+	results, err := vs.SearchFiltered(context.Background(), []float32{1}, 5, map[string]string{"make": "honda"})
 	if err != nil {
-		t.Fatalf("New: %v", err)
+		t.Fatalf("unexpected error: %v", err)
 	}
-	defer store.Close()
-	defer store.DeleteCollection(ctx) //nolint:errcheck
+	if len(results) != 1 {
+		t.Fatalf("expected 1, got %d", len(results))
+	}
+}
 
-	if err := store.EnsureCollection(ctx, 4); err != nil {
-		t.Fatalf("first EnsureCollection: %v", err)
+func TestSearchFiltered_EmptyResults(t *testing.T) {
+	pts := &mockPoints{searchResp: &pb.SearchResponse{}}
+	vs := NewWithClients(pts, &mockCollections{}, "test")
+	results, err := vs.SearchFiltered(context.Background(), []float32{1}, 5, nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
-	// Second call should be a no-op.
-	if err := store.EnsureCollection(ctx, 4); err != nil {
-		t.Fatalf("second EnsureCollection: %v", err)
+	if len(results) != 0 {
+		t.Fatalf("expected 0, got %d", len(results))
+	}
+}
+
+func TestFieldMatch(t *testing.T) {
+	cond := fieldMatch("key", "value")
+	fc := cond.GetField()
+	if fc.Key != "key" {
+		t.Fatalf("expected key, got %s", fc.Key)
+	}
+	if fc.Match.GetKeyword() != "value" {
+		t.Fatalf("expected value, got %s", fc.Match.GetKeyword())
+	}
+}
+
+func TestEnsureCollection_OtherCollectionExists(t *testing.T) {
+	cols := &mockCollections{
+		listResp: &pb.ListCollectionsResponse{
+			Collections: []*pb.CollectionDescription{{Name: "other"}},
+		},
+		createResp: &pb.CollectionOperationResponse{Result: true},
+	}
+	vs := NewWithClients(&mockPoints{}, cols, "test")
+	if err := vs.EnsureCollection(context.Background(), 4); err != nil {
+		t.Fatalf("unexpected error: %v", err)
 	}
 }

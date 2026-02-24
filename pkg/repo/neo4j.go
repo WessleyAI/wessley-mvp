@@ -7,6 +7,18 @@ import (
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 )
 
+// result is the minimal interface needed from a neo4j result.
+type result interface {
+	Next(ctx context.Context) bool
+	Record() *neo4j.Record
+}
+
+// runner is the minimal interface needed from a neo4j session.
+type runner interface {
+	Run(ctx context.Context, cypher string, params map[string]any) (result, error)
+	Close(ctx context.Context) error
+}
+
 // Neo4jRepo is a generic Neo4j-backed repository.
 type Neo4jRepo[T any, ID comparable] struct {
 	driver     neo4j.DriverWithContext
@@ -14,6 +26,7 @@ type Neo4jRepo[T any, ID comparable] struct {
 	idKey      string
 	toMap      func(T) map[string]any
 	fromRecord func(*neo4j.Record) (T, error)
+	newSession func(ctx context.Context) runner // for testing
 }
 
 // Neo4jOption configures a Neo4jRepo.
@@ -48,8 +61,24 @@ func NewNeo4jRepo[T any, ID comparable](
 // Compile-time interface check.
 var _ Repository[any, string] = (*Neo4jRepo[any, string])(nil)
 
-func (r *Neo4jRepo[T, ID]) session(ctx context.Context) neo4j.SessionWithContext {
-	return r.driver.NewSession(ctx, neo4j.SessionConfig{})
+// neo4jSessionAdapter adapts neo4j.SessionWithContext to the runner interface.
+type neo4jSessionAdapter struct {
+	sess neo4j.SessionWithContext
+}
+
+func (a *neo4jSessionAdapter) Run(ctx context.Context, cypher string, params map[string]any) (result, error) {
+	return a.sess.Run(ctx, cypher, params)
+}
+
+func (a *neo4jSessionAdapter) Close(ctx context.Context) error {
+	return a.sess.Close(ctx)
+}
+
+func (r *Neo4jRepo[T, ID]) session(ctx context.Context) runner {
+	if r.newSession != nil {
+		return r.newSession(ctx)
+	}
+	return &neo4jSessionAdapter{sess: r.driver.NewSession(ctx, neo4j.SessionConfig{})}
 }
 
 func (r *Neo4jRepo[T, ID]) Get(ctx context.Context, id ID) (T, error) {
