@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 import os
 import signal
@@ -55,8 +54,6 @@ def serve() -> None:
     server.add_insecure_port(_LISTEN_ADDR)
     server.start()
     logger.info("ML Worker listening on %s", _LISTEN_ADDR)
-
-    stop_event = asyncio.Event() if False else None  # noqa: kept simple
 
     def _stop(signum, frame):
         logger.info("Shutting down…")

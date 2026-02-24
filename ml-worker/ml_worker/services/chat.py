@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 from typing import Iterator
@@ -20,9 +21,18 @@ _DEFAULT_MODEL = os.getenv("CHAT_MODEL", "mistral")
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     """Wraps Ollama /api/chat for unary and streaming chat."""
 
-    def Chat(self, request: chat_pb2.ChatRequest, context: grpc.ServicerContext) -> chat_pb2.ChatResponse:
+    def Chat(
+        self,
+        request: chat_pb2.ChatRequest,
+        context: grpc.ServicerContext,
+    ) -> chat_pb2.ChatResponse:
         model = request.model or _DEFAULT_MODEL
         messages = self._build_messages(request)
+        options: dict = {}
+        if request.temperature:
+            options["temperature"] = request.temperature
+        if request.max_tokens:
+            options["num_predict"] = request.max_tokens
 
         try:
             with httpx.Client(timeout=120) as client:
@@ -32,8 +42,7 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
                         "model": model,
                         "messages": messages,
                         "stream": False,
-                        **({"options": {"temperature": request.temperature}} if request.temperature else {}),
-                        **({"options": {"num_predict": request.max_tokens}} if request.max_tokens else {}),
+                        **({"options": options} if options else {}),
                     },
                 )
                 resp.raise_for_status()
@@ -41,15 +50,22 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
         except Exception as exc:
             logger.error("Ollama chat error: %s", exc)
             context.abort(grpc.StatusCode.INTERNAL, f"Ollama error: {exc}")
+            return chat_pb2.ChatResponse()
 
         reply = data.get("message", {}).get("content", "")
         tokens = data.get("eval_count", 0) + data.get("prompt_eval_count", 0)
-
         return chat_pb2.ChatResponse(reply=reply, tokens_used=tokens, model=model)
 
-    def ChatStream(self, request: chat_pb2.ChatRequest, context: grpc.ServicerContext) -> Iterator[chat_pb2.ChatChunk]:
+    def ChatStream(
+        self,
+        request: chat_pb2.ChatRequest,
+        context: grpc.ServicerContext,
+    ) -> Iterator[chat_pb2.ChatChunk]:
         model = request.model or _DEFAULT_MODEL
         messages = self._build_messages(request)
+        options: dict = {}
+        if request.temperature:
+            options["temperature"] = request.temperature
 
         try:
             with httpx.Client(timeout=120) as client:
@@ -60,16 +76,14 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
                         "model": model,
                         "messages": messages,
                         "stream": True,
-                        **({"options": {"temperature": request.temperature}} if request.temperature else {}),
+                        **({"options": options} if options else {}),
                     },
                 ) as resp:
                     resp.raise_for_status()
-                    import json as _json
-
                     for line in resp.iter_lines():
                         if not line:
                             continue
-                        chunk = _json.loads(line)
+                        chunk = json.loads(line)
                         text = chunk.get("message", {}).get("content", "")
                         done = chunk.get("done", False)
                         yield chat_pb2.ChatChunk(text=text, done=done)
