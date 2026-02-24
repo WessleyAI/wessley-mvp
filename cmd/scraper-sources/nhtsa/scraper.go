@@ -14,7 +14,10 @@ import (
 	"github.com/WessleyAI/wessley-mvp/pkg/fn"
 )
 
-const baseURL = "https://api.nhtsa.gov/complaints/complaintsByVehicle"
+const (
+	complaintsURL = "https://api.nhtsa.gov/complaints/complaintsByVehicle"
+	modelsURL     = "https://api.nhtsa.gov/products/vehicle/models"
+)
 
 // Scraper fetches complaints from the NHTSA complaints API.
 type Scraper struct {
@@ -45,18 +48,87 @@ func (s *Scraper) FetchAll(ctx context.Context) ([]scraper.ScrapedPost, error) {
 		default:
 		}
 
-		posts, err := s.fetchMake(ctx, make_, limiter)
+		// First, fetch available models for this make+year
+		models, err := s.fetchModels(ctx, make_, limiter)
 		if err != nil {
-			log.Printf("warning: failed to fetch NHTSA complaints for %s: %v", make_, err)
+			log.Printf("warning: failed to fetch NHTSA models for %s: %v", make_, err)
 			continue
 		}
-		allPosts = append(allPosts, posts...)
+
+		if len(models) == 0 {
+			log.Printf("warning: no models found for %s year %d", make_, s.cfg.ModelYear)
+			continue
+		}
+
+		// Limit to top 5 popular models to avoid too many requests
+		if len(models) > 5 {
+			models = models[:5]
+		}
+
+		for _, model := range models {
+			posts, err := s.fetchMakeModel(ctx, make_, model, limiter)
+			if err != nil {
+				log.Printf("warning: failed to fetch NHTSA complaints for %s %s: %v", make_, model, err)
+				continue
+			}
+			allPosts = append(allPosts, posts...)
+
+			if s.cfg.MaxPerMake > 0 && len(allPosts) >= s.cfg.MaxPerMake {
+				break
+			}
+		}
 	}
 	return allPosts, nil
 }
 
-func (s *Scraper) fetchMake(ctx context.Context, make_ string, limiter *time.Ticker) ([]scraper.ScrapedPost, error) {
-	url := fmt.Sprintf("%s?make=%s&modelYear=%d", baseURL, make_, s.cfg.ModelYear)
+type modelsResponse struct {
+	Count   int           `json:"count"`
+	Results []modelEntry  `json:"results"`
+}
+
+type modelEntry struct {
+	Model string `json:"model"`
+}
+
+func (s *Scraper) fetchModels(ctx context.Context, make_ string, limiter *time.Ticker) ([]string, error) {
+	url := fmt.Sprintf("%s?modelYear=%d&make=%s&issueType=c", modelsURL, s.cfg.ModelYear, make_)
+
+	<-limiter.C
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "wessley-scraper/1.0 (automotive repair data collection)")
+
+	resp, err := s.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status %d from %s", resp.StatusCode, url)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var mr modelsResponse
+	if err := json.Unmarshal(body, &mr); err != nil {
+		return nil, err
+	}
+
+	var models []string
+	for _, m := range mr.Results {
+		models = append(models, m.Model)
+	}
+	return models, nil
+}
+
+func (s *Scraper) fetchMakeModel(ctx context.Context, make_, model string, limiter *time.Ticker) ([]scraper.ScrapedPost, error) {
+	url := fmt.Sprintf("%s?make=%s&model=%s&modelYear=%d", complaintsURL, make_, model, s.cfg.ModelYear)
 
 	result := fn.Retry(ctx, fn.RetryOpts{
 		MaxAttempts: 3,
@@ -70,7 +142,7 @@ func (s *Scraper) fetchMake(ctx context.Context, make_ string, limiter *time.Tic
 
 	resp, err := result.Unwrap()
 	if err != nil {
-		return nil, fmt.Errorf("nhtsa %s: %w", make_, err)
+		return nil, fmt.Errorf("nhtsa %s %s: %w", make_, model, err)
 	}
 
 	now := time.Now().UTC()
@@ -85,21 +157,33 @@ func (s *Scraper) fetchMake(ctx context.Context, make_ string, limiter *time.Tic
 			break
 		}
 		published := parseNHTSADate(c.DateComplaintFiled)
-		vehicle := fmt.Sprintf("%d %s %s", c.ModelYear, c.MakeName, c.ModelName)
+
+		// Extract vehicle info from products array
+		vehicleMake := make_
+		vehicleModel := model
+		vehicleYear := s.cfg.ModelYear
+		if vp := c.VehicleProduct(); vp != nil {
+			vehicleMake = vp.ProductMake
+			vehicleModel = vp.ProductModel
+			if vp.ProductYear != "" && vp.ProductYear != "9999" {
+				fmt.Sscanf(vp.ProductYear, "%d", &vehicleYear)
+			}
+		}
+		vehicle := fmt.Sprintf("%d %s %s", vehicleYear, vehicleMake, vehicleModel)
 
 		posts = append(posts, scraper.ScrapedPost{
 			Source:      "nhtsa",
 			SourceID:    fmt.Sprintf("nhtsa-%d", c.ODINumber),
-			Title:       fmt.Sprintf("NHTSA Complaint: %s - %s", vehicle, c.Component),
+			Title:       fmt.Sprintf("NHTSA Complaint: %s - %s", vehicle, c.Components),
 			Content:     c.Summary,
 			Author:      "nhtsa-consumer",
-			URL:         fmt.Sprintf("https://www.nhtsa.gov/vehicle/%d/%s/%s/complaints", c.ModelYear, c.MakeName, c.ModelName),
+			URL:         fmt.Sprintf("https://www.nhtsa.gov/vehicle/%d/%s/%s/complaints", vehicleYear, vehicleMake, vehicleModel),
 			PublishedAt: published,
 			ScrapedAt:   now,
 			Metadata: scraper.Metadata{
 				Vehicle:  vehicle,
 				Symptoms: extractSymptoms(c.Summary),
-				Keywords: []string{strings.ToLower(c.Component), "nhtsa", "complaint"},
+				Keywords: []string{strings.ToLower(c.Components), "nhtsa", "complaint"},
 			},
 		})
 	}

@@ -26,29 +26,61 @@ func TestNewYouTubeScraper(t *testing.T) {
 	}
 }
 
+// mockInnertubeServer creates a test server that handles both the innertube player API
+// and timedtext caption fetching.
+func mockInnertubeServer(transcript string) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" && strings.Contains(r.URL.Path, "youtubei/v1/player") {
+			// Return innertube player response with caption tracks pointing back to this server
+			baseURL := fmt.Sprintf("http://%s/api/timedtext?v=test&lang=en", r.Host)
+			resp := map[string]interface{}{
+				"captions": map[string]interface{}{
+					"playerCaptionsTracklistRenderer": map[string]interface{}{
+						"captionTracks": []map[string]interface{}{
+							{"baseUrl": baseURL, "languageCode": "en", "kind": ""},
+						},
+					},
+				},
+			}
+			json.NewEncoder(w).Encode(resp)
+		} else if strings.Contains(r.URL.Path, "timedtext") || strings.Contains(r.URL.Path, "api/timedtext") {
+			w.Write([]byte(transcript))
+		} else if strings.Contains(r.URL.Path, "youtube/v3/search") {
+			// YouTube search API mock
+			json.NewEncoder(w).Encode(searchResponse{})
+		} else {
+			w.WriteHeader(404)
+		}
+	}))
+}
+
+func mockInnertubeServerNoCaptions() *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" && strings.Contains(r.URL.Path, "youtubei/v1/player") {
+			resp := map[string]interface{}{
+				"playabilityStatus": map[string]interface{}{
+					"status": "OK",
+				},
+			}
+			json.NewEncoder(w).Encode(resp)
+		} else {
+			w.WriteHeader(404)
+		}
+	}))
+}
+
 func TestGetTranscript_Success(t *testing.T) {
 	transcript := `<?xml version="1.0" encoding="utf-8"?>
-<transcript>
-  <text start="0.0" dur="2.0">Hello world</text>
-  <text start="2.0" dur="1.5">[Music] this is a test</text>
-</transcript>`
+<timedtext format="3"><body>
+  <p t="0" d="2000">Hello world</p>
+  <p t="2000" d="1500">this is a test</p>
+</body></timedtext>`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(transcript))
-	}))
+	srv := mockInnertubeServer(transcript)
 	defer srv.Close()
 
-	// Patch the URL by using a custom client and overriding via transport
-	// Actually, GetTranscript builds URLs to youtube.com. We need to intercept.
-	// The simplest approach: test CleanTranscript more, and test GetTranscript with a server that mimics the API.
-	// Since GetTranscript hardcodes youtube.com URLs, we test it by overriding the http.Client transport.
-
 	client := srv.Client()
-	transport := &rewriteTransport{
-		base:    client.Transport,
-		baseURL: srv.URL,
-	}
-	client.Transport = transport
+	client.Transport = &rewriteTransport{base: client.Transport, baseURL: srv.URL}
 
 	result := GetTranscript(context.Background(), client, "test123")
 	text, err := result.Unwrap()
@@ -58,15 +90,10 @@ func TestGetTranscript_Success(t *testing.T) {
 	if !strings.Contains(text, "Hello world") {
 		t.Errorf("expected transcript content, got: %s", text)
 	}
-	if strings.Contains(text, "[Music]") {
-		t.Error("bracket noise should be removed")
-	}
 }
 
 func TestGetTranscript_NoTranscript(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(404)
-	}))
+	srv := mockInnertubeServerNoCaptions()
 	defer srv.Close()
 
 	client := srv.Client()
@@ -79,9 +106,7 @@ func TestGetTranscript_NoTranscript(t *testing.T) {
 }
 
 func TestGetTranscript_InvalidXML(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("this is not xml at all, and it's long enough to pass the length check"))
-	}))
+	srv := mockInnertubeServer("this is not xml at all, and it's long enough to pass the length check")
 	defer srv.Close()
 
 	client := srv.Client()
@@ -94,9 +119,7 @@ func TestGetTranscript_InvalidXML(t *testing.T) {
 }
 
 func TestGetTranscript_EmptyTranscript(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`<?xml version="1.0"?><transcript></transcript>`))
-	}))
+	srv := mockInnertubeServer(`<?xml version="1.0"?><timedtext format="3"><body></body></timedtext>`)
 	defer srv.Close()
 
 	client := srv.Client()
@@ -105,6 +128,32 @@ func TestGetTranscript_EmptyTranscript(t *testing.T) {
 	result := GetTranscript(context.Background(), client, "empty")
 	if result.IsOk() {
 		t.Fatal("expected error for empty transcript")
+	}
+}
+
+func TestGetTranscript_LegacyFormat(t *testing.T) {
+	transcript := `<?xml version="1.0" encoding="utf-8"?>
+<transcript>
+  <text start="0.0" dur="2.0">Legacy format works</text>
+  <text start="2.0" dur="1.5">[Music] and removes noise</text>
+</transcript>`
+
+	srv := mockInnertubeServer(transcript)
+	defer srv.Close()
+
+	client := srv.Client()
+	client.Transport = &rewriteTransport{base: client.Transport, baseURL: srv.URL}
+
+	result := GetTranscript(context.Background(), client, "legacy")
+	text, err := result.Unwrap()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !strings.Contains(text, "Legacy format works") {
+		t.Errorf("expected legacy content, got: %s", text)
+	}
+	if strings.Contains(text, "[Music]") {
+		t.Error("bracket noise should be removed")
 	}
 }
 
@@ -184,14 +233,12 @@ func TestSearchVideos_QuotaExhausted(t *testing.T) {
 
 func TestScrapeVideo_Success(t *testing.T) {
 	transcript := `<?xml version="1.0" encoding="utf-8"?>
-<transcript>
-  <text start="0.0" dur="2.0">How to replace brake pads on a 2018 Honda Civic</text>
-  <text start="2.0" dur="1.5">First remove the caliper</text>
-</transcript>`
+<timedtext format="3"><body>
+  <p t="0" d="2000">How to replace brake pads on a 2018 Honda Civic</p>
+  <p t="2000" d="1500">First remove the caliper</p>
+</body></timedtext>`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(transcript))
-	}))
+	srv := mockInnertubeServer(transcript)
 	defer srv.Close()
 
 	s := NewYouTubeScraper("key", nil)
@@ -223,13 +270,11 @@ func TestScrapeVideo_Duplicate(t *testing.T) {
 
 func TestScrapeVideoIDs(t *testing.T) {
 	transcript := `<?xml version="1.0" encoding="utf-8"?>
-<transcript>
-  <text start="0.0" dur="2.0">Test content for video</text>
-</transcript>`
+<timedtext format="3"><body>
+  <p t="0" d="2000">Test content for video</p>
+</body></timedtext>`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(transcript))
-	}))
+	srv := mockInnertubeServer(transcript)
 	defer srv.Close()
 
 	s := NewYouTubeScraper("key", nil)
@@ -265,7 +310,6 @@ func TestScrapeVideoIDs_ContextCancelled(t *testing.T) {
 }
 
 func TestScrape_WithQuery(t *testing.T) {
-	// Search returns one video, which we then scrape
 	searchResp := searchResponse{
 		Items: []struct {
 			ID struct {
@@ -291,11 +335,25 @@ func TestScrape_WithQuery(t *testing.T) {
 	}
 
 	transcript := `<?xml version="1.0" encoding="utf-8"?>
-<transcript><text start="0" dur="1">test content here</text></transcript>`
+<timedtext format="3"><body>
+  <p t="0" d="1000">test content here</p>
+</body></timedtext>`
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.URL.Path, "youtube/v3/search") {
 			json.NewEncoder(w).Encode(searchResp)
+		} else if r.Method == "POST" && strings.Contains(r.URL.Path, "youtubei/v1/player") {
+			baseURL := fmt.Sprintf("http://%s/api/timedtext?v=test&lang=en", r.Host)
+			resp := map[string]interface{}{
+				"captions": map[string]interface{}{
+					"playerCaptionsTracklistRenderer": map[string]interface{}{
+						"captionTracks": []map[string]interface{}{
+							{"baseUrl": baseURL, "languageCode": "en", "kind": ""},
+						},
+					},
+				},
+			}
+			json.NewEncoder(w).Encode(resp)
 		} else {
 			w.Write([]byte(transcript))
 		}
@@ -319,7 +377,6 @@ func TestScrape_WithQuery(t *testing.T) {
 }
 
 func TestScrape_NoQuery_UsesDefaults(t *testing.T) {
-	// Returns quota exhausted to stop early
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(403)
 	}))
@@ -346,7 +403,7 @@ func TestScrape_ContextCancelled(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cancel() // cancel on first request
+		cancel()
 		w.WriteHeader(403)
 	}))
 	defer srv.Close()
@@ -358,7 +415,6 @@ func TestScrape_ContextCancelled(t *testing.T) {
 	ch := s.Scrape(ctx, ScrapeOpts{Query: "test"})
 	for range ch {
 	}
-	// Just ensure it doesn't hang
 }
 
 func TestExtractMetadata_AllFields(t *testing.T) {
@@ -380,8 +436,8 @@ func TestExtractMetadata_AllFields(t *testing.T) {
 func TestCleanTranscript_AllEntities(t *testing.T) {
 	input := `&quot;hello&quot; &lt;b&gt; &amp; &#39;world&#39; [Cheering]`
 	got := CleanTranscript(input)
-	if strings.Contains(got, "&") && !strings.Contains(got, "& ") {
-		// should have decoded all entities
+	if strings.Contains(got, "&amp;") {
+		t.Error("should decode &amp;")
 	}
 	if strings.Contains(got, "[Cheering]") {
 		t.Error("should remove [Cheering]")
@@ -395,7 +451,6 @@ type rewriteTransport struct {
 }
 
 func (t *rewriteTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	// Preserve the path and query
 	newURL := fmt.Sprintf("%s%s", t.baseURL, req.URL.RequestURI())
 	newReq, err := http.NewRequestWithContext(req.Context(), req.Method, newURL, req.Body)
 	if err != nil {
