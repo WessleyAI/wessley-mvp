@@ -9,28 +9,117 @@ import (
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j/dbtype"
 )
 
+// cypher runner abstractions for testability.
+
+// CypherResult abstracts iterating over query results.
+type CypherResult interface {
+	Next(ctx context.Context) bool
+	Record() *neo4j.Record
+}
+
+// CypherRunner can execute a Cypher query.
+type CypherRunner interface {
+	Run(ctx context.Context, cypher string, params map[string]any) (CypherResult, error)
+}
+
+// CypherSession extends CypherRunner with Close and ExecuteWrite.
+type CypherSession interface {
+	CypherRunner
+	Close(ctx context.Context) error
+	ExecuteWrite(ctx context.Context, work func(tx CypherRunner) (any, error)) (any, error)
+}
+
+// SessionOpener creates sessions.
+type SessionOpener interface {
+	OpenSession(ctx context.Context) CypherSession
+}
+
+// neo4jSessionAdapter wraps neo4j.SessionWithContext.
+type neo4jSessionAdapter struct {
+	sess neo4j.SessionWithContext
+}
+
+func (a *neo4jSessionAdapter) Run(ctx context.Context, cypher string, params map[string]any) (CypherResult, error) {
+	return a.sess.Run(ctx, cypher, params)
+}
+func (a *neo4jSessionAdapter) Close(ctx context.Context) error {
+	return a.sess.Close(ctx)
+}
+func (a *neo4jSessionAdapter) ExecuteWrite(ctx context.Context, work func(tx CypherRunner) (any, error)) (any, error) {
+	return a.sess.ExecuteWrite(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
+		return work(&neo4jTxAdapter{tx: tx})
+	})
+}
+
+type neo4jTxAdapter struct {
+	tx neo4j.ManagedTransaction
+}
+
+func (a *neo4jTxAdapter) Run(ctx context.Context, cypher string, params map[string]any) (CypherResult, error) {
+	return a.tx.Run(ctx, cypher, params)
+}
+
+// neo4jDriverAdapter wraps neo4j.DriverWithContext as SessionOpener.
+type neo4jDriverAdapter struct {
+	driver neo4j.DriverWithContext
+}
+
+func (a *neo4jDriverAdapter) OpenSession(ctx context.Context) CypherSession {
+	return &neo4jSessionAdapter{sess: a.driver.NewSession(ctx, neo4j.SessionConfig{})}
+}
+
 // GraphStore provides graph operations on top of the generic Neo4j repository.
 type GraphStore struct {
-	driver     neo4j.DriverWithContext
+	opener     SessionOpener
 	components *repo.Neo4jRepo[Component, string]
 }
 
 // New creates a new GraphStore.
 func New(driver neo4j.DriverWithContext) *GraphStore {
 	return &GraphStore{
-		driver:     driver,
+		opener:     &neo4jDriverAdapter{driver: driver},
 		components: newComponentRepo(driver),
+	}
+}
+
+// NewWithOpener creates a GraphStore with a custom SessionOpener (for testing).
+func NewWithOpener(opener SessionOpener) *GraphStore {
+	return &GraphStore{
+		opener: opener,
 	}
 }
 
 // GetComponent returns a component by ID.
 func (g *GraphStore) GetComponent(ctx context.Context, id string) (Component, error) {
-	return g.components.Get(ctx, id)
+	if g.components != nil {
+		return g.components.Get(ctx, id)
+	}
+	// Fallback for stores created with NewWithOpener (no repo).
+	sess := g.opener.OpenSession(ctx)
+	defer sess.Close(ctx)
+
+	cypher := `MATCH (n:Component {id: $id}) RETURN n`
+	result, err := sess.Run(ctx, cypher, map[string]any{"id": id})
+	if err != nil {
+		return Component{}, err
+	}
+	if !result.Next(ctx) {
+		return Component{}, fmt.Errorf("component %s not found", id)
+	}
+	nVal, ok := result.Record().Get("n")
+	if !ok {
+		return Component{}, fmt.Errorf("no n field in record")
+	}
+	node, ok := nVal.(dbtype.Node)
+	if !ok {
+		return Component{}, fmt.Errorf("unexpected type for n")
+	}
+	return componentFromProps(node.Props), nil
 }
 
 // SaveComponent creates or updates a component node.
 func (g *GraphStore) SaveComponent(ctx context.Context, c Component) error {
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
 	cypher := `MERGE (n:Component {id: $id}) SET n += $props`
@@ -43,7 +132,7 @@ func (g *GraphStore) SaveComponent(ctx context.Context, c Component) error {
 
 // SaveEdge creates or updates an edge between two components.
 func (g *GraphStore) SaveEdge(ctx context.Context, e Edge) error {
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
 	cypher := fmt.Sprintf(
@@ -66,7 +155,7 @@ func (g *GraphStore) Neighbors(ctx context.Context, nodeID string, depth int) ([
 	if depth <= 0 {
 		depth = 1
 	}
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
 	cypher := fmt.Sprintf(
@@ -82,7 +171,7 @@ func (g *GraphStore) Neighbors(ctx context.Context, nodeID string, depth int) ([
 
 // FindByVehicle returns all components for a specific vehicle.
 func (g *GraphStore) FindByVehicle(ctx context.Context, year int, make, model string) ([]Component, error) {
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
 	vehicleKey := fmt.Sprintf("%d-%s-%s", year, make, model)
@@ -96,7 +185,7 @@ func (g *GraphStore) FindByVehicle(ctx context.Context, year int, make, model st
 
 // FindByType returns all components of a given type.
 func (g *GraphStore) FindByType(ctx context.Context, componentType string) ([]Component, error) {
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
 	cypher := `MATCH (n:Component {type: $type}) RETURN n`
@@ -109,7 +198,7 @@ func (g *GraphStore) FindByType(ctx context.Context, componentType string) ([]Co
 
 // TracePath finds the shortest path between two components.
 func (g *GraphStore) TracePath(ctx context.Context, fromID, toID string) ([]Component, error) {
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
 	cypher := `MATCH p = shortestPath((a:Component {id: $from})-[*]-(b:Component {id: $to}))
@@ -144,11 +233,10 @@ func (g *GraphStore) TracePath(ctx context.Context, fromID, toID string) ([]Comp
 
 // SaveBatch saves multiple components and edges in a single transaction.
 func (g *GraphStore) SaveBatch(ctx context.Context, components []Component, edges []Edge) error {
-	sess := g.driver.NewSession(ctx, neo4j.SessionConfig{})
+	sess := g.opener.OpenSession(ctx)
 	defer sess.Close(ctx)
 
-	_, err := sess.ExecuteWrite(ctx, func(tx neo4j.ManagedTransaction) (any, error) {
-		// Batch create/merge components
+	_, err := sess.ExecuteWrite(ctx, func(tx CypherRunner) (any, error) {
 		for _, c := range components {
 			cypher := `MERGE (n:Component {id: $id}) SET n += $props`
 			if _, err := tx.Run(ctx, cypher, map[string]any{
@@ -158,7 +246,6 @@ func (g *GraphStore) SaveBatch(ctx context.Context, components []Component, edge
 				return nil, err
 			}
 		}
-		// Batch create/merge edges
 		for _, e := range edges {
 			cypher := fmt.Sprintf(
 				`MATCH (a:Component {id: $from}), (b:Component {id: $to})
@@ -181,12 +268,16 @@ func (g *GraphStore) SaveBatch(ctx context.Context, components []Component, edge
 }
 
 // collectComponents reads all Component nodes from a result set.
-func collectComponents(ctx context.Context, result neo4j.ResultWithContext) ([]Component, error) {
+func collectComponents(ctx context.Context, result CypherResult) ([]Component, error) {
 	var items []Component
 	for result.Next(ctx) {
-		node, _, err := neo4j.GetRecordValue[dbtype.Node](result.Record(), "n")
-		if err != nil {
-			return nil, err
+		nVal, ok := result.Record().Get("n")
+		if !ok {
+			continue
+		}
+		node, ok := nVal.(dbtype.Node)
+		if !ok {
+			continue
 		}
 		items = append(items, componentFromProps(node.Props))
 	}
@@ -224,7 +315,6 @@ func sanitizeRelType(t string) string {
 	if len(safe) == 0 {
 		return "RELATED_TO"
 	}
-	// Uppercase for Neo4j convention
 	for i := range safe {
 		if safe[i] >= 'a' && safe[i] <= 'z' {
 			safe[i] -= 32
