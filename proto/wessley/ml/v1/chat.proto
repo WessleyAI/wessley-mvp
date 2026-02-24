@@ -1,0 +1,28 @@
+syntax = "proto3";
+package wessley.ml.v1;
+option go_package = "wessley-mvp/ml/proto;mlpb";
+
+service ChatService {
+    rpc Chat(ChatRequest) returns (ChatResponse);
+    rpc ChatStream(ChatRequest) returns (stream ChatChunk);
+}
+
+message ChatRequest {
+    string message = 1;
+    repeated string context = 2;
+    string system_prompt = 3;
+    float temperature = 4;
+    string model = 5;
+    int32 max_tokens = 6;
+}
+
+message ChatResponse {
+    string reply = 1;
+    int32 tokens_used = 2;
+    string model = 3;
+}
+
+message ChatChunk {
+    string text = 1;
+    bool done = 2;
+}
