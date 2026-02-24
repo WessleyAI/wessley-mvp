@@ -27,3 +27,15 @@ run-web:
 
 test:
 	go test ./...
+
+test-unit:
+	go test ./... -count=1
+
+test-integration:
+	./scripts/integration-test.sh
+
+test-all: test-unit test-integration
+
+test-coverage:
+	go test ./... -coverprofile=cover.out
+	go tool cover -func=cover.out
