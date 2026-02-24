@@ -1,0 +1,22 @@
+services:
+  wessley:
+    build:
+      target: dev
+    volumes:
+      - ..:/app
+    environment:
+      - LOG_LEVEL=debug
+    # Uses air for hot reload in dev target
+
+  ml-worker:
+    volumes:
+      - ../ml-worker:/app
+    environment:
+      - LOG_LEVEL=debug
+
+  web:
+    volumes:
+      - ../web:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
