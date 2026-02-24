@@ -14,6 +14,7 @@ import (
 	"syscall"
 
 	"github.com/WessleyAI/wessley-mvp/engine/scraper"
+	"github.com/WessleyAI/wessley-mvp/pkg/fn"
 )
 
 func main() {
@@ -32,28 +33,26 @@ func main() {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 
-	var ch <-chan func() (scraper.ScrapedPost, error)
+	var results <-chan fn.Result[scraper.ScrapedPost]
 
 	if *videoIDs != "" {
 		ids := strings.Split(*videoIDs, ",")
-		results := s.ScrapeVideoIDs(ctx, ids)
-		ch = unwrapChan(results)
+		results = s.ScrapeVideoIDs(ctx, ids)
 	} else {
 		if *apiKey == "" {
 			fmt.Fprintln(os.Stderr, "error: YouTube API key required (set YOUTUBE_API_KEY or use -api-key)")
 			fmt.Fprintln(os.Stderr, "       use -video-ids for direct scraping without API key")
 			os.Exit(1)
 		}
-		results := s.Scrape(ctx, scraper.ScrapeOpts{
+		results = s.Scrape(ctx, scraper.ScrapeOpts{
 			Query:      *query,
 			MaxResults: *maxRes,
 		})
-		ch = unwrapChan(results)
 	}
 
 	count := 0
-	for unwrap := range ch {
-		post, err := unwrap()
+	for r := range results {
+		post, err := r.Unwrap()
 		if err != nil {
 			log.Printf("scrape error: %v", err)
 			continue
@@ -65,18 +64,4 @@ func main() {
 	}
 
 	log.Printf("scraped %d videos", count)
-}
-
-// unwrapChan converts fn.Result channel to a channel of unwrap functions
-// to avoid importing fn in main's hot path.
-func unwrapChan[T any](in <-chan interface{ Unwrap() (T, error) }) <-chan func() (T, error) {
-	out := make(chan func() (T, error))
-	go func() {
-		defer close(out)
-		for r := range in {
-			r := r
-			out <- r.Unwrap
-		}
-	}()
-	return out
 }
