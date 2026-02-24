@@ -1,0 +1,119 @@
+services:
+  # --- App Services ---
+  wessley:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: wessley
+    ports:
+      - "8080:8080"
+    environment:
+      - NATS_URL=nats://nats:4222
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_AUTH=neo4j/password
+      - QDRANT_ADDR=qdrant:6334
+      - REDIS_ADDR=redis:6379
+      - ML_WORKER_ADDR=ml-worker:50051
+      - LOG_LEVEL=info
+    depends_on:
+      nats:
+        condition: service_started
+      neo4j:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      ml-worker:
+        condition: service_started
+    restart: unless-stopped
+
+  ml-worker:
+    build:
+      context: ..
+      dockerfile: Dockerfile.ml-worker
+    ports:
+      - "50051:50051"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - EMBEDDING_MODEL=mistral
+    depends_on:
+      ollama:
+        condition: service_started
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ../web
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://wessley:8080
+    depends_on:
+      - wessley
+    restart: unless-stopped
+
+  # --- Infrastructure ---
+  neo4j:
+    image: neo4j:5-community
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+      - "NEO4J_PLUGINS=[\"apoc\"]"
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:7474"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  nats:
+    image: nats:2-alpine
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: ["--jetstream", "--store_dir=/data"]
+    volumes:
+      - nats_data:/data
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  neo4j_data:
+  qdrant_data:
+  redis_data:
+  nats_data:
+  ollama_data:
