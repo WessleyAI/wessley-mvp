@@ -97,25 +97,19 @@ func TestFetchAll_MultipleCategories(t *testing.T) {
 }
 
 func TestFetchAll_ContextCancelled(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(200)
-	}))
-	defer srv.Close()
-
-	s := NewScraper(Config{Categories: []string{"A", "B"}, MaxGuides: 10, RateLimit: time.Millisecond})
-	s.client = &http.Client{Transport: &redirectTransport{server: srv}, Timeout: 5 * time.Second}
-
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
+
+	s := NewScraper(Config{Categories: []string{"A", "B"}, MaxGuides: 10, RateLimit: time.Millisecond})
 	posts, _ := s.FetchAll(ctx)
 	if len(posts) != 0 {
 		t.Fatalf("expected 0, got %d", len(posts))
 	}
 }
 
-func TestFetchAll_ServerError(t *testing.T) {
+func TestFetchAll_EmptyResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(500)
+		json.NewEncoder(w).Encode([]Guide{})
 	}))
 	defer srv.Close()
 
@@ -124,53 +118,8 @@ func TestFetchAll_ServerError(t *testing.T) {
 
 	posts, err := s.FetchAll(context.Background())
 	if err != nil {
-		t.Fatalf("expected nil error, got %v", err)
+		t.Fatalf("unexpected error: %v", err)
 	}
-	if len(posts) != 0 {
-		t.Fatalf("expected 0, got %d", len(posts))
-	}
-}
-
-func TestFetchAll_InvalidJSON(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("not json"))
-	}))
-	defer srv.Close()
-
-	s := NewScraper(Config{Categories: []string{"A"}, MaxGuides: 10, RateLimit: time.Millisecond})
-	s.client = &http.Client{Transport: &redirectTransport{server: srv}, Timeout: 5 * time.Second}
-
-	posts, _ := s.FetchAll(context.Background())
-	if len(posts) != 0 {
-		t.Fatalf("expected 0, got %d", len(posts))
-	}
-}
-
-func TestFetchAll_RateLimited(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(429)
-	}))
-	defer srv.Close()
-
-	s := NewScraper(Config{Categories: []string{"A"}, MaxGuides: 10, RateLimit: time.Millisecond})
-	s.client = &http.Client{Transport: &redirectTransport{server: srv}, Timeout: 5 * time.Second}
-
-	posts, _ := s.FetchAll(context.Background())
-	if len(posts) != 0 {
-		t.Fatalf("expected 0, got %d", len(posts))
-	}
-}
-
-func TestFetchAll_404(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(404)
-	}))
-	defer srv.Close()
-
-	s := NewScraper(Config{Categories: []string{"A"}, MaxGuides: 10, RateLimit: time.Millisecond})
-	s.client = &http.Client{Transport: &redirectTransport{server: srv}, Timeout: 5 * time.Second}
-
-	posts, _ := s.FetchAll(context.Background())
 	if len(posts) != 0 {
 		t.Fatalf("expected 0, got %d", len(posts))
 	}
@@ -200,6 +149,66 @@ func TestDoGet_CancelledContext(t *testing.T) {
 	result := s.doGet(ctx, "http://localhost:1/test")
 	if result.IsOk() {
 		t.Fatal("expected error")
+	}
+}
+
+func TestDoGet_BadJSON(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("not json"))
+	}))
+	defer srv.Close()
+
+	s := NewScraper(Config{RateLimit: time.Millisecond})
+	s.client = srv.Client()
+
+	result := s.doGet(context.Background(), srv.URL+"/test")
+	if result.IsOk() {
+		t.Fatal("expected error for bad JSON")
+	}
+}
+
+func TestDoGet_404(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(404)
+	}))
+	defer srv.Close()
+
+	s := NewScraper(Config{RateLimit: time.Millisecond})
+	s.client = srv.Client()
+
+	result := s.doGet(context.Background(), srv.URL+"/test")
+	if result.IsOk() {
+		t.Fatal("expected error for 404")
+	}
+}
+
+func TestDoGet_429(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(429)
+	}))
+	defer srv.Close()
+
+	s := NewScraper(Config{RateLimit: time.Millisecond})
+	s.client = srv.Client()
+
+	result := s.doGet(context.Background(), srv.URL+"/test")
+	if result.IsOk() {
+		t.Fatal("expected error for 429")
+	}
+}
+
+func TestDoGet_500(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(500)
+	}))
+	defer srv.Close()
+
+	s := NewScraper(Config{RateLimit: time.Millisecond})
+	s.client = srv.Client()
+
+	result := s.doGet(context.Background(), srv.URL+"/test")
+	if result.IsOk() {
+		t.Fatal("expected error for 500")
 	}
 }
 
