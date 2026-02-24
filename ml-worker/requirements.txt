@@ -1,0 +1,7 @@
+grpcio==1.68.1
+grpcio-tools==1.68.1
+grpcio-health-checking==1.68.1
+grpcio-reflection==1.68.1
+protobuf==5.29.2
+httpx==0.28.1
+sentence-transformers==3.3.1
