@@ -20,8 +20,28 @@ import (
 	"github.com/WessleyAI/wessley-mvp/engine/scraper"
 	"github.com/WessleyAI/wessley-mvp/engine/semantic"
 	"github.com/WessleyAI/wessley-mvp/pkg/fn"
+	"github.com/WessleyAI/wessley-mvp/pkg/metrics"
 	"github.com/WessleyAI/wessley-mvp/pkg/ollama"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
+)
+
+var met = metrics.New()
+
+// Ingest metrics
+var (
+	mDocsTotal       = func(source string) *metrics.Counter { return met.Counter(metrics.WithLabels("wessley_ingest_docs_total", "source", source), "Total documents ingested") }
+	mErrorsTotal     = func(stage string) *metrics.Counter { return met.Counter(metrics.WithLabels("wessley_ingest_errors_total", "stage", stage), "Total ingestion errors") }
+	mDocsSkipped     = met.Counter("wessley_ingest_docs_skipped_total", "Documents skipped by dedup")
+	mChunksTotal     = met.Counter("wessley_ingest_chunks_total", "Total chunks created")
+	mEmbeddingsTotal = met.Counter("wessley_ingest_embeddings_total", "Total embeddings generated")
+	mNeo4jWrites     = met.Counter("wessley_ingest_neo4j_writes_total", "Graph store writes")
+	mQdrantWrites    = met.Counter("wessley_ingest_qdrant_writes_total", "Vector store writes")
+	mFilesProcessed  = met.Counter("wessley_ingest_files_processed_total", "Files processed")
+	mActiveDocs      = met.Gauge("wessley_ingest_active_docs", "Currently processing documents")
+	mLastScan        = met.Gauge("wessley_ingest_last_scan_timestamp", "Epoch of last directory scan")
+	mPipelineDur     = met.Histogram("wessley_ingest_pipeline_duration_seconds", "Per-doc pipeline time", nil)
+	mStageDur        = func(stage string) *metrics.Histogram { return met.Histogram(metrics.WithLabels("wessley_ingest_stage_duration_seconds", "stage", stage), "Per-stage duration", nil) }
+	mEmbedDur        = met.Histogram("wessley_ingest_embed_duration_seconds", "Ollama embed call time", nil)
 )
 
 const vectorDims = 768 // nomic-embed-text
@@ -40,6 +60,9 @@ func main() {
 		stateFile  = flag.String("state", "/tmp/wessley-data/.ingest-state.json", "processed files state")
 	)
 	flag.Parse()
+
+	// Start metrics server
+	met.ServeAsync(9091)
 
 	log := slog.Default()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -109,8 +132,10 @@ func main() {
 	log.Info("watching for scraped data", "dir", *dataDir, "interval", *interval)
 
 	scan := func() {
+		mLastScan.Set(time.Now().Unix())
 		entries, err := os.ReadDir(*dataDir)
 		if err != nil {
+			mErrorsTotal("scan").Inc()
 			log.Error("readdir failed", "error", err)
 			return
 		}
@@ -130,6 +155,7 @@ func main() {
 			log.Info("processing file", "file", e.Name())
 			count, errs := processFile(ctx, path, pipeline)
 			log.Info("file done", "file", e.Name(), "ingested", count, "errors", errs)
+			mFilesProcessed.Inc()
 
 			processed[key] = true
 			saveState(*stateFile, processed)
@@ -291,12 +317,22 @@ func processFile(ctx context.Context, path string, pipeline fn.Stage[scraper.Scr
 		if ctx.Err() != nil {
 			break
 		}
+		mActiveDocs.Inc()
+		docStart := time.Now()
 		result := pipeline(ctx, p)
+		mPipelineDur.Since(docStart)
+		mActiveDocs.Dec()
 		if result.IsErr() {
 			_, err := result.Unwrap()
 			log.Error("pipeline error", "source_id", p.SourceID, "error", err)
+			mErrorsTotal("pipeline").Inc()
 			errs++
 		} else {
+			source := p.Source
+			if idx := strings.IndexByte(source, ':'); idx > 0 {
+				source = source[:idx]
+			}
+			mDocsTotal(source).Inc()
 			count++
 		}
 	}

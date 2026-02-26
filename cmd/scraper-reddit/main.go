@@ -15,7 +15,16 @@ import (
 	"github.com/nats-io/nats.go"
 
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-reddit/reddit"
+	"github.com/WessleyAI/wessley-mvp/pkg/metrics"
 	"github.com/WessleyAI/wessley-mvp/pkg/natsutil"
+)
+
+var met = metrics.New()
+var (
+	mPostsTotal    = met.Counter("wessley_scraper_reddit_posts_total", "Total Reddit posts scraped")
+	mErrorsTotal   = met.Counter("wessley_scraper_reddit_errors_total", "Total scraper errors")
+	mScrapeDur     = met.Histogram("wessley_scraper_reddit_scrape_duration_seconds", "Scrape cycle duration", nil)
+	mLastScrape    = met.Gauge("wessley_scraper_reddit_last_scrape_timestamp", "Epoch of last scrape")
 )
 
 func main() {
@@ -27,6 +36,8 @@ func main() {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
+
+	met.ServeAsync(9093)
 
 	subreddits := []string{
 		"MechanicAdvice",
@@ -68,10 +79,15 @@ func main() {
 	enc.SetIndent("", "  ")
 
 	run := func() error {
+		scrapeStart := time.Now()
 		posts, err := scraper.FetchAll(ctx)
 		if err != nil {
+			mErrorsTotal.Inc()
 			return fmt.Errorf("fetch: %w", err)
 		}
+		mScrapeDur.Since(scrapeStart)
+		mLastScrape.Set(time.Now().Unix())
+		mPostsTotal.Add(int64(len(posts)))
 		log.Printf("fetched %d posts", len(posts))
 
 		for _, p := range posts {

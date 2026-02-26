@@ -16,6 +16,8 @@ import (
 
 	"github.com/nats-io/nats.go"
 
+	"github.com/WessleyAI/wessley-mvp/pkg/metrics"
+
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/forums"
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/ifixit"
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/manuals"
@@ -46,6 +48,27 @@ func main() {
 	neo4jUser := flag.String("neo4j-user", "neo4j", "Neo4j username")
 	neo4jPass := flag.String("neo4j-pass", "password", "Neo4j password")
 	flag.Parse()
+
+	met := metrics.New()
+	mDocsTotal := func(source string) *metrics.Counter {
+		return met.Counter(metrics.WithLabels("wessley_scraper_sources_docs_total", "source", source), "Docs scraped by source")
+	}
+	mErrorsTotal := func(source string) *metrics.Counter {
+		return met.Counter(metrics.WithLabels("wessley_scraper_sources_errors_total", "source", source), "Scraper errors by source")
+	}
+	mScrapeDur := func(source string) *metrics.Histogram {
+		return met.Histogram(metrics.WithLabels("wessley_scraper_sources_scrape_duration_seconds", "source", source), "Scrape duration by source", nil)
+	}
+	mLastScrape := met.Gauge("wessley_scraper_sources_last_scrape_timestamp", "Epoch of last scrape")
+	mManualsDiscovered := met.Counter("wessley_scraper_manuals_discovered_total", "Manuals discovered")
+	mManualsDownloaded := met.Counter("wessley_scraper_manuals_downloaded_total", "Manuals downloaded")
+	mManualsFailed := met.Counter("wessley_scraper_manuals_failed_total", "Manuals failed")
+	// Suppress unused warnings for manual-mode metrics
+	_ = mManualsDiscovered
+	_ = mManualsDownloaded
+	_ = mManualsFailed
+
+	met.ServeAsync(9092)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -221,10 +244,14 @@ func main() {
 		var total int
 
 		if nhtsaScraper != nil {
+			start := time.Now()
 			posts, err := nhtsaScraper.FetchAll(ctx)
 			if err != nil {
+				mErrorsTotal("nhtsa").Inc()
 				log.Printf("nhtsa error: %v", err)
 			} else {
+				mScrapeDur("nhtsa").Since(start)
+				mDocsTotal("nhtsa").Add(int64(len(posts)))
 				log.Printf("nhtsa: fetched %d posts", len(posts))
 				total += len(posts)
 				if err := emit(posts); err != nil {
@@ -234,10 +261,14 @@ func main() {
 		}
 
 		if ifixitScraper != nil {
+			start := time.Now()
 			posts, err := ifixitScraper.FetchAll(ctx)
 			if err != nil {
+				mErrorsTotal("ifixit").Inc()
 				log.Printf("ifixit error: %v", err)
 			} else {
+				mScrapeDur("ifixit").Since(start)
+				mDocsTotal("ifixit").Add(int64(len(posts)))
 				log.Printf("ifixit: fetched %d posts", len(posts))
 				total += len(posts)
 				if err := emit(posts); err != nil {
@@ -247,10 +278,14 @@ func main() {
 		}
 
 		if manualScraper != nil {
+			start := time.Now()
 			posts, err := manualScraper.FetchAll(ctx)
 			if err != nil {
+				mErrorsTotal("manuals").Inc()
 				log.Printf("manuals error: %v", err)
 			} else {
+				mScrapeDur("manuals").Since(start)
+				mDocsTotal("manuals").Add(int64(len(posts)))
 				log.Printf("manuals: fetched %d posts", len(posts))
 				total += len(posts)
 				if err := emit(posts); err != nil {
@@ -260,10 +295,14 @@ func main() {
 		}
 
 		if forumScraper != nil {
+			start := time.Now()
 			posts, err := forumScraper.FetchAll(ctx)
 			if err != nil {
+				mErrorsTotal("forums").Inc()
 				log.Printf("forums error: %v", err)
 			} else {
+				mScrapeDur("forums").Since(start)
+				mDocsTotal("forums").Add(int64(len(posts)))
 				log.Printf("forums: fetched %d posts", len(posts))
 				total += len(posts)
 				if err := emit(posts); err != nil {
@@ -272,6 +311,7 @@ func main() {
 			}
 		}
 
+		mLastScrape.Set(time.Now().Unix())
 		log.Printf("total: %d posts scraped", total)
 		return nil
 	}
