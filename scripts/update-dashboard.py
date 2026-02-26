@@ -97,7 +97,8 @@ for f in glob.glob(os.path.join(DATA_SRC, "*.json")):
     except:
         pass
 
-total_docs = sum(docs_by_source.values())
+# Use Neo4j node count as source of truth for total docs (not regex counting which double-counts)
+total_docs = total_nodes if total_nodes > 0 else sum(docs_by_source.values())
 
 # === Files processed ===
 files_processed = 0
