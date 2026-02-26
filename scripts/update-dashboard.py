@@ -228,4 +228,47 @@ with open(HISTORY, "w") as f:
 with open(PREV, "w") as f:
     json.dump(snapshot, f)
 
+# === Generate logs-latest.json ===
+logs = []
+
+# Recent ingest activity from state file changes
+for f in sorted(glob.glob(os.path.join(DATA_SRC, "*.json")), key=os.path.getmtime, reverse=True)[:10]:
+    if os.path.basename(f).startswith("."): continue
+    mtime = datetime.fromtimestamp(os.path.getmtime(f), timezone.utc)
+    size = os.path.getsize(f)
+    logs.append({
+        "time": mtime.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "category": "ingestion",
+        "message": f"File {os.path.basename(f)} ({size//1024}KB) processed"
+    })
+
+# Process status
+for proc_name, pattern in [("scraper-reddit", "scraper-reddit"), ("scraper-sources", "scraper-sources"), ("ingest", "/tmp/ingest")]:
+    running = process_running(pattern)
+    logs.append({
+        "time": now,
+        "category": "system",
+        "message": f"{proc_name}: {'running' if running else 'STOPPED'}"
+    })
+
+# Docker container status
+try:
+    result = subprocess.run(["docker", "ps", "--format", "{{.Names}} {{.Status}}"], capture_output=True, text=True, timeout=5)
+    for line in result.stdout.strip().split("\n"):
+        if line.strip():
+            logs.append({"time": now, "category": "infrastructure", "message": f"Container {line.strip()}"})
+except: pass
+
+# Disk usage
+try:
+    data_size = subprocess.run(["du", "-sh", DATA_SRC], capture_output=True, text=True, timeout=5)
+    logs.append({"time": now, "category": "system", "message": f"Data directory: {data_size.stdout.strip()}"})
+except: pass
+
+# Sort by time desc
+logs.sort(key=lambda x: x["time"], reverse=True)
+
+with open(os.path.join(DOCS_DIR, "data", "logs-latest.json"), "w") as f:
+    json.dump(logs[:50], f, indent=2)
+
 print(f"✅ Updated: {total_docs} docs, {total_nodes} nodes, {total_vectors} vectors | Δ +{delta['new_docs']} docs +{delta['new_nodes']} nodes")

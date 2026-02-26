@@ -181,6 +181,37 @@ body{display:flex;min-height:100vh;min-height:100dvh}
 .view-subtitle{font-size:13px;color:var(--text3);margin-bottom:16px}
 
 /* Hidden views */
+.analysis-section{margin-bottom:20px}
+.analysis-section h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.analysis-section .count-badge{background:var(--surface2);padding:2px 8px;border-radius:10px;font-size:11px}
+.analysis-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;border-left:3px solid var(--border)}
+.analysis-card.critical{border-left-color:var(--red)}
+.analysis-card.warning{border-left-color:var(--amber)}
+.analysis-card.suggestion{border-left-color:var(--blue)}
+.analysis-card.bug{border-left-color:var(--red);background:rgba(239,68,68,.03)}
+.analysis-card .card-title{font-weight:600;font-size:14px;margin-bottom:6px}
+.analysis-card .card-detail{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:6px}
+.analysis-card .card-fix{font-size:12px;color:var(--green);line-height:1.4}
+.analysis-card .card-fix::before{content:"💡 Fix: "}
+.analysis-card .card-meta{font-size:11px;color:var(--text3);margin-top:6px}
+.effort-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.effort-badge.low{background:rgba(34,197,94,.15);color:var(--green)}
+.effort-badge.med{background:rgba(251,191,36,.15);color:var(--amber)}
+.effort-badge.high{background:rgba(239,68,68,.15);color:var(--red)}
+.healthy-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.healthy-pill{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:6px 12px;border-radius:8px;font-size:12px}
+.strategy-item{padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.5}
+.log-cat-ingestion{background:var(--blue);color:#fff}
+.log-cat-system{background:var(--text3);color:#fff}
+.log-cat-infrastructure{background:var(--purple);color:#fff}
+.log-cat-error{background:var(--red);color:#fff}
+.log-cat-source{background:var(--orange);color:#fff}
+.freshness-item{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.freshness-item:last-child{border-bottom:none}
+.freshness-age{color:var(--text3);font-size:12px}
+.freshness-age.stale{color:var(--amber)}
+.freshness-age.fresh{color:var(--green)}
+.pipe-status-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
 .view{display:none}.view.active{display:block}
 .tab-content{display:none}.tab-content.active{display:block}
 
@@ -245,6 +276,7 @@ body{display:flex;min-height:100vh;min-height:100dvh}
       <div class="nav-group-label">System</div>
       <div class="nav-item" data-view="infra"><span class="icon">🖥️</span>Infrastructure</div>
       <div class="nav-item" data-view="logs"><span class="icon">📋</span>Logs</div>
+      <div class="nav-item" data-view="analysis"><span class="icon">🔍</span>Analysis</div>
     </div>
   </nav>
   <div class="sidebar-footer">
@@ -262,6 +294,11 @@ body{display:flex;min-height:100vh;min-height:100dvh}
   <div class="health-strip" id="healthStrip"></div>
   <div class="kpi-grid" id="kpiGrid"></div>
   <div class="insights" id="insightsPanel"><h3>Insights & Actions</h3><div id="insightsList"></div></div>
+  <div class="insights" id="strategicAlerts" style="display:none"><h3>⚡ Strategic Alerts</h3><div id="strategicAlertsList"></div></div>
+  <div class="cols-2" id="overviewExtra" style="display:none">
+    <div class="panel" id="dataFreshnessPanel"><h3>Data Freshness</h3><div id="dataFreshness"></div></div>
+    <div class="panel" id="pipelineStatusPanel"><h3>Pipeline Status</h3><div id="pipelineStatus"></div></div>
+  </div>
   <div class="cols-2">
     <div class="panel"><h3>Source Mix</h3><div id="sourceMixBar"></div></div>
     <div class="panel"><h3>Top Makes by Coverage</h3><div class="chart-wrap"><canvas id="chartMakes"></canvas></div></div>
@@ -354,6 +391,13 @@ body{display:flex;min-height:100vh;min-height:100dvh}
   <div class="view-title">Activity Log</div>
   <div class="view-subtitle">Recent pipeline activity</div>
   <div id="logsContent"></div>
+</div>
+
+<!-- ANALYSIS -->
+<div class="view" id="v-analysis">
+  <div class="view-title">Strategic Analysis</div>
+  <div class="view-subtitle" id="analysisTime">Last analysis: —</div>
+  <div id="analysisContent"></div>
 </div>
 
 </main>
@@ -691,17 +735,160 @@ function timeAgo(date){
   if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
 }
 
+function renderSourcesExtra(){
+  if(!DATA)return;
+  const ing=DATA.ingestion,sc=DATA.scrapers;
+  // Show post counts per source from scraper data
+  const cards=document.querySelectorAll('.source-card .count');
+  // Calculate docs/hour if history has enough points
+  if(HIST.length>=3){
+    const oldest=HIST[0],newest=HIST[HIST.length-1];
+    const hours=(new Date(newest.timestamp)-new Date(oldest.timestamp))/3600000;
+    if(hours>0){
+      const rate=Math.round((newest.total_docs-oldest.total_docs)/hours);
+      const summary=document.getElementById('sourcesSummary');
+      if(summary&&rate>0)summary.innerHTML+=` Ingestion rate: ~<strong>${rate} docs/hour</strong>.`;
+    }
+  }
+}
+
+/* Analysis data cache */
+let ANALYSIS=null, ANALYSIS_FETCHED=false, LOGS_DATA=null, LOGS_FETCHED=false;
+
+async function fetchAnalysis(){
+  if(ANALYSIS_FETCHED)return ANALYSIS;
+  ANALYSIS_FETCHED=true;
+  try{ANALYSIS=await fetch('data/analysis-latest.json?'+Date.now()).then(r=>r.ok?r.json():null)}catch(e){ANALYSIS=null}
+  return ANALYSIS;
+}
+
+async function fetchLogs(){
+  if(LOGS_FETCHED)return LOGS_DATA;
+  LOGS_FETCHED=true;
+  try{LOGS_DATA=await fetch('data/logs-latest.json?'+Date.now()).then(r=>r.ok?r.json():null)}catch(e){LOGS_DATA=null}
+  return LOGS_DATA;
+}
+
+function renderAnalysisSection(title,items,cls,renderItem){
+  if(!items||!items.length)return'';
+  return`<div class="analysis-section"><h3>${title}<span class="count-badge">${items.length}</span></h3>${items.map(i=>renderItem(i,cls)).join('')}</div>`;
+}
+
+async function renderAnalysis(){
+  const a=await fetchAnalysis();
+  if(!a){document.getElementById('analysisContent').innerHTML='<div class="empty-state">No analysis data available. Run the strategist to generate analysis-latest.json.</div>';return}
+  if(a.timestamp)document.getElementById('analysisTime').textContent='Last analysis: '+timeAgo(new Date(a.timestamp));
+  let html='';
+  // Critical
+  html+=renderAnalysisSection('Critical Issues',a.critical,'critical',(i)=>`<div class="analysis-card critical"><div class="card-title">${i.title||i.issue||''}</div><div class="card-detail">${i.detail||i.description||''}</div>${i.fix?`<div class="card-fix">${i.fix}</div>`:''}</div>`);
+  // Warnings
+  html+=renderAnalysisSection('Warnings',a.warnings,'warning',(i)=>`<div class="analysis-card warning"><div class="card-title">${i.title||i.issue||''}</div><div class="card-detail">${i.detail||i.description||''}</div>${i.fix?`<div class="card-fix">${i.fix}</div>`:''}</div>`);
+  // Healthy
+  if(a.healthy&&a.healthy.length){html+=`<div class="analysis-section"><h3>Healthy<span class="count-badge">${a.healthy.length}</span></h3><div class="healthy-pills">${a.healthy.map(h=>`<div class="healthy-pill">✓ ${typeof h==='string'?h:h.name||h.title||''}</div>`).join('')}</div></div>`}
+  // Suggestions
+  html+=renderAnalysisSection('Suggestions',a.suggestions,'suggestion',(i)=>`<div class="analysis-card suggestion"><div class="card-title">${i.title||''} ${i.effort?`<span class="effort-badge ${i.effort}">${i.effort}</span>`:''}</div><div class="card-detail">${i.detail||i.description||''}</div>${i.impact?`<div class="card-meta">Impact: ${i.impact}</div>`:''}</div>`);
+  // Bugs
+  html+=renderAnalysisSection('Bugs',a.bugs,'bug',(i)=>`<div class="analysis-card bug"><div class="card-title">🐛 ${i.title||i.file||''}</div><div class="card-detail">${i.detail||i.description||''}</div>${i.file?`<div class="card-meta">${i.file}${i.line?':'+i.line:''}</div>`:''}${i.fix?`<div class="card-fix">${i.fix}</div>`:''}</div>`);
+  // Key Metrics
+  if(a.metrics){const m=a.metrics;html+=`<div class="analysis-section"><h3>Key Metrics</h3><div class="stats-grid"><div class="stat-box"><div class="num">${(m.total_docs||0).toLocaleString()}</div><div class="lbl">Total Docs</div></div><div class="stat-box"><div class="num">${(m.total_nodes||0).toLocaleString()}</div><div class="lbl">Total Nodes</div></div><div class="stat-box"><div class="num">${(m.total_vectors||0).toLocaleString()}</div><div class="lbl">Vectors</div></div><div class="stat-box"><div class="num">${m.error_rate||'—'}</div><div class="lbl">Error Rate</div></div><div class="stat-box"><div class="num">${m.sources_active||'—'}</div><div class="lbl">Sources Active</div></div></div></div>`}
+  // Strategy
+  if(a.strategy&&a.strategy.length){html+=`<div class="analysis-section"><h3>Strategy<span class="count-badge">${a.strategy.length}</span></h3>${a.strategy.map(s=>`<div class="strategy-item">${typeof s==='string'?s:s.recommendation||s.title||''}</div>`).join('')}</div>`}
+  document.getElementById('analysisContent').innerHTML=html;
+}
+
+async function renderOverviewAlerts(){
+  const a=await fetchAnalysis();
+  const el=document.getElementById('strategicAlerts');
+  const list=document.getElementById('strategicAlertsList');
+  if(!a){el.style.display='none';return}
+  const items=[];
+  if(a.critical)a.critical.slice(0,2).forEach(i=>items.push({level:'error',msg:i.title||i.issue||''}));
+  if(a.warnings)a.warnings.slice(0,3-items.length).forEach(i=>items.push({level:'warn',msg:i.title||i.issue||''}));
+  if(!items.length){el.style.display='none';return}
+  el.style.display='';
+  list.innerHTML=items.map(i=>`<div class="insight-item"><span class="insight-dot" style="background:${insightColor(i.level)}"></span>${i.msg}</div>`).join('');
+}
+
+async function renderOverviewExtra(){
+  const logs=await fetchLogs();
+  const el=document.getElementById('overviewExtra');
+  if(!logs||!logs.length){el.style.display='none';return}
+  el.style.display='';
+  // Data Freshness - from ingestion logs
+  const ingestionLogs=logs.filter(l=>l.category==='ingestion');
+  document.getElementById('dataFreshness').innerHTML=ingestionLogs.length?ingestionLogs.slice(0,8).map(l=>{
+    const age=timeAgo(new Date(l.time));
+    const stale=(Date.now()-new Date(l.time))>3600000;
+    return`<div class="freshness-item"><span>${l.message}</span><span class="freshness-age ${stale?'stale':'fresh'}">${age}</span></div>`}).join(''):'<div class="empty-state">No ingestion data</div>';
+  // Pipeline Status
+  const sysLogs=logs.filter(l=>l.category==='system'&&(l.message.includes('running')||l.message.includes('STOPPED')));
+  document.getElementById('pipelineStatus').innerHTML=sysLogs.length?sysLogs.map(l=>{
+    const running=l.message.includes('running');
+    return`<div class="pipe-status-item"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:${running?'var(--green)':'var(--red)'}"></span>${l.message}</div>`}).join(''):'<div class="empty-state">No process data</div>';
+}
+
+async function renderGraphAlerts(){
+  const a=await fetchAnalysis();
+  if(!a||!a.critical)return;
+  const graphIssues=a.critical.filter(i=>(i.title||i.issue||'').toLowerCase().includes('graph'));
+  if(graphIssues.length){
+    const el=document.getElementById('graphAlert');
+    el.innerHTML=graphIssues.map(i=>`<div class="alert-banner warn">🔍 ${i.title||i.issue}: ${i.detail||i.description||''}</div>`).join('')+el.innerHTML;
+  }
+}
+
+async function renderLogsEnriched(){
+  const logsData=await fetchLogs();
+  let items=[];
+  // From history deltas
+  if(HIST&&HIST.length>1){
+    for(let i=HIST.length-1;i>=1;i--){
+      const h=HIST[i],t=h.timestamp;
+      if(h.new_docs>0)items.push({time:t,cat:'ingestion',msg:`${h.new_docs} new documents ingested`});
+      if(h.new_vectors>0)items.push({time:t,cat:'system',msg:`${h.new_vectors} new vectors embedded`});
+      if(h.errors_delta>0)items.push({time:t,cat:'error',msg:`${h.errors_delta} new errors`});
+    }
+  }
+  // From logs-latest.json
+  if(logsData){
+    logsData.forEach(l=>{items.push({time:l.time,cat:l.category||'system',msg:l.message})});
+  }
+  // Sort by time desc
+  items.sort((a,b)=>new Date(b.time)-new Date(a.time));
+  items=items.slice(0,50);
+  if(!items.length){
+    document.getElementById('logsContent').innerHTML=`<div class="empty-state" style="padding:60px 20px"><div style="font-size:24px;margin-bottom:12px">📋</div><div>No activity data available yet.</div></div>`;
+    return;
+  }
+  const cats=['All','ingestion','system','infrastructure','error','source'];
+  let filterHtml=`<div class="log-filters">${cats.map((c,i)=>`<button class="log-filter${i===0?' active':''}" data-logcat="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</button>`).join('')}</div>`;
+
+  function renderItems(filter){
+    return items.filter(i=>filter==='All'||i.cat===filter).map(i=>`<div class="log-item"><span class="time">${timeAgo(new Date(i.time))}</span><span class="log-badge log-cat-${i.cat}">${i.cat}</span><span>${i.msg}</span></div>`).join('')||'<div class="empty-state">No items in this category</div>';
+  }
+
+  document.getElementById('logsContent').innerHTML=filterHtml+'<div id="logItems">'+renderItems('All')+'</div>';
+  document.querySelectorAll('.log-filter').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.log-filter').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('logItems').innerHTML=renderItems(btn.dataset.logcat);
+    });
+  });
+}
+
 /* Render dispatcher */
 function renderView(){
   switch(currentView){
-    case'overview':renderOverview();break;
+    case'overview':renderOverview();renderOverviewAlerts();renderOverviewExtra();break;
     case'ingestion':renderIngestion();break;
-    case'sources':renderSources();break;
-    case'graph':renderGraph();break;
+    case'sources':renderSources();renderSourcesExtra();break;
+    case'graph':renderGraph();renderGraphAlerts();break;
     case'vehicles':renderVehicles();break;
     case'manuals':renderManuals();break;
     case'infra':renderInfra();break;
-    case'logs':renderLogs();break;
+    case'logs':renderLogsEnriched();break;
+    case'analysis':renderAnalysis();break;
   }
   // Sidebar health
   if(DATA){
