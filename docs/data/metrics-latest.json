@@ -1,65 +1,140 @@
 {
-  "timestamp": "2026-02-26T10:15:00Z",
+  "timestamp": "2026-02-26T17:02:05Z",
   "knowledge_graph": {
-    "total_nodes": 1499,
+    "total_nodes": 1584,
     "total_relationships": 0,
     "nodes_by_type": {
-      "Component": 1499
+      "Component": 1584
     },
     "relationships_by_type": {},
     "top_makes": [
-      {"name": "Toyota", "models": 18, "documents": 420},
-      {"name": "Honda", "models": 12, "documents": 310},
-      {"name": "Ford", "models": 15, "documents": 285},
-      {"name": "Chevrolet", "models": 14, "documents": 195},
-      {"name": "Nissan", "models": 10, "documents": 142},
-      {"name": "BMW", "models": 8, "documents": 67},
-      {"name": "Hyundai", "models": 9, "documents": 52},
-      {"name": "Kia", "models": 7, "documents": 28}
+      {
+        "name": "Toyota",
+        "models": 18,
+        "documents": 420
+      },
+      {
+        "name": "Honda",
+        "models": 12,
+        "documents": 310
+      },
+      {
+        "name": "Ford",
+        "models": 15,
+        "documents": 285
+      },
+      {
+        "name": "Chevrolet",
+        "models": 14,
+        "documents": 195
+      },
+      {
+        "name": "Nissan",
+        "models": 10,
+        "documents": 142
+      },
+      {
+        "name": "BMW",
+        "models": 8,
+        "documents": 67
+      },
+      {
+        "name": "Hyundai",
+        "models": 9,
+        "documents": 52
+      },
+      {
+        "name": "Kia",
+        "models": 7,
+        "documents": 28
+      }
     ],
     "top_vehicles": [
-      {"vehicle": "2024 Toyota Camry", "documents": 45, "components": 120},
-      {"vehicle": "2024 Honda Civic", "documents": 38, "components": 95},
-      {"vehicle": "2024 Ford F-150", "documents": 35, "components": 88},
-      {"vehicle": "2024 Toyota RAV4", "documents": 32, "components": 78},
-      {"vehicle": "2024 Chevrolet Silverado", "documents": 28, "components": 72},
-      {"vehicle": "2024 Honda CR-V", "documents": 25, "components": 65},
-      {"vehicle": "2024 Nissan Altima", "documents": 22, "components": 58},
-      {"vehicle": "2024 Toyota Highlander", "documents": 20, "components": 52},
-      {"vehicle": "2024 Ford Explorer", "documents": 18, "components": 45},
-      {"vehicle": "2024 BMW 3 Series", "documents": 15, "components": 38}
+      {
+        "vehicle": "2024 Toyota Camry",
+        "documents": 45,
+        "components": 120
+      },
+      {
+        "vehicle": "2024 Honda Civic",
+        "documents": 38,
+        "components": 95
+      },
+      {
+        "vehicle": "2024 Ford F-150",
+        "documents": 35,
+        "components": 88
+      },
+      {
+        "vehicle": "2024 Toyota RAV4",
+        "documents": 32,
+        "components": 78
+      },
+      {
+        "vehicle": "2024 Chevrolet Silverado",
+        "documents": 28,
+        "components": 72
+      }
     ],
     "recent_vehicles": []
   },
   "vector_store": {
-    "total_vectors": 2232,
+    "total_vectors": 2360,
     "collection": "wessley",
     "dimensions": 768,
     "status": "green"
   },
   "ingestion": {
-    "total_docs_ingested": 1499,
+    "total_docs_ingested": 19564,
     "total_errors": 23,
     "docs_by_source": {
-      "nhtsa": 182,
-      "ifixit": 11,
-      "reddit": 1197,
-      "youtube": 61,
-      "forums": 48
+      "youtube": 78,
+      "ifixit": 539,
+      "nhtsa": 18947
     },
-    "last_ingestion": "2026-02-26T10:15:00Z",
-    "files_processed": 83
+    "last_ingestion": "2026-02-26T17:02:05Z",
+    "files_processed": 97
   },
   "scrapers": {
-    "reddit": {"status": "running", "last_scrape": "2026-02-26T10:10:00Z", "total_posts": 1197},
-    "nhtsa": {"status": "running", "last_scrape": "2026-02-26T09:46:00Z", "total_docs": 182},
-    "ifixit": {"status": "running", "last_scrape": "2026-02-26T09:46:00Z", "total_docs": 11},
-    "youtube": {"status": "running", "last_scrape": "2026-02-26T09:31:00Z", "total_docs": 61},
-    "manuals": {"discovered": 0, "downloaded": 0, "ingested": 0, "failed": 0}
+    "reddit": {
+      "status": "running",
+      "last_scrape": "2026-02-26T17:02:05Z",
+      "total_posts": 0
+    },
+    "nhtsa": {
+      "status": "running",
+      "last_scrape": "2026-02-26T17:02:05Z",
+      "total_docs": 18947
+    },
+    "ifixit": {
+      "status": "running",
+      "last_scrape": "2026-02-26T17:02:05Z",
+      "total_docs": 539
+    },
+    "youtube": {
+      "status": "running",
+      "last_scrape": "2026-02-26T17:02:05Z",
+      "total_docs": 78
+    },
+    "manuals": {
+      "discovered": 0,
+      "downloaded": 0,
+      "ingested": 0,
+      "failed": 0
+    }
   },
   "infrastructure": {
-    "neo4j": {"status": "connected", "version": "5.x"},
-    "qdrant": {"status": "connected", "vectors": 2232},
-    "ollama": {"status": "connected", "model": "nomic-embed-text"}
+    "neo4j": {
+      "status": "connected",
+      "version": "5.x"
+    },
+    "qdrant": {
+      "status": "connected",
+      "vectors": 2360
+    },
+    "ollama": {
+      "status": "connected",
+      "model": "nomic-embed-text"
+    }
   }
 }
