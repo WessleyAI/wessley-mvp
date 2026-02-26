@@ -201,6 +201,31 @@ body{display:flex;min-height:100vh;min-height:100dvh}
 .healthy-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .healthy-pill{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:6px 12px;border-radius:8px;font-size:12px}
 .strategy-item{padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.5}
+
+/* Fix history */
+.fix-run{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.fix-run-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.fix-run-time{font-size:14px;font-weight:600}
+.fix-run-summary{font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.5}
+.fix-run-stats{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.fix-stat{font-size:11px;padding:4px 10px;border-radius:6px;background:var(--surface2);color:var(--text2)}
+.fix-stat.pass{background:rgba(34,197,94,.1);color:var(--green)}
+.fix-stat.fail{background:rgba(239,68,68,.1);color:var(--red)}
+.fix-item{padding:10px 0;border-top:1px solid var(--border);font-size:13px}
+.fix-item:first-child{border-top:none;padding-top:0}
+.fix-item .fix-title{font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.fix-item .fix-detail{color:var(--text2);line-height:1.5;margin-bottom:4px}
+.fix-item .fix-files{font-size:11px;color:var(--text3)}
+.fix-item .fix-files code{background:var(--surface2);padding:1px 6px;border-radius:3px;font-size:11px}
+.fix-cat{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.fix-cat.critical{background:rgba(239,68,68,.15);color:var(--red)}
+.fix-cat.warning{background:rgba(251,191,36,.15);color:var(--amber)}
+.fix-cat.bug{background:rgba(167,139,250,.15);color:var(--purple)}
+.fix-cat.test{background:rgba(59,130,246,.15);color:var(--blue)}
+.skip-item{padding:8px 0;border-top:1px solid var(--border);font-size:13px;color:var(--text3)}
+.skip-item .skip-title{font-weight:500;color:var(--text2)}
+.skip-item .skip-reason{font-size:12px;margin-top:2px}
+.fix-commit{font-size:11px;color:var(--text3);font-family:monospace;background:var(--surface2);padding:2px 8px;border-radius:4px}
 .log-cat-ingestion{background:var(--blue);color:#fff}
 .log-cat-system{background:var(--text3);color:#fff}
 .log-cat-infrastructure{background:var(--purple);color:#fff}
@@ -277,6 +302,7 @@ body{display:flex;min-height:100vh;min-height:100dvh}
       <div class="nav-item" data-view="infra"><span class="icon">🖥️</span>Infrastructure</div>
       <div class="nav-item" data-view="logs"><span class="icon">📋</span>Logs</div>
       <div class="nav-item" data-view="analysis"><span class="icon">🔍</span>Analysis</div>
+      <div class="nav-item" data-view="fixes"><span class="icon">🔧</span>Fixes</div>
     </div>
   </nav>
   <div class="sidebar-footer">
@@ -398,6 +424,13 @@ body{display:flex;min-height:100vh;min-height:100dvh}
   <div class="view-title">Strategic Analysis</div>
   <div class="view-subtitle" id="analysisTime">Last analysis: —</div>
   <div id="analysisContent"></div>
+</div>
+
+<!-- FIXES -->
+<div class="view" id="v-fixes">
+  <div class="view-title">Fix History</div>
+  <div class="view-subtitle">Automated bug fixes by the Bug Fixer agent</div>
+  <div id="fixesContent"></div>
 </div>
 
 </main>
@@ -878,6 +911,60 @@ async function renderLogsEnriched(){
 }
 
 /* Render dispatcher */
+let FIXES_CACHE=null;
+async function renderFixes(){
+  if(!FIXES_CACHE){
+    try{FIXES_CACHE=await fetch('data/fixes-history.json?'+Date.now()).then(r=>r.json())}catch(e){FIXES_CACHE=[]}
+  }
+  const el=document.getElementById('fixesContent');
+  if(!FIXES_CACHE||!FIXES_CACHE.length){
+    el.innerHTML='<div class="empty-state" style="padding:60px 20px"><div style="font-size:32px;margin-bottom:12px">🔧</div><div style="font-size:15px;margin-bottom:8px">No fix runs yet</div><div>The Bug Fixer agent runs every 4 hours after the Strategic Analyst.<br>Fix history will appear here after the first run.</div></div>';
+    return;
+  }
+  const runs=FIXES_CACHE.slice().reverse();
+  let html='<div style="font-size:13px;color:var(--text2);margin-bottom:16px">'+runs.length+' fix run'+(runs.length!==1?'s':'')+' recorded</div>';
+  runs.forEach((run,i)=>{
+    const t=run.timestamp?new Date(run.timestamp):null;
+    const fixCount=(run.fixed||[]).length;
+    const skipCount=(run.skipped||[]).length;
+    const buildCls=run.build_status==='pass'?'pass':'fail';
+    html+=`<div class="fix-run">
+      <div class="fix-run-header">
+        <span class="fix-run-time">${t?t.toLocaleString():'Unknown time'}</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${run.commit?`<span class="fix-commit">${run.commit.substring(0,7)}</span>`:''}
+          <span class="fix-stat ${buildCls}">Build: ${run.build_status||'?'}</span>
+        </div>
+      </div>`;
+    if(run.summary)html+=`<div class="fix-run-summary">${run.summary}</div>`;
+    html+=`<div class="fix-run-stats">
+      <span class="fix-stat pass">✅ ${fixCount} fixed</span>
+      <span class="fix-stat${skipCount?' fail':''}">${skipCount?'⏭️':'✅'} ${skipCount} skipped</span>`;
+    if(run.tests_after)html+=`<span class="fix-stat">Tests: ${run.tests_after.passed||0} passed, ${run.tests_after.failed||0} failed</span>`;
+    html+=`</div>`;
+    if(fixCount){
+      html+='<div style="margin-bottom:8px"><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Fixed</div>';
+      (run.fixed||[]).forEach(f=>{
+        html+=`<div class="fix-item">
+          <div class="fix-title"><span class="fix-cat ${f.category||'bug'}">${f.category||'fix'}</span>${f.title||''}</div>
+          ${f.detail?`<div class="fix-detail">${f.detail}</div>`:''}
+          ${f.files_changed&&f.files_changed.length?`<div class="fix-files">Files: ${f.files_changed.map(p=>`<code>${p}</code>`).join(' ')}</div>`:''}
+        </div>`;
+      });
+      html+='</div>';
+    }
+    if(skipCount){
+      html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Skipped</div>';
+      (run.skipped||[]).forEach(s=>{
+        html+=`<div class="skip-item"><div class="skip-title">${s.title||''}</div><div class="skip-reason">${s.reason||''}</div></div>`;
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
 function renderView(){
   switch(currentView){
     case'overview':renderOverview();renderOverviewAlerts();renderOverviewExtra();break;
@@ -889,6 +976,7 @@ function renderView(){
     case'infra':renderInfra();break;
     case'logs':renderLogsEnriched();break;
     case'analysis':renderAnalysis();break;
+    case'fixes':renderFixes();break;
   }
   // Sidebar health
   if(DATA){
