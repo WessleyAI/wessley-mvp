@@ -39,7 +39,12 @@ func DefaultConfig() Config {
 		Concurrency:  3,
 		YearRange:    [2]int{2015, 2026},
 		UserAgent:    "WessleyBot/1.0 (automotive-manual-indexer)",
-		Sources:      []string{"toyota", "honda", "ford", "archive", "nhtsa", "search"},
+		Sources: []string{
+			"toyota", "honda", "ford", "chevrolet", "gmc", "ram", "jeep", "dodge", "chrysler",
+			"nissan", "hyundai", "kia", "subaru", "mazda", "volkswagen", "bmw", "mercedes",
+			"audi", "tesla", "volvo", "lexus", "acura", "infiniti", "genesis", "porsche",
+			"mitsubishi", "lincoln", "buick", "cadillac", "archive", "nhtsa", "search",
+		},
 	}
 }
 
@@ -61,4 +66,5 @@ var KnownMakes = []string{
 	"Subaru", "Mazda", "Lexus", "Jeep", "Ram", "GMC",
 	"Dodge", "Chrysler", "Buick", "Cadillac", "Acura",
 	"Infiniti", "Volvo", "Land Rover", "Porsche", "Tesla",
+	"Genesis", "Mitsubishi", "Lincoln",
 }

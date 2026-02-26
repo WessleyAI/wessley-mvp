@@ -41,7 +41,7 @@ func main() {
 	manualsStatus := flag.Bool("manuals-status", false, "print manual registry stats")
 	manualsMakes := flag.String("manuals-makes", "", "comma-separated makes to target")
 	manualsYears := flag.String("manuals-years", "2015-2026", "year range (e.g. 2015-2026)")
-	manualsSources := flag.String("manuals-sources", "toyota,honda,ford,archive,nhtsa,search", "comma-separated sources")
+	manualsSources := flag.String("manuals-sources", "toyota,honda,ford,chevrolet,gmc,ram,jeep,dodge,chrysler,nissan,hyundai,kia,subaru,mazda,volkswagen,bmw,mercedes,audi,tesla,volvo,lexus,acura,infiniti,genesis,porsche,mitsubishi,lincoln,buick,cadillac,archive,nhtsa,search", "comma-separated sources")
 	neo4jURL := flag.String("neo4j-url", "", "Neo4j URL for manual registry")
 	neo4jUser := flag.String("neo4j-user", "neo4j", "Neo4j username")
 	neo4jPass := flag.String("neo4j-pass", "password", "Neo4j password")
@@ -338,6 +338,84 @@ func buildManualSources(sourcesList string) []manuals.ManualSource {
 	}
 	if enabled["nhtsa"] {
 		srcs = append(srcs, manuals.NewNHTSASource())
+	}
+	if enabled["chevrolet"] {
+		srcs = append(srcs, manuals.NewChevroletSource())
+	}
+	if enabled["gmc"] {
+		srcs = append(srcs, manuals.NewGMCSource())
+	}
+	if enabled["ram"] {
+		srcs = append(srcs, manuals.NewRamSource())
+	}
+	if enabled["jeep"] {
+		srcs = append(srcs, manuals.NewJeepSource())
+	}
+	if enabled["dodge"] {
+		srcs = append(srcs, manuals.NewDodgeSource())
+	}
+	if enabled["chrysler"] {
+		srcs = append(srcs, manuals.NewChryslerSource())
+	}
+	if enabled["nissan"] {
+		srcs = append(srcs, manuals.NewNissanSource())
+	}
+	if enabled["hyundai"] {
+		srcs = append(srcs, manuals.NewHyundaiSource())
+	}
+	if enabled["kia"] {
+		srcs = append(srcs, manuals.NewKiaSource())
+	}
+	if enabled["subaru"] {
+		srcs = append(srcs, manuals.NewSubaruSource())
+	}
+	if enabled["mazda"] {
+		srcs = append(srcs, manuals.NewMazdaSource())
+	}
+	if enabled["volkswagen"] {
+		srcs = append(srcs, manuals.NewVolkswagenSource())
+	}
+	if enabled["bmw"] {
+		srcs = append(srcs, manuals.NewBMWSource())
+	}
+	if enabled["mercedes"] {
+		srcs = append(srcs, manuals.NewMercedesBenzSource())
+	}
+	if enabled["audi"] {
+		srcs = append(srcs, manuals.NewAudiSource())
+	}
+	if enabled["tesla"] {
+		srcs = append(srcs, manuals.NewTeslaSource())
+	}
+	if enabled["volvo"] {
+		srcs = append(srcs, manuals.NewVolvoSource())
+	}
+	if enabled["lexus"] {
+		srcs = append(srcs, manuals.NewLexusSource())
+	}
+	if enabled["acura"] {
+		srcs = append(srcs, manuals.NewAcuraSource())
+	}
+	if enabled["infiniti"] {
+		srcs = append(srcs, manuals.NewInfinitiSource())
+	}
+	if enabled["genesis"] {
+		srcs = append(srcs, manuals.NewGenesisSource())
+	}
+	if enabled["porsche"] {
+		srcs = append(srcs, manuals.NewPorscheSource())
+	}
+	if enabled["mitsubishi"] {
+		srcs = append(srcs, manuals.NewMitsubishiSource())
+	}
+	if enabled["lincoln"] {
+		srcs = append(srcs, manuals.NewLincolnSource())
+	}
+	if enabled["buick"] {
+		srcs = append(srcs, manuals.NewBuickSource())
+	}
+	if enabled["cadillac"] {
+		srcs = append(srcs, manuals.NewCadillacSource())
 	}
 	if enabled["search"] {
 		srcs = append(srcs, manuals.NewGenericSearchSource())

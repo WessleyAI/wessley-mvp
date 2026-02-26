@@ -164,11 +164,36 @@ func containsIgnoreCase(list []string, target string) bool {
 
 func inferModelFromURL(url, make_ string) string {
 	url = strings.ToLower(url)
-	// Try common model names
 	models := map[string][]string{
-		"Toyota": {"camry", "corolla", "rav4", "highlander", "tacoma", "tundra", "4runner", "prius", "sienna"},
-		"Honda":  {"civic", "accord", "cr-v", "pilot", "odyssey", "hr-v", "ridgeline", "passport"},
-		"Ford":   {"f-150", "escape", "explorer", "mustang", "bronco", "ranger", "edge", "expedition"},
+		"Toyota":        {"camry", "corolla", "rav4", "highlander", "tacoma", "tundra", "4runner", "prius", "sienna", "avalon", "venza", "supra", "gr86", "corolla-cross", "bz4x", "crown", "sequoia", "land-cruiser"},
+		"Honda":         {"civic", "accord", "cr-v", "pilot", "odyssey", "hr-v", "ridgeline", "passport"},
+		"Ford":          {"f-150", "escape", "explorer", "mustang", "bronco", "ranger", "edge", "expedition"},
+		"Chevrolet":     {"silverado", "equinox", "traverse", "tahoe", "suburban", "colorado", "blazer", "trax", "malibu", "camaro", "bolt-ev", "bolt-euv", "trailblazer", "corvette"},
+		"GMC":           {"sierra", "yukon", "canyon", "acadia", "terrain", "hummer-ev"},
+		"Ram":           {"1500", "2500", "3500", "promaster"},
+		"Jeep":          {"wrangler", "grand-cherokee", "cherokee", "gladiator", "compass", "renegade", "wagoneer"},
+		"Dodge":         {"charger", "durango", "hornet"},
+		"Chrysler":      {"pacifica", "300"},
+		"Nissan":        {"altima", "sentra", "rogue", "pathfinder", "frontier", "titan", "maxima", "kicks", "ariya", "leaf", "versa", "murano"},
+		"Hyundai":       {"elantra", "sonata", "tucson", "santa-fe", "kona", "palisade", "ioniq-5", "ioniq-6", "venue"},
+		"Kia":           {"forte", "k5", "sportage", "telluride", "sorento", "carnival", "ev6", "ev9", "seltos", "soul"},
+		"Subaru":        {"outback", "forester", "crosstrek", "wrx", "impreza", "ascent", "brz", "solterra"},
+		"Mazda":         {"mazda3", "cx-5", "cx-30", "cx-50", "cx-90", "mx-5"},
+		"Volkswagen":    {"golf", "jetta", "tiguan", "atlas", "id-4", "taos"},
+		"BMW":           {"3-series", "5-series", "7-series", "x1", "x3", "x5", "x7", "m3", "m5", "ix", "i4"},
+		"Mercedes-Benz": {"c-class", "e-class", "s-class", "glc", "gle", "gls", "eqs", "eqe"},
+		"Audi":          {"a3", "a4", "a6", "a8", "q3", "q5", "q7", "q8", "e-tron"},
+		"Tesla":         {"model-3", "model-y", "model-s", "model-x", "cybertruck"},
+		"Volvo":         {"xc40", "xc60", "xc90", "s60", "v60", "ex30", "ex90"},
+		"Lexus":         {"es", "is", "rx", "nx", "tx", "gx", "lx", "ux", "lc", "rz"},
+		"Acura":         {"integra", "tlx", "mdx", "rdx", "zdx"},
+		"Infiniti":      {"q50", "qx50", "qx55", "qx60", "qx80"},
+		"Genesis":       {"g70", "g80", "g90", "gv60", "gv70", "gv80"},
+		"Porsche":       {"911", "cayenne", "macan", "taycan", "panamera", "718"},
+		"Mitsubishi":    {"outlander", "eclipse-cross", "mirage"},
+		"Lincoln":       {"aviator", "corsair", "nautilus", "navigator"},
+		"Buick":         {"enclave", "encore-gx", "envista", "envision"},
+		"Cadillac":      {"escalade", "ct4", "ct5", "xt4", "xt5", "xt6", "lyriq"},
 	}
 	for _, m := range models[make_] {
 		if strings.Contains(url, m) {

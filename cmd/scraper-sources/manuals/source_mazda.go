@@ -1,0 +1,113 @@
+package manuals
+
+import (
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/WessleyAI/wessley-mvp/engine/graph"
+	"github.com/WessleyAI/wessley-mvp/pkg/fn"
+)
+
+// MazdaSource discovers owner manuals from Mazda's website.
+type MazdaSource struct {
+	client *http.Client
+}
+
+// NewMazdaSource creates a new MazdaSource.
+func NewMazdaSource() *MazdaSource {
+	return &MazdaSource{
+		client: &http.Client{Timeout: 30 * time.Second},
+	}
+}
+
+func (s *MazdaSource) Name() string { return "mazda" }
+
+func (s *MazdaSource) Discover(ctx context.Context, makes []string, years []int) ([]graph.ManualEntry, error) {
+	if !containsIgnoreCase(makes, "Mazda") {
+		return nil, nil
+	}
+
+	var entries []graph.ManualEntry
+
+	models := []string{
+		"3", "cx-5", "cx-30", "cx-50", "cx-90", "mx-5",
+	}
+
+	for _, year := range years {
+		for _, model := range models {
+			select {
+			case <-ctx.Done():
+				return entries, ctx.Err()
+			default:
+			}
+
+			url := fmt.Sprintf("https://www.mazdausa.com/siteassets/pdf/owners-manuals/%d/mazda-%s-owners-manual.pdf", year, model)
+			entry := graph.ManualEntry{
+				ID:           graph.ManualEntryID(url),
+				URL:          url,
+				SourceSite:   "www.mazdausa.com",
+				Make:         "Mazda",
+				Model:        normModel(model),
+				Year:         year,
+				ManualType:   "owner",
+				Language:     "en",
+				Status:       "discovered",
+				DiscoveredAt: time.Now(),
+			}
+			entries = append(entries, entry)
+		}
+
+		// Crawl the owners manual page for additional PDF links
+		pageURL := fmt.Sprintf("https://www.mazdausa.com/owners/manuals/%d", year)
+		found, err := s.discoverFromPage(ctx, pageURL, year)
+		if err != nil {
+			log.Printf("mazda: page crawl %d: %v", year, err)
+		} else {
+			entries = append(entries, found...)
+		}
+
+		time.Sleep(time.Second) // Rate limit between years
+	}
+
+	return entries, nil
+}
+
+var mazdaPDFRegex = pdfLinkRegex
+
+func (s *MazdaSource) discoverFromPage(ctx context.Context, pageURL string, year int) ([]graph.ManualEntry, error) {
+	result := fn.Retry(ctx, fn.RetryOpts{
+		MaxAttempts: 2,
+		InitialWait: time.Second,
+		MaxWait:     5 * time.Second,
+	}, func(ctx context.Context) fn.Result[[]byte] {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, pageURL, nil)
+		if err != nil {
+			return fn.Err[[]byte](err)
+		}
+		req.Header.Set("User-Agent", "WessleyBot/1.0")
+		resp, err := s.client.Do(req)
+		if err != nil {
+			return fn.Err[[]byte](err)
+		}
+		defer resp.Body.Close()
+		if resp.StatusCode != http.StatusOK {
+			return fn.Errf[[]byte]("status %d", resp.StatusCode)
+		}
+		body, err := io.ReadAll(io.LimitReader(resp.Body, 2*1024*1024))
+		if err != nil {
+			return fn.Err[[]byte](err)
+		}
+		return fn.Ok(body)
+	})
+
+	body, err := result.Unwrap()
+	if err != nil {
+		return nil, err
+	}
+
+	return extractPDFLinks(string(body), "www.mazdausa.com", "Mazda", year), nil
+}
