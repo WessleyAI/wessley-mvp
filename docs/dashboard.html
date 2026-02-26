@@ -110,7 +110,8 @@ a{color:var(--blue);text-decoration:none}
 
 /* ---- Charts ---- */
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;height:280px;overflow:hidden}
+.chart-card canvas{position:absolute;left:16px;right:16px;top:40px;bottom:16px;width:calc(100% - 32px) !important;height:calc(100% - 56px) !important}
 .chart-card .cc-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:12px}
 @media(max-width:768px){.chart-grid{grid-template-columns:1fr}}
 
@@ -261,8 +262,8 @@ a{color:var(--blue);text-decoration:none}
     </div>
     <div class="section-body">
       <div class="chart-grid">
-        <div class="chart-card"><div class="cc-title">Ingestion over 24h</div><canvas id="ch-ingestion" height="200"></canvas></div>
-        <div class="chart-card"><div class="cc-title">Source Distribution</div><canvas id="ch-sources" height="200"></canvas></div>
+        <div class="chart-card"><div class="cc-title">Ingestion over 24h</div><canvas id="ch-ingestion"></canvas></div>
+        <div class="chart-card"><div class="cc-title">Source Distribution</div><canvas id="ch-sources"></canvas></div>
       </div>
     </div>
   </div>
@@ -275,8 +276,8 @@ a{color:var(--blue);text-decoration:none}
     </div>
     <div class="section-body">
       <div class="chart-grid" style="margin-bottom:16px">
-        <div class="chart-card"><div class="cc-title">Top Makes</div><canvas id="ch-makes" height="200"></canvas></div>
-        <div class="chart-card"><div class="cc-title">Knowledge Graph Growth</div><canvas id="ch-growth" height="200"></canvas></div>
+        <div class="chart-card"><div class="cc-title">Top Makes</div><canvas id="ch-makes"></canvas></div>
+        <div class="chart-card"><div class="cc-title">Knowledge Graph Growth</div><canvas id="ch-growth"></canvas></div>
       </div>
       <div class="chart-card">
         <div class="cc-title">Vehicle Coverage Detail</div>
@@ -628,7 +629,7 @@ function renderChart(id, type, data, extraOpts = {}) {
   charts[id] = new Chart(canvas, {
     type, data,
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, resizeDelay: 100,
       plugins: {
         legend: { display: data.datasets?.length > 1 || isDoughnut, position: isDoughnut ? 'right' : 'top',
           labels: { color: '#7d8590', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 12 } },
