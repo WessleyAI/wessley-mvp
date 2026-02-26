@@ -20,8 +20,10 @@ import (
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/ifixit"
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/manuals"
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/nhtsa"
+	"github.com/WessleyAI/wessley-mvp/engine/graph"
 	"github.com/WessleyAI/wessley-mvp/engine/scraper"
 	"github.com/WessleyAI/wessley-mvp/pkg/natsutil"
+	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 )
 
 func main() {
@@ -31,12 +33,106 @@ func main() {
 	sources := flag.String("sources", "nhtsa,ifixit,forums", "comma-separated sources to scrape")
 	nhtsaMakes := flag.String("nhtsa-makes", "TOYOTA,HONDA,FORD,CHEVROLET,BMW,NISSAN", "comma-separated vehicle makes for NHTSA")
 	nhtsaYear := flag.Int("nhtsa-year", 2024, "model year for NHTSA queries")
-	manualsDir := flag.String("manuals-dir", "", "directory containing PDF vehicle manuals")
+	manualsDir := flag.String("manuals-dir", "", "directory containing PDF vehicle manuals (legacy) / output dir for crawler")
 	manualsMax := flag.Int("manuals-max", 0, "max manual files to process (0 = unlimited)")
+	manualsDiscover := flag.Bool("manuals-discover", false, "crawl sources and build manual index only")
+	manualsDownload := flag.Bool("manuals-download", false, "download pending manuals from index")
+	manualsProcess := flag.Bool("manuals-process", false, "full pipeline: discover + download + ingest")
+	manualsStatus := flag.Bool("manuals-status", false, "print manual registry stats")
+	manualsMakes := flag.String("manuals-makes", "", "comma-separated makes to target")
+	manualsYears := flag.String("manuals-years", "2015-2026", "year range (e.g. 2015-2026)")
+	manualsSources := flag.String("manuals-sources", "toyota,honda,ford,archive,nhtsa,search", "comma-separated sources")
+	neo4jURL := flag.String("neo4j-url", "", "Neo4j URL for manual registry")
+	neo4jUser := flag.String("neo4j-user", "neo4j", "Neo4j username")
+	neo4jPass := flag.String("neo4j-pass", "password", "Neo4j password")
 	flag.Parse()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
+
+	// --- Manual crawler mode ---
+	if *manualsDiscover || *manualsDownload || *manualsProcess || *manualsStatus {
+		if *neo4jURL == "" {
+			*neo4jURL = os.Getenv("NEO4J_URL")
+			if *neo4jURL == "" {
+				*neo4jURL = "neo4j://localhost:7687"
+			}
+		}
+		if u := os.Getenv("NEO4J_USER"); u != "" && *neo4jUser == "neo4j" {
+			*neo4jUser = u
+		}
+		if p := os.Getenv("NEO4J_PASS"); p != "" && *neo4jPass == "password" {
+			*neo4jPass = p
+		}
+
+		driver, err := neo4j.NewDriverWithContext(*neo4jURL, neo4j.BasicAuth(*neo4jUser, *neo4jPass, ""))
+		if err != nil {
+			log.Fatalf("neo4j connect: %v", err)
+		}
+		defer driver.Close(ctx)
+
+		graphStore := graph.New(driver)
+
+		outputDir := *manualsDir
+		if outputDir == "" {
+			outputDir = "./manuals"
+		}
+
+		yearRange := parseYearRange(*manualsYears)
+		var makes []string
+		if *manualsMakes != "" {
+			makes = strings.Split(*manualsMakes, ",")
+		}
+
+		crawlerCfg := manuals.CrawlerConfig{
+			OutputDir:    outputDir,
+			MaxPerSource: 100,
+			RateLimit:    2 * time.Second,
+			UserAgent:    "WessleyBot/1.0",
+			MaxFileSize:  200 * 1024 * 1024,
+			Concurrency:  3,
+			Makes:        makes,
+			YearRange:    yearRange,
+		}
+
+		srcs := buildManualSources(*manualsSources)
+		crawler := manuals.NewCrawler(graphStore, crawlerCfg, srcs...)
+
+		switch {
+		case *manualsStatus:
+			stats, err := graphStore.ManualStats(ctx)
+			if err != nil {
+				log.Fatalf("manual stats: %v", err)
+			}
+			fmt.Printf("Total: %d\n", stats.Total)
+			fmt.Println("By Status:")
+			for k, v := range stats.ByStatus {
+				fmt.Printf("  %s: %d\n", k, v)
+			}
+			fmt.Println("By Source:")
+			for k, v := range stats.BySource {
+				fmt.Printf("  %s: %d\n", k, v)
+			}
+		case *manualsDiscover:
+			n, err := crawler.Discover(ctx)
+			if err != nil {
+				log.Fatalf("discover: %v", err)
+			}
+			fmt.Printf("Discovered %d manuals\n", n)
+		case *manualsDownload:
+			n, err := crawler.Download(ctx, 0)
+			if err != nil {
+				log.Fatalf("download: %v", err)
+			}
+			fmt.Printf("Downloaded %d manuals\n", n)
+		case *manualsProcess:
+			if err := crawler.Process(ctx); err != nil {
+				log.Fatalf("process: %v", err)
+			}
+			fmt.Println("Manual processing complete")
+		}
+		return
+	}
 
 	enabledSources := make(map[string]bool)
 	for _, s := range strings.Split(*sources, ",") {
@@ -203,4 +299,48 @@ func main() {
 			}
 		}
 	}
+}
+
+func parseYearRange(s string) [2]int {
+	parts := strings.SplitN(s, "-", 2)
+	var yr [2]int
+	if len(parts) == 2 {
+		fmt.Sscanf(parts[0], "%d", &yr[0])
+		fmt.Sscanf(parts[1], "%d", &yr[1])
+	}
+	if yr[0] == 0 {
+		yr[0] = 2015
+	}
+	if yr[1] == 0 {
+		yr[1] = 2026
+	}
+	return yr
+}
+
+func buildManualSources(sourcesList string) []manuals.ManualSource {
+	enabled := make(map[string]bool)
+	for _, s := range strings.Split(sourcesList, ",") {
+		enabled[strings.TrimSpace(s)] = true
+	}
+
+	var srcs []manuals.ManualSource
+	if enabled["toyota"] {
+		srcs = append(srcs, manuals.NewToyotaSource())
+	}
+	if enabled["honda"] {
+		srcs = append(srcs, manuals.NewHondaSource())
+	}
+	if enabled["ford"] {
+		srcs = append(srcs, manuals.NewFordSource())
+	}
+	if enabled["archive"] {
+		srcs = append(srcs, manuals.NewArchiveSource())
+	}
+	if enabled["nhtsa"] {
+		srcs = append(srcs, manuals.NewNHTSASource())
+	}
+	if enabled["search"] {
+		srcs = append(srcs, manuals.NewGenericSearchSource())
+	}
+	return srcs
 }

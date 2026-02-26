@@ -105,6 +105,8 @@ func run(cfg Config, logger *slog.Logger) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/health", handleHealth)
 	mux.HandleFunc("POST /api/chat", handleChat(ragSvc, logger))
+	mux.HandleFunc("GET /api/v1/manuals", handleManuals(graphStore, logger))
+	mux.HandleFunc("GET /api/v1/manuals/{id}/download", handleManualDownload(graphStore, logger))
 
 	handler := mid.Chain(mux,
 		mid.Recover(logger),
@@ -188,6 +190,63 @@ func handleChat(ragSvc *rag.Service, logger *slog.Logger) http.HandlerFunc {
 			Model:   answer.Model,
 			Tokens:  answer.TokensUsed,
 		})
+	}
+}
+
+// --- Manual Handlers ---
+
+func handleManuals(gs *graph.GraphStore, logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		filter := graph.ManualFilter{
+			Make:   q.Get("make"),
+			Model:  q.Get("model"),
+			Status: q.Get("status"),
+		}
+		if y := q.Get("year"); y != "" {
+			fmt.Sscanf(y, "%d", &filter.Year)
+		}
+
+		entries, err := gs.FindManuals(r.Context(), filter)
+		if err != nil {
+			logger.Error("find manuals", "err", err)
+			http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(entries)
+	}
+}
+
+func handleManualDownload(gs *graph.GraphStore, logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		if id == "" {
+			http.Error(w, `{"error":"id required"}`, http.StatusBadRequest)
+			return
+		}
+
+		entries, err := gs.FindManuals(r.Context(), graph.ManualFilter{})
+		if err != nil {
+			logger.Error("find manual for download", "err", err)
+			http.Error(w, `{"error":"internal server error"}`, http.StatusInternalServerError)
+			return
+		}
+
+		for _, e := range entries {
+			if e.ID == id {
+				if e.LocalPath != "" {
+					http.ServeFile(w, r, e.LocalPath)
+					return
+				}
+				// Redirect to source URL
+				http.Redirect(w, r, e.URL, http.StatusTemporaryRedirect)
+				return
+			}
+		}
+
+		http.Error(w, `{"error":"not found"}`, http.StatusNotFound)
 	}
 }
 
