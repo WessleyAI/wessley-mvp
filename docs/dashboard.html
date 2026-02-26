@@ -2,676 +2,452 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wessley AI — Knowledge Pipeline</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wessley AI — Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#090d13;--bg2:#0d1117;--surface:#131920;--surface2:#1a2230;
-  --border:#1c2636;--border2:#243040;
-  --text:#e6edf3;--text2:#7d8590;--text3:#484f58;
-  --green:#2ea043;--green-bg:rgba(46,160,67,.1);
-  --red:#f85149;--red-bg:rgba(248,81,73,.1);
-  --amber:#d29922;--amber-bg:rgba(210,153,34,.1);
-  --blue:#58a6ff;--blue-bg:rgba(88,166,255,.08);
-  --purple:#bc8cff;--purple-bg:rgba(188,140,255,.1);
-  --cyan:#76e3ea;
-  --radius:10px;
+--bg:#0b0f15;--surface:#141a23;--surface2:#1c2430;--border:#232d3b;
+--text:#e1e7ef;--text2:#6b7a8d;--blue:#4d8eff;--green:#34d399;
+--amber:#fbbf24;--red:#f87171;--purple:#a78bfa;--sidebar-w:240px;--radius:10px;
 }
-html{font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:13px;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-body{min-height:100vh;padding-bottom:80px}
-a{color:var(--blue);text-decoration:none}
-
-/* ---- Top Bar ---- */
-.topbar{position:sticky;top:0;z-index:100;background:var(--bg2);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.topbar-inner{max-width:1400px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.02em}
-.brand svg{width:24px;height:24px}
-.topbar-right{display:flex;align-items:center;gap:16px}
-
-/* Health beacon */
-.health-beacon{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 8px;border-radius:99px;font-size:12px;font-weight:600;cursor:default;transition:all .3s}
-.health-beacon.healthy{background:var(--green-bg);color:var(--green)}
-.health-beacon.degraded{background:var(--amber-bg);color:var(--amber)}
-.health-beacon.broken{background:var(--red-bg);color:var(--red)}
-.beacon-dot{width:8px;height:8px;border-radius:50%;animation:pulse 2s ease-in-out infinite}
-.health-beacon.healthy .beacon-dot{background:var(--green)}
-.health-beacon.degraded .beacon-dot{background:var(--amber)}
-.health-beacon.broken .beacon-dot{background:var(--red)}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
-
-/* Countdown */
-.countdown{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);font-variant-numeric:tabular-nums}
-.countdown-ring{position:relative;width:28px;height:28px}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .25s}
+.sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.health-beacon{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);margin-top:8px}
+.health-beacon .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.nav-section{padding:16px 12px 4px;font-size:10px;font-weight:600;color:var(--text2);letter-spacing:1.2px;text-transform:uppercase}
+.sidebar nav{flex:1;overflow-y:auto;padding:4px 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-left:3px solid transparent;transition:all .15s;text-decoration:none}
+.nav-item:hover{color:var(--text);background:rgba(77,142,255,.06)}
+.nav-item.active{color:var(--blue);border-left-color:var(--blue);background:rgba(77,142,255,.08)}
+.sidebar-footer{padding:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px}
+.countdown-ring{position:relative;width:50px;height:50px}
 .countdown-ring svg{transform:rotate(-90deg)}
-.countdown-ring circle{fill:none;stroke-width:2.5}
+.countdown-ring circle{fill:none;stroke-width:3}
 .countdown-ring .bg{stroke:var(--border)}
-.countdown-ring .fg{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
-.countdown-ring .fg.done{stroke:var(--green);transition:stroke .3s}
-.cd-time{font-weight:600}
-
-/* Freshness badge */
-.freshness{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px}
-.freshness .fresh-dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
-.freshness.stale .fresh-dot{background:var(--amber)}
-.freshness.dead .fresh-dot{background:var(--red)}
-
-/* ---- Layout ---- */
-.container{max-width:1400px;margin:0 auto;padding:20px 24px}
-
-/* ---- Section ---- */
-.section{margin-bottom:24px}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;cursor:pointer;user-select:none}
-.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);display:flex;align-items:center;gap:8px}
-.section-title .chevron{transition:transform .2s;font-size:10px;color:var(--text3)}
-.section.collapsed .section-title .chevron{transform:rotate(-90deg)}
-.section.collapsed .section-body{display:none}
-.section-badge{font-size:11px;color:var(--text3);font-weight:500}
-
-/* ---- KPI Strip ---- */
-.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px}
-.kpi{background:var(--surface);padding:16px 18px;position:relative;transition:background .15s}
-.kpi:hover{background:var(--surface2)}
-.kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.kpi-value{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1;letter-spacing:-.02em}
-.kpi-sub{display:flex;align-items:center;gap:6px;margin-top:4px}
-.kpi-delta{font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:2px;padding:1px 6px;border-radius:99px}
-.kpi-delta.up{background:var(--green-bg);color:var(--green)}
-.kpi-delta.down{background:var(--red-bg);color:var(--red)}
-.kpi-delta.flat{background:rgba(125,133,144,.1);color:var(--text2)}
-.kpi-spark{position:absolute;bottom:8px;right:12px;opacity:.5}
-
-/* ---- Health Matrix ---- */
-.health-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.health-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;transition:all .15s}
-.health-card:hover{background:var(--surface2);border-color:var(--border2)}
-.health-card .hc-indicator{width:10px;height:10px;border-radius:50%;margin-top:3px;flex-shrink:0}
-.health-card .hc-indicator.ok{background:var(--green)}
-.health-card .hc-indicator.warn{background:var(--amber)}
-.health-card .hc-indicator.err{background:var(--red)}
-.health-card .hc-indicator.off{background:var(--text3)}
-.health-card .hc-body{flex:1;min-width:0}
-.health-card .hc-name{font-size:13px;font-weight:600;text-transform:capitalize;margin-bottom:2px}
-.health-card .hc-meta{font-size:11px;color:var(--text2);display:flex;gap:12px;flex-wrap:wrap}
-.health-card .hc-stat{font-weight:600;color:var(--text)}
-
-/* ---- Source Matrix ---- */
-.source-matrix{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.source-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;transition:all .15s}
-.source-card:hover{background:var(--surface2);border-color:var(--border2)}
-.source-card .sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.source-card .sc-name{font-size:13px;font-weight:600;text-transform:capitalize}
-.source-card .sc-count{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.source-card .sc-bar{height:3px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden}
-.source-card .sc-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
-
-/* ---- Charts ---- */
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;height:280px;overflow:hidden}
-.chart-card canvas{position:absolute;left:16px;right:16px;top:40px;bottom:16px;width:calc(100% - 32px) !important;height:calc(100% - 56px) !important}
-.chart-card .cc-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:12px}
-@media(max-width:768px){.chart-grid{grid-template-columns:1fr}}
-
-/* ---- Coverage ---- */
-.coverage-table{width:100%;border-collapse:collapse}
-.coverage-table th{text-align:left;padding:8px 12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border)}
-.coverage-table td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px}
-.coverage-table tr:hover td{background:var(--surface2)}
-.coverage-bar{display:flex;align-items:center;gap:8px}
-.coverage-bar-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.coverage-bar-fill{height:100%;border-radius:3px}
-.coverage-bar-pct{font-size:11px;color:var(--text2);font-weight:600;min-width:32px;text-align:right;font-variant-numeric:tabular-nums}
-
-/* ---- Funnel ---- */
-.funnel{display:flex;align-items:stretch;gap:2px;height:72px;margin-bottom:20px}
-.funnel-step{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;font-size:20px;font-weight:800;color:#fff;position:relative;min-width:60px;letter-spacing:-.01em}
-.funnel-step .fl-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.8;margin-top:2px}
-.funnel-arrow{display:flex;align-items:center;color:var(--text3);font-size:16px}
-
-/* ---- Infra ---- */
-.infra-row{display:flex;gap:12px;flex-wrap:wrap}
-.infra-chip{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:12px;flex:1;min-width:180px}
-.infra-chip .ic-dot{width:8px;height:8px;border-radius:50%}
-.infra-chip .ic-dot.ok{background:var(--green)}
-.infra-chip .ic-dot.err{background:var(--red)}
-.infra-chip .ic-name{font-weight:600}
-.infra-chip .ic-detail{color:var(--text2);margin-left:auto;font-size:11px}
-
-/* ---- Activity Feed ---- */
-.feed{max-height:400px;overflow-y:auto}
-.feed-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
-.feed-item:last-child{border-bottom:none}
-.fi-icon{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;background:var(--surface2)}
-.fi-time{font-size:11px;color:var(--text3);min-width:54px;font-variant-numeric:tabular-nums;font-weight:500}
-.fi-msg{flex:1;font-size:12px;color:var(--text2);line-height:1.5}
-.fi-msg strong{color:var(--text);font-weight:600}
-.feed-item.is-error{background:var(--red-bg);border-radius:6px;padding:8px 10px;margin:2px -10px;border-bottom:none}
-.feed-item.is-error .fi-msg{color:var(--red)}
-
-/* ---- Error Banner ---- */
-.error-banner{background:var(--red-bg);border:1px solid rgba(248,81,73,.2);border-radius:var(--radius);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--red);font-weight:500}
-.error-banner .eb-count{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
-.error-banner.hidden{display:none}
-
-/* ---- Pill ---- */
-.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600}
-.pill.green{background:var(--green-bg);color:var(--green)}
-.pill.red{background:var(--red-bg);color:var(--red)}
-.pill.amber{background:var(--amber-bg);color:var(--amber)}
-.pill.blue{background:var(--blue-bg);color:var(--blue)}
-
-/* ---- Empty ---- */
-.empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
-
-/* ---- Responsive ---- */
-@media(max-width:640px){
-  .topbar-inner{padding:0 14px;height:48px}
-  .container{padding:14px}
-  .kpi-strip{grid-template-columns:repeat(2,1fr)}
-  .kpi{padding:12px 14px}
-  .kpi-value{font-size:22px}
-  .health-grid,.source-matrix{grid-template-columns:1fr}
-  .funnel{flex-direction:column;height:auto;gap:6px}
-  .funnel-step{flex-direction:row;height:44px;padding:0 14px;gap:8px}
-  .funnel-step .fl-label{margin-top:0;margin-left:4px}
-  .funnel-arrow{transform:rotate(90deg)}
-  .infra-row{flex-direction:column}
-  .brand span{display:none}
+.countdown-ring .fg{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.countdown-text{font-size:11px;color:var(--text2)}
+/* MOBILE */
+.sidebar-toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:18px;cursor:pointer}
+@media(max-width:800px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.sidebar-toggle{display:block}
+.main{margin-left:0!important}
 }
-
-/* ---- Scrollbar ---- */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-
-/* ---- Animate-in ---- */
-@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.animate-in{animation:slideUp .3s ease-out}
-
-/* ---- Update flash ---- */
-@keyframes flash{0%{background:var(--blue-bg)}100%{background:transparent}}
-.flash{animation:flash .8s ease-out}
+/* MAIN */
+.main{margin-left:var(--sidebar-w);height:100vh;overflow-y:auto;padding:24px 28px 40px}
+.view{display:none}
+.view.active{display:block}
+/* CARDS */
+.kpi-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.kpi-card{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:4px}
+.kpi-card .label{font-size:11px;color:var(--text2);font-weight:500}
+.kpi-card .value{font-size:26px;font-weight:700}
+.kpi-card .delta{font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;display:inline-block;width:fit-content}
+.delta.up{color:var(--green);background:rgba(52,211,153,.1)}
+.delta.down{color:var(--red);background:rgba(248,113,113,.1)}
+.delta.neutral{color:var(--text2);background:rgba(107,122,141,.1)}
+.sparkline{margin-top:4px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card h3{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px}
+.chart-wrap{position:relative;height:220px}
+.chart-wrap canvas{position:absolute;inset:0}
+/* MINI CARDS */
+.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
+.mini-card .mc-label{font-size:11px;color:var(--text2)}
+.mini-card .mc-value{font-size:18px;font-weight:700;margin-top:4px}
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.tbl th{text-align:left;color:var(--text2);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--border)}
+.tbl td{padding:6px 8px;border-bottom:1px solid var(--border);color:var(--text)}
+/* PILLS */
+.pill{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600}
+.pill.ok{background:rgba(52,211,153,.15);color:var(--green)}
+.pill.err{background:rgba(248,113,113,.15);color:var(--red)}
+.pill.warn{background:rgba(251,191,36,.15);color:var(--amber)}
+/* PIPELINE */
+.pipeline-flow{display:flex;gap:0;margin-bottom:20px;flex-wrap:wrap}
+.pipeline-stage{flex:1;min-width:100px;background:var(--surface2);border:1px solid var(--border);padding:14px;text-align:center;position:relative}
+.pipeline-stage:not(:last-child)::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px;z-index:1}
+.pipeline-stage .ps-name{font-size:11px;color:var(--text2);font-weight:600}
+.pipeline-stage .ps-val{font-size:20px;font-weight:700;margin-top:4px}
+/* SCRAPER CARDS */
+.scraper-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px}
+.scraper-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.scraper-card .sc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.scraper-card .sc-name{font-weight:600;font-size:14px}
+.scraper-card .sc-stat{font-size:12px;color:var(--text2);margin-top:4px}
+/* SERVICE CARDS */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:20px}
+.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:14px}
+.svc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.svc-dot.ok{background:var(--green)}
+.svc-dot.err{background:var(--red)}
+.svc-dot.warn{background:var(--amber)}
+/* ACTIVITY */
+.activity-filters{display:flex;gap:8px;margin-bottom:14px}
+.af-pill{padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;background:var(--surface2);color:var(--text2);border:1px solid var(--border);font-weight:500}
+.af-pill.active{background:rgba(77,142,255,.15);color:var(--blue);border-color:var(--blue)}
+.activity-list{max-height:500px;overflow-y:auto}
+.activity-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.activity-item .ai-time{color:var(--text2);min-width:70px;flex-shrink:0}
+.activity-item .ai-icon{flex-shrink:0}
+/* FUNNEL */
+.funnel{display:flex;gap:8px;margin-bottom:16px;align-items:end}
+.funnel-bar{border-radius:6px 6px 0 0;min-width:80px;text-align:center;padding:10px 12px;font-weight:700;font-size:18px}
+.funnel-bar .fb-label{font-size:10px;font-weight:500;margin-top:4px}
+.empty-state{text-align:center;padding:40px;color:var(--text2);font-size:13px}
+.section-title{font-size:16px;font-weight:700;margin-bottom:16px}
 </style>
 </head>
 <body>
-
-<!-- Top Bar -->
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--blue)" stroke-width="2"/><path d="M7 12l3 3 7-7" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Wessley AI</span>
-    </div>
-    <div class="topbar-right">
-      <div class="freshness" id="freshness"><span class="fresh-dot"></span> Updated <span id="fresh-ago">—</span></div>
-      <div class="health-beacon healthy" id="health-beacon"><span class="beacon-dot"></span><span id="health-label">Healthy</span></div>
-      <div class="countdown">
-        <div class="countdown-ring">
-          <svg width="28" height="28" viewBox="0 0 28 28">
-            <circle class="bg" cx="14" cy="14" r="11"/>
-            <circle class="fg" id="cd-ring" cx="14" cy="14" r="11" stroke-dasharray="69.1" stroke-dashoffset="0"/>
-          </svg>
-        </div>
-        <span class="cd-time" id="cd-text">5:00</span>
-      </div>
-    </div>
-  </div>
-</header>
-
-<div class="container">
-
-  <!-- Error Banner (hidden when 0 errors) -->
-  <div class="error-banner hidden" id="error-banner">
-    <span>⚠</span>
-    <span><span class="eb-count" id="error-count">0</span> pipeline errors</span>
-    <span style="color:var(--text2);font-size:11px;margin-left:auto" id="error-rate"></span>
-  </div>
-
-  <!-- KPI Strip -->
-  <div class="kpi-strip" id="kpi-strip"></div>
-
-  <!-- Section: Source Health -->
-  <div class="section" id="s-sources">
-    <div class="section-header" onclick="toggleSection('s-sources')">
-      <div class="section-title"><span class="chevron">▼</span> Sources & Scrapers</div>
-      <div class="section-badge" id="sources-badge"></div>
-    </div>
-    <div class="section-body">
-      <div class="source-matrix" id="source-matrix"></div>
-    </div>
-  </div>
-
-  <!-- Section: Infrastructure -->
-  <div class="section" id="s-infra">
-    <div class="section-header" onclick="toggleSection('s-infra')">
-      <div class="section-title"><span class="chevron">▼</span> Infrastructure</div>
-      <div class="section-badge" id="infra-badge"></div>
-    </div>
-    <div class="section-body">
-      <div class="infra-row" id="infra-row"></div>
-    </div>
-  </div>
-
-  <!-- Section: Throughput Charts -->
-  <div class="section" id="s-throughput">
-    <div class="section-header" onclick="toggleSection('s-throughput')">
-      <div class="section-title"><span class="chevron">▼</span> Throughput & Trends</div>
-    </div>
-    <div class="section-body">
-      <div class="chart-grid">
-        <div class="chart-card"><div class="cc-title">Ingestion over 24h</div><canvas id="ch-ingestion"></canvas></div>
-        <div class="chart-card"><div class="cc-title">Source Distribution</div><canvas id="ch-sources"></canvas></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section: Vehicle Coverage -->
-  <div class="section" id="s-coverage">
-    <div class="section-header" onclick="toggleSection('s-coverage')">
-      <div class="section-title"><span class="chevron">▼</span> Vehicle Coverage</div>
-      <div class="section-badge" id="coverage-badge"></div>
-    </div>
-    <div class="section-body">
-      <div class="chart-grid" style="margin-bottom:16px">
-        <div class="chart-card"><div class="cc-title">Top Makes</div><canvas id="ch-makes"></canvas></div>
-        <div class="chart-card"><div class="cc-title">Knowledge Graph Growth</div><canvas id="ch-growth"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <div class="cc-title">Vehicle Coverage Detail</div>
-        <div style="overflow-x:auto" id="coverage-table-wrap"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section: Manuals Funnel -->
-  <div class="section" id="s-manuals">
-    <div class="section-header" onclick="toggleSection('s-manuals')">
-      <div class="section-title"><span class="chevron">▼</span> Manual Discovery</div>
-      <div class="section-badge" id="manuals-badge"></div>
-    </div>
-    <div class="section-body">
-      <div id="funnel-wrap"></div>
-    </div>
-  </div>
-
-  <!-- Section: Activity -->
-  <div class="section" id="s-activity">
-    <div class="section-header" onclick="toggleSection('s-activity')">
-      <div class="section-title"><span class="chevron">▼</span> Recent Activity</div>
-      <div class="section-badge" id="activity-badge"></div>
-    </div>
-    <div class="section-body">
-      <div class="feed" id="activity-feed"></div>
-    </div>
-  </div>
-
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<aside class="sidebar">
+<div class="sidebar-header">
+<h1>⚡ Wessley AI</h1>
+<div class="health-beacon"><span class="dot"></span> Live</div>
 </div>
+<nav>
+<div class="nav-section">Monitor</div>
+<a class="nav-item active" data-view="overview" href="#overview">📊 Overview</a>
+<a class="nav-item" data-view="pipeline" href="#pipeline">🔄 Pipeline</a>
+<a class="nav-item" data-view="scrapers" href="#scrapers">🕷️ Scrapers</a>
+<div class="nav-section">Knowledge</div>
+<a class="nav-item" data-view="graph" href="#graph">🧠 Graph</a>
+<a class="nav-item" data-view="vehicles" href="#vehicles">🚗 Vehicles</a>
+<a class="nav-item" data-view="manuals" href="#manuals">📖 Manuals</a>
+<div class="nav-section">System</div>
+<a class="nav-item" data-view="infra" href="#infra">🖥️ Infrastructure</a>
+<a class="nav-item" data-view="activity" href="#activity">📋 Activity</a>
+</nav>
+<div class="sidebar-footer">
+<div class="countdown-ring">
+<svg width="50" height="50" viewBox="0 0 50 50">
+<circle class="bg" cx="25" cy="25" r="21"/>
+<circle class="fg" id="cd-ring" cx="25" cy="25" r="21" stroke-dasharray="131.95" stroke-dashoffset="0"/>
+</svg>
+</div>
+<div class="countdown-text" id="cd-text">Next: 5:00</div>
+</div>
+</aside>
+
+<main class="main">
+<!-- OVERVIEW -->
+<div class="view active" id="v-overview">
+<div class="section-title">Overview</div>
+<div class="kpi-row" id="overview-kpis"></div>
+<div class="grid-2">
+<div class="card"><h3>Ingestion Rate (24h)</h3><div class="chart-wrap"><canvas id="ch-ingestion-rate"></canvas></div></div>
+<div class="card"><h3>By Source</h3><div class="chart-wrap"><canvas id="ch-by-source"></canvas></div></div>
+</div>
+<div class="grid-3" id="overview-minis"></div>
+</div>
+<!-- PIPELINE -->
+<div class="view" id="v-pipeline">
+<div class="section-title">Ingestion Pipeline</div>
+<div class="pipeline-flow" id="pipeline-stages"></div>
+<div class="grid-2">
+<div class="card"><h3>Throughput (24h)</h3><div class="chart-wrap"><canvas id="ch-throughput"></canvas></div></div>
+<div class="card"><h3>Error Rate (24h)</h3><div class="chart-wrap"><canvas id="ch-error-rate"></canvas></div></div>
+</div>
+<div class="kpi-row" id="pipeline-stats"></div>
+</div>
+<!-- SCRAPERS -->
+<div class="view" id="v-scrapers">
+<div class="section-title">Scraper Status</div>
+<div class="scraper-grid" id="scraper-cards"></div>
+<div class="card"><h3>Documents by Source</h3><div class="chart-wrap"><canvas id="ch-scraper-bars"></canvas></div></div>
+</div>
+<!-- GRAPH -->
+<div class="view" id="v-graph">
+<div class="section-title">Knowledge Graph</div>
+<div class="kpi-row" id="graph-kpis"></div>
+<div class="grid-2">
+<div class="card"><h3>Nodes by Type</h3><div class="chart-wrap"><canvas id="ch-nodes-type"></canvas></div></div>
+<div class="card"><h3>Relationships by Type</h3><div class="chart-wrap"><canvas id="ch-rels-type"></canvas></div></div>
+</div>
+<div class="grid-2">
+<div class="card"><h3>Top Makes</h3><table class="tbl"><thead><tr><th>Make</th><th>Models</th><th>Docs</th></tr></thead><tbody id="tbl-makes"></tbody></table></div>
+<div class="card"><h3>Top Vehicles</h3><table class="tbl"><thead><tr><th>Vehicle</th><th>Docs</th><th>Components</th></tr></thead><tbody id="tbl-vehicles"></tbody></table></div>
+</div>
+</div>
+<!-- VEHICLES -->
+<div class="view" id="v-vehicles">
+<div class="section-title">Vehicle Coverage</div>
+<div class="kpi-row" id="vehicles-kpis"></div>
+<div class="grid-2">
+<div class="card"><h3>Top Vehicles by Docs</h3><div class="chart-wrap"><canvas id="ch-top-vehicles"></canvas></div></div>
+<div class="card"><h3>Top Makes</h3><div class="chart-wrap"><canvas id="ch-top-makes"></canvas></div></div>
+</div>
+</div>
+<!-- MANUALS -->
+<div class="view" id="v-manuals">
+<div class="section-title">Manual Tracker</div>
+<div id="manuals-content"></div>
+</div>
+<!-- INFRA -->
+<div class="view" id="v-infra">
+<div class="section-title">Infrastructure</div>
+<div class="svc-grid" id="infra-cards"></div>
+</div>
+<!-- ACTIVITY -->
+<div class="view" id="v-activity">
+<div class="section-title">Activity Feed</div>
+<div class="activity-filters" id="activity-filters"></div>
+<div class="activity-list" id="activity-list"></div>
+</div>
+</main>
 
 <script>
-// ---- State ----
-let D = null, H = [], charts = {}, cdLeft = 300, cdTimer = null;
-const CIRC = 2 * Math.PI * 11;
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
+let DATA=null, HISTORY=[], lastTs=null;
+const charts={};
 
-// ---- Formatting ----
-function fmt(n) {
-  if (n == null) return '—';
-  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-  if (n >= 1e4) return (n / 1e3).toFixed(1) + 'K';
-  return n.toLocaleString();
-}
-function ago(ts) {
-  if (!ts) return '—';
-  const s = (Date.now() - new Date(ts).getTime()) / 1000;
-  if (s < 0) return 'just now';
-  if (s < 60) return Math.floor(s) + 's ago';
-  if (s < 3600) return Math.floor(s / 60) + 'm ago';
-  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
-  return Math.floor(s / 86400) + 'd ago';
-}
-function deltaHTML(val) {
-  if (val == null) return '';
-  const cls = val > 0 ? 'up' : val < 0 ? 'down' : 'flat';
-  const arrow = val > 0 ? '↑' : val < 0 ? '↓' : '→';
-  return `<span class="kpi-delta ${cls}">${arrow} ${Math.abs(val)}</span>`;
-}
-function sparkSVG(data, w = 64, h = 20, color = '#58a6ff') {
-  if (!data || data.length < 2) return '';
-  const max = Math.max(...data, 1), min = Math.min(...data, 0), range = max - min || 1;
-  const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * (h - 4) - 2}`).join(' ');
-  return `<svg width="${w}" height="${h}" style="display:block"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function mkChart(id,type,data,opts={}){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(charts[id]){charts[id].destroy();charts[id]=null}
+  charts[id]=new Chart(el,{type,data,options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:300},
+    plugins:{legend:{labels:{color:'#6b7a8d',font:{size:11,family:'Inter'}}}},
+    scales:type==='doughnut'||type==='pie'?{}:{
+      x:{ticks:{color:'#4a5568',font:{size:10}},grid:{color:'rgba(35,45,59,.5)'}},
+      y:{ticks:{color:'#4a5568',font:{size:10}},grid:{color:'rgba(35,45,59,.5)'},beginAtZero:true}
+    },...opts}});
 }
 
-// ---- Section toggle ----
-function toggleSection(id) {
-  document.getElementById(id).classList.toggle('collapsed');
+function num(v){if(v==null)return'—';if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return v.toLocaleString()}
+function ago(ts){if(!ts)return'—';const d=Date.now()-new Date(ts).getTime(),m=Math.floor(d/60000);if(m<1)return'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago'}
+
+function sparkSVG(arr){
+  if(!arr||arr.length<2)return'';
+  const w=60,h=20,max=Math.max(...arr)||1,min=Math.min(...arr);
+  const pts=arr.map((v,i)=>`${(i/(arr.length-1))*w},${h-((v-min)/(max-min||1))*h}`).join(' ');
+  return`<svg class="sparkline" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="var(--blue)" stroke-width="1.5"/></svg>`;
 }
 
-// ---- Data loading ----
-async function loadData() {
-  try {
-    const [lr, hr] = await Promise.all([
-      fetch('data/metrics-latest.json').then(r => r.json()),
-      fetch('data/metrics-history.json').then(r => r.json())
-    ]);
-    D = lr; H = hr;
-    render();
-  } catch (e) {
-    console.error('Data load failed:', e);
-    $('#health-beacon').className = 'health-beacon broken';
-    $('#health-label').textContent = 'Load Error';
-  }
+function kpiCard(label,value,delta,hist){
+  const cls=delta>0?'up':delta<0?'down':'neutral';
+  const sign=delta>0?'+':'';
+  return`<div class="kpi-card"><div class="label">${label}</div><div class="value">${num(value)}</div>${delta!=null?`<div class="delta ${cls}">${sign}${delta}</div>`:''}${sparkSVG(hist)}</div>`;
 }
 
-// ---- Compute health ----
-function computeHealth() {
-  if (!D) return 'broken';
-  const infra = D.infrastructure || {};
-  const allConnected = ['neo4j', 'qdrant', 'ollama'].every(k => infra[k]?.status === 'connected');
-  const scrapers = D.scrapers || {};
-  const anyDown = Object.entries(scrapers).filter(([k]) => k !== 'manuals').some(([, v]) => v.status === 'error');
-  const errRate = D.ingestion?.total_docs_ingested ? (D.ingestion.total_errors / D.ingestion.total_docs_ingested) : 0;
-  if (!allConnected || anyDown) return 'broken';
-  if (errRate > 0.05) return 'degraded';
-  return 'healthy';
+function histField(field){
+  return HISTORY.slice(-12).map(h=>{
+    try{return field.split('.').reduce((o,k)=>o[k],h)||0}catch(e){return 0}
+  });
 }
 
-// ---- Render ----
-function render() {
-  if (!D) return;
-  renderHealth();
-  renderKPIs();
-  renderSources();
-  renderInfra();
-  renderCharts();
-  renderCoverage();
-  renderManuals();
-  renderActivity();
-}
+// RENDERERS
+const renderers={
+overview(){
+  if(!DATA)return;
+  const ig=DATA.ingestion||{},kg=DATA.knowledge_graph||{},vs=DATA.vector_store||{};
+  const srcCount=Object.keys(DATA.scrapers||{}).filter(k=>k!=='manuals'&&(DATA.scrapers[k].status==='active'||DATA.scrapers[k].total_posts>0)).length;
+  const errRate=ig.total_docs_ingested?(ig.total_errors/ig.total_docs_ingested*100).toFixed(1)+'%':'0%';
+  document.getElementById('overview-kpis').innerHTML=[
+    kpiCard('Total Docs',ig.total_docs_ingested||0,null,histField('ingestion.total_docs_ingested')),
+    kpiCard('Graph Nodes',kg.total_nodes||0,null,histField('knowledge_graph.total_nodes')),
+    kpiCard('Vectors',vs.total_vectors||0,null,histField('vector_store.total_vectors')),
+    kpiCard('Error Rate',errRate),
+    kpiCard('Sources Active',srcCount)
+  ].join('');
 
-function renderHealth() {
-  const health = computeHealth();
-  const beacon = $('#health-beacon');
-  beacon.className = `health-beacon ${health}`;
-  const labels = { healthy: 'Healthy', degraded: 'Degraded', broken: 'Unhealthy' };
-  $('#health-label').textContent = labels[health];
+  // ingestion rate chart
+  const hLabels=HISTORY.slice(-24).map((_,i)=>i+'h');
+  const hData=HISTORY.slice(-24).map(h=>h?.ingestion?.total_docs_ingested||0);
+  mkChart('ch-ingestion-rate','line',{labels:hLabels,datasets:[{label:'Docs',data:hData,borderColor:'var(--blue)',backgroundColor:'rgba(77,142,255,.1)',fill:true,tension:.3,pointRadius:0}]});
 
-  // Freshness
-  const lastIng = D.ingestion?.last_ingestion;
-  $('#fresh-ago').textContent = ago(lastIng);
-  const freshEl = $('#freshness');
-  if (!lastIng) { freshEl.className = 'freshness dead'; }
-  else {
-    const mins = (Date.now() - new Date(lastIng).getTime()) / 60000;
-    freshEl.className = 'freshness' + (mins > 30 ? ' dead' : mins > 10 ? ' stale' : '');
-  }
+  // by source doughnut
+  const src=ig.docs_by_source||{};
+  const sKeys=Object.keys(src), sVals=sKeys.map(k=>src[k]);
+  const colors=['#4d8eff','#34d399','#fbbf24','#f87171','#a78bfa','#f472b6','#fb923c'];
+  mkChart('ch-by-source','doughnut',{labels:sKeys,datasets:[{data:sVals,backgroundColor:colors.slice(0,sKeys.length)}]});
 
-  // Error banner
-  const errors = D.ingestion?.total_errors || 0;
-  const banner = $('#error-banner');
-  if (errors > 0) {
-    banner.classList.remove('hidden');
-    $('#error-count').textContent = errors;
-    const rate = D.ingestion?.total_docs_ingested ? ((errors / D.ingestion.total_docs_ingested) * 100).toFixed(1) : 0;
-    $('#error-rate').textContent = `${rate}% error rate`;
-  } else {
-    banner.classList.add('hidden');
-  }
-}
+  // mini cards
+  const sc=DATA.scrapers||{};
+  const lastScrape=Object.values(sc).reduce((a,s)=>s.last_scrape&&new Date(s.last_scrape)>new Date(a||0)?s.last_scrape:a,null);
+  const man=sc.manuals||{};
+  document.getElementById('overview-minis').innerHTML=`
+    <div class="mini-card"><div class="mc-label">Last Scrape</div><div class="mc-value">${ago(lastScrape)}</div></div>
+    <div class="mini-card"><div class="mc-label">Manuals Discovered</div><div class="mc-value">${num(man.discovered||0)}</div></div>
+    <div class="mini-card"><div class="mc-label">Files Processed</div><div class="mc-value">${num(ig.files_processed||0)}</div></div>`;
+},
 
-function renderKPIs() {
-  const ing = D.ingestion || {};
-  const kg = D.knowledge_graph || {};
-  const vs = D.vector_store || {};
-  const last = H.length ? H[H.length - 1] : {};
-  const histDocs = H.map(h => h.total_docs || 0);
-  const histVecs = H.map(h => h.total_vectors || 0);
-  const histNodes = H.map(h => h.total_nodes || 0);
+pipeline(){
+  if(!DATA)return;
+  const ig=DATA.ingestion||{};
+  const stages=['Validate','Parse','Chunk','Embed','Store'];
+  document.getElementById('pipeline-stages').innerHTML=stages.map(s=>`<div class="pipeline-stage"><div class="ps-name">${s}</div><div class="ps-val">—</div></div>`).join('');
+  
+  const hLabels=HISTORY.slice(-24).map((_,i)=>i+'h');
+  mkChart('ch-throughput','line',{labels:hLabels,datasets:[{label:'Docs/h',data:HISTORY.slice(-24).map(h=>h?.ingestion?.total_docs_ingested||0),borderColor:'var(--blue)',tension:.3,pointRadius:0,fill:true,backgroundColor:'rgba(77,142,255,.08)'}]});
+  mkChart('ch-error-rate','line',{labels:hLabels,datasets:[{label:'Errors',data:HISTORY.slice(-24).map(h=>h?.ingestion?.total_errors||0),borderColor:'var(--red)',tension:.3,pointRadius:0,fill:true,backgroundColor:'rgba(248,113,113,.08)'}]});
+  
+  document.getElementById('pipeline-stats').innerHTML=[
+    kpiCard('Total Ingested',ig.total_docs_ingested||0),
+    kpiCard('Total Errors',ig.total_errors||0),
+    kpiCard('Files Processed',ig.files_processed||0)
+  ].join('');
+},
 
-  const kpis = [
-    { label: 'Documents', value: fmt(ing.total_docs_ingested), delta: last.new_docs, spark: histDocs, color: '' },
-    { label: 'Graph Nodes', value: fmt(kg.total_nodes), delta: last.new_nodes, spark: histNodes, color: '' },
-    { label: 'Vectors', value: fmt(vs.total_vectors), delta: last.new_vectors, spark: histVecs, color: '' },
-    { label: 'Components', value: fmt(kg.nodes_by_type?.Component || 0), delta: null, spark: [], color: '' },
-    { label: 'Makes', value: (kg.top_makes || []).length, delta: null, spark: [], color: '' },
-    { label: 'Files Processed', value: fmt(ing.files_processed), delta: null, spark: [], color: '' },
-  ];
-
-  $('#kpi-strip').innerHTML = kpis.map(k => `
-    <div class="kpi">
-      <div class="kpi-label">${k.label}</div>
-      <div class="kpi-value" ${k.color ? `style="color:${k.color}"` : ''}>${k.value}</div>
-      <div class="kpi-sub">${deltaHTML(k.delta)}</div>
-      ${k.spark.length > 1 ? `<div class="kpi-spark">${sparkSVG(k.spark)}</div>` : ''}
-    </div>
-  `).join('');
-}
-
-function renderSources() {
-  const scrapers = D.scrapers || {};
-  const docs = D.ingestion?.docs_by_source || {};
-  const entries = Object.entries(scrapers).filter(([k]) => k !== 'manuals');
-  const maxDocs = Math.max(...entries.map(([k, v]) => v.total_posts || v.total_docs || docs[k] || 0), 1);
-  const allRunning = entries.every(([, v]) => v.status === 'running');
-  $('#sources-badge').textContent = allRunning ? `${entries.length}/${entries.length} running` : `⚠ some scrapers down`;
-
-  const colors = { reddit: '#ff4500', nhtsa: 'var(--blue)', ifixit: 'var(--cyan)', youtube: '#f00', forums: 'var(--purple)' };
-
-  $('#source-matrix').innerHTML = entries.map(([name, s]) => {
-    const count = s.total_posts || s.total_docs || docs[name] || 0;
-    const pct = Math.round((count / maxDocs) * 100);
-    const color = colors[name] || 'var(--blue)';
-    const statusCls = s.status === 'running' ? 'green' : s.status === 'error' ? 'red' : 'amber';
-    return `<div class="source-card">
-      <div class="sc-top"><span class="sc-name">${name}</span><span class="pill ${statusCls}">${s.status || 'unknown'}</span></div>
-      <div class="sc-count">${fmt(count)}</div>
-      <div style="font-size:11px;color:var(--text2)">Last: ${ago(s.last_scrape)}</div>
-      <div class="sc-bar"><div class="sc-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-    </div>`;
+scrapers(){
+  if(!DATA)return;
+  const sc=DATA.scrapers||{};
+  const names=['reddit','nhtsa','ifixit','youtube'];
+  document.getElementById('scraper-cards').innerHTML=names.map(n=>{
+    const s=sc[n]||{};
+    const st=s.status||'unknown';
+    const cls=st==='active'?'ok':st==='error'?'err':'warn';
+    return`<div class="scraper-card"><div class="sc-header"><span class="sc-name">${n}</span><span class="pill ${cls}">${st}</span></div><div class="sc-stat">${num(s.total_posts||s.total_docs||0)} docs</div><div class="sc-stat">Last: ${ago(s.last_scrape)}</div></div>`;
   }).join('');
-}
+  
+  const labels=names,vals=names.map(n=>(sc[n]||{}).total_posts||(sc[n]||{}).total_docs||0);
+  mkChart('ch-scraper-bars','bar',{labels,datasets:[{label:'Documents',data:vals,backgroundColor:'#4d8eff'}]},{indexAxis:'y'});
+},
 
-function renderInfra() {
-  const infra = D.infrastructure || {};
-  const vs = D.vector_store || {};
-  const items = [
-    { name: 'Neo4j', status: infra.neo4j?.status, detail: infra.neo4j?.version || '' },
-    { name: 'Qdrant', status: infra.qdrant?.status, detail: `${fmt(vs.total_vectors)} vectors · ${vs.dimensions}d` },
-    { name: 'Ollama', status: infra.ollama?.status, detail: infra.ollama?.model || '' },
+graph(){
+  if(!DATA)return;
+  const kg=DATA.knowledge_graph||{};
+  const nbt=kg.nodes_by_type||{},rbt=kg.relationships_by_type||{};
+  document.getElementById('graph-kpis').innerHTML=[
+    kpiCard('Total Nodes',kg.total_nodes||0),
+    kpiCard('Total Relationships',kg.total_relationships||0),
+    kpiCard('Node Types',Object.keys(nbt).length),
+    kpiCard('Rel Types',Object.keys(rbt).length)
+  ].join('');
+  
+  mkChart('ch-nodes-type','bar',{labels:Object.keys(nbt),datasets:[{label:'Nodes',data:Object.values(nbt),backgroundColor:'#4d8eff'}]},{indexAxis:'y'});
+  mkChart('ch-rels-type','bar',{labels:Object.keys(rbt),datasets:[{label:'Rels',data:Object.values(rbt),backgroundColor:'#a78bfa'}]},{indexAxis:'y'});
+  
+  const makes=(kg.top_makes||[]).slice(0,10);
+  document.getElementById('tbl-makes').innerHTML=makes.map(m=>`<tr><td>${m.name||''}</td><td>${m.models||0}</td><td>${m.documents||0}</td></tr>`).join('')||'<tr><td colspan=3 style="color:var(--text2)">No data</td></tr>';
+  const vehs=(kg.top_vehicles||[]).slice(0,10);
+  document.getElementById('tbl-vehicles').innerHTML=vehs.map(v=>`<tr><td>${v.vehicle||''}</td><td>${v.documents||0}</td><td>${v.components||0}</td></tr>`).join('')||'<tr><td colspan=3 style="color:var(--text2)">No data</td></tr>';
+},
+
+vehicles(){
+  if(!DATA)return;
+  const kg=DATA.knowledge_graph||{};
+  const makes=kg.top_makes||[],vehs=kg.top_vehicles||[];
+  document.getElementById('vehicles-kpis').innerHTML=[
+    kpiCard('Total Makes',makes.length),
+    kpiCard('Total Vehicles',vehs.length)
+  ].join('');
+  const topV=vehs.slice(0,10);
+  mkChart('ch-top-vehicles','bar',{labels:topV.map(v=>v.vehicle),datasets:[{label:'Docs',data:topV.map(v=>v.documents||0),backgroundColor:'#4d8eff'}]},{indexAxis:'y'});
+  const topM=makes.slice(0,10);
+  mkChart('ch-top-makes','bar',{labels:topM.map(m=>m.name),datasets:[{label:'Models',data:topM.map(m=>m.models||0),backgroundColor:'#34d399'}]},{indexAxis:'y'});
+},
+
+manuals(){
+  if(!DATA)return;
+  const m=(DATA.scrapers||{}).manuals||{};
+  if(!m.discovered&&!m.downloaded&&!m.ingested){
+    document.getElementById('manuals-content').innerHTML='<div class="empty-state">📖 Manual crawling not yet started.<br>Run <code>--manuals-discover</code> to begin.</div>';
+    return;
+  }
+  const maxV=Math.max(m.discovered||0,m.downloaded||0,m.ingested||0,1);
+  const bar=(v,c,l)=>`<div class="funnel-bar" style="background:${c};height:${Math.max(40,v/maxV*120)}px">${v}<div class="fb-label">${l}</div></div>`;
+  document.getElementById('manuals-content').innerHTML=`
+    <div class="funnel">${bar(m.discovered||0,'rgba(77,142,255,.3)','Discovered')}${bar(m.downloaded||0,'rgba(52,211,153,.3)','Downloaded')}${bar(m.ingested||0,'rgba(167,139,250,.3)','Ingested')}</div>
+    <div class="kpi-row">${kpiCard('Discovered',m.discovered||0)}${kpiCard('Downloaded',m.downloaded||0)}${kpiCard('Ingested',m.ingested||0)}${kpiCard('Failed',m.failed||0)}</div>`;
+},
+
+infra(){
+  if(!DATA)return;
+  const inf=DATA.infrastructure||{};
+  const svcs=[
+    {key:'neo4j',icon:'🗄️',detail:s=>`Version: ${s.version||'—'}`},
+    {key:'qdrant',icon:'🔮',detail:s=>`Vectors: ${num(s.vectors||0)}`},
+    {key:'ollama',icon:'🤖',detail:s=>`Model: ${s.model||'—'}`}
   ];
-  const allOk = items.every(i => i.status === 'connected');
-  $('#infra-badge').textContent = allOk ? 'All connected' : '⚠ Issue detected';
+  document.getElementById('infra-cards').innerHTML=svcs.map(({key,icon,detail})=>{
+    const s=inf[key]||{};
+    const st=s.status||'unknown';
+    const cls=st==='connected'||st==='running'||st==='healthy'?'ok':st==='error'?'err':'warn';
+    return`<div class="svc-card"><div class="svc-dot ${cls}"></div><div><div style="font-weight:600">${icon} ${key}</div><div style="font-size:12px;color:var(--text2);margin-top:4px">${detail(s)}</div><div style="font-size:11px;color:var(--text2)">Status: ${st}</div></div></div>`;
+  }).join('');
+},
 
-  $('#infra-row').innerHTML = items.map(i => `
-    <div class="infra-chip">
-      <div class="ic-dot ${i.status === 'connected' ? 'ok' : 'err'}"></div>
-      <span class="ic-name">${i.name}</span>
-      <span class="ic-detail">${i.detail}</span>
-    </div>
-  `).join('');
-}
-
-function renderCharts() {
-  // Ingestion over time
-  const labels = H.map(h => new Date(h.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-  renderChart('ch-ingestion', 'line', {
-    labels,
-    datasets: [{
-      label: 'New docs', data: H.map(h => h.new_docs || 0),
-      borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,.08)', fill: true, tension: .4, pointRadius: 0, borderWidth: 2
-    }]
+activity(){
+  const filters=['All','Ingestion','Errors','Vehicles'];
+  document.getElementById('activity-filters').innerHTML=filters.map((f,i)=>`<div class="af-pill${i===0?' active':''}" data-filter="${f.toLowerCase()}">${f}</div>`).join('');
+  
+  const items=HISTORY.slice(-50).reverse().map(h=>{
+    const ts=h?.timestamp?new Date(h.timestamp).toLocaleTimeString():'';
+    const docs=h?.ingestion?.total_docs_ingested;
+    const errs=h?.ingestion?.total_errors;
+    let icon='📊',msg='Metrics snapshot',cat='all';
+    if(errs>0){icon='❌';msg=`${errs} errors recorded`;cat='errors'}
+    else if(docs>0){icon='📥';msg=`${docs} docs ingested`;cat='ingestion'}
+    return`<div class="activity-item" data-cat="${cat}"><span class="ai-time">${ts}</span><span class="ai-icon">${icon}</span><span>${msg}</span></div>`;
   });
-
-  // Source donut
-  const src = D.ingestion?.docs_by_source || {};
-  const srcColors = ['#ff4500', '#58a6ff', '#76e3ea', '#f00', '#bc8cff', '#7d8590'];
-  renderChart('ch-sources', 'doughnut', {
-    labels: Object.keys(src).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
-    datasets: [{ data: Object.values(src), backgroundColor: srcColors, borderWidth: 0 }]
-  }, { cutout: '70%' });
-
-  // Top makes
-  const makes = D.knowledge_graph?.top_makes || [];
-  renderChart('ch-makes', 'bar', {
-    labels: makes.map(m => m.name),
-    datasets: [{
-      label: 'Documents', data: makes.map(m => m.documents),
-      backgroundColor: 'rgba(88,166,255,.6)', borderRadius: 4, borderSkipped: false
-    }]
-  });
-
-  // Graph growth
-  renderChart('ch-growth', 'line', {
-    labels,
-    datasets: [
-      { label: 'Nodes', data: H.map(h => h.total_nodes || 0), borderColor: '#58a6ff', tension: .4, pointRadius: 0, borderWidth: 2, fill: false },
-      { label: 'Vectors', data: H.map(h => h.total_vectors || 0), borderColor: '#bc8cff', tension: .4, pointRadius: 0, borderWidth: 2, fill: false },
-    ]
-  });
-}
-
-function renderCoverage() {
-  const vehicles = D.knowledge_graph?.top_vehicles || [];
-  const makes = D.knowledge_graph?.top_makes || [];
-  const totalModels = makes.reduce((s, m) => s + m.models, 0);
-  $('#coverage-badge').textContent = `${makes.length} makes · ${totalModels} models`;
-
-  if (!vehicles.length) {
-    $('#coverage-table-wrap').innerHTML = '<div class="empty">No vehicle data yet</div>';
-    return;
-  }
-  const maxDocs = Math.max(...vehicles.map(v => v.documents), 1);
-  $('#coverage-table-wrap').innerHTML = `<table class="coverage-table">
-    <thead><tr><th>Vehicle</th><th>Docs</th><th>Components</th><th>Coverage</th></tr></thead>
-    <tbody>${vehicles.map(v => {
-      const pct = Math.min(100, Math.round((v.documents / 50) * 100));
-      const color = pct > 60 ? 'var(--green)' : pct > 30 ? 'var(--amber)' : 'var(--red)';
-      return `<tr>
-        <td style="font-weight:600">${v.vehicle}</td>
-        <td>${v.documents}</td>
-        <td>${v.components}</td>
-        <td><div class="coverage-bar"><div class="coverage-bar-track"><div class="coverage-bar-fill" style="width:${pct}%;background:${color}"></div></div><span class="coverage-bar-pct">${pct}%</span></div></td>
-      </tr>`;
-    }).join('')}</tbody></table>`;
-}
-
-function renderManuals() {
-  const m = D.scrapers?.manuals || {};
-  const total = (m.discovered || 0) + (m.downloaded || 0) + (m.ingested || 0);
-  $('#manuals-badge').textContent = total ? `${fmt(total)} total` : 'Not started';
-
-  if (!m.discovered && !m.downloaded && !m.ingested) {
-    $('#funnel-wrap').innerHTML = '<div class="empty">Manual discovery hasn\'t started yet. Crawlers will populate this once active.</div>';
-    return;
-  }
-
-  const steps = [
-    { label: 'Discovered', val: m.discovered || 0, color: 'var(--blue)' },
-    { label: 'Downloaded', val: m.downloaded || 0, color: 'var(--green)' },
-    { label: 'Ingested', val: m.ingested || 0, color: 'var(--purple)' },
-  ];
-  const failed = m.failed || 0;
-
-  $('#funnel-wrap').innerHTML = `
-    <div class="funnel">
-      ${steps.map((s, i) => `${i ? '<div class="funnel-arrow">→</div>' : ''}<div class="funnel-step" style="background:${s.color}">${fmt(s.val)}<div class="fl-label">${s.label}</div></div>`).join('')}
-    </div>
-    ${failed ? `<div style="font-size:12px;color:var(--red);margin-top:8px">⚠ ${failed} failed downloads</div>` : ''}
-  `;
-}
-
-function renderActivity() {
-  const items = generateFeedItems();
-  $('#activity-badge').textContent = items.length ? `${items.length} events` : '';
-  const el = $('#activity-feed');
-  if (!items.length) {
-    el.innerHTML = '<div class="empty">No recent activity</div>';
-    return;
-  }
-  el.innerHTML = items.slice(0, 30).map(i => `
-    <div class="feed-item${i.error ? ' is-error' : ''}">
-      <div class="fi-icon">${i.icon}</div>
-      <div class="fi-time">${ago(i.ts)}</div>
-      <div class="fi-msg">${i.msg}</div>
-    </div>
-  `).join('');
-}
-
-function generateFeedItems() {
-  const items = [];
-  H.forEach(h => {
-    const ts = h.timestamp;
-    if (h.new_docs > 0) items.push({ ts, icon: '📥', msg: `<strong>${h.new_docs}</strong> documents ingested` });
-    if (h.new_nodes > 0) items.push({ ts, icon: '🔗', msg: `<strong>${h.new_nodes}</strong> graph nodes added` });
-    if (h.new_vectors > 0) items.push({ ts, icon: '🧮', msg: `<strong>${h.new_vectors}</strong> vectors embedded` });
-    if (h.errors_delta > 0) items.push({ ts, icon: '⚠️', msg: `<strong>${h.errors_delta}</strong> errors`, error: true });
-    Object.entries(h.docs_by_source || {}).forEach(([src, n]) => {
-      if (n > 0) items.push({ ts, icon: '🤖', msg: `<strong>${src}</strong> scraped ${n} docs` });
+  document.getElementById('activity-list').innerHTML=items.join('')||'<div class="empty-state">No activity yet</div>';
+  
+  document.querySelectorAll('.af-pill').forEach(p=>p.onclick=function(){
+    document.querySelectorAll('.af-pill').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    const f=this.dataset.filter;
+    document.querySelectorAll('.activity-item').forEach(el=>{
+      el.style.display=(f==='all'||el.dataset.cat===f)?'flex':'none';
     });
   });
-  Object.entries(D.scrapers || {}).filter(([k]) => k !== 'manuals').forEach(([name, s]) => {
-    if (s.last_scrape) items.push({ ts: s.last_scrape, icon: '✅', msg: `<strong>${name}</strong> scraper completed` });
-  });
-  items.sort((a, b) => new Date(b.ts) - new Date(a.ts));
-  return items;
 }
+};
 
-// ---- Chart helper ----
-function renderChart(id, type, data, extraOpts = {}) {
-  const canvas = $(`#${id}`);
-  if (!canvas) return;
-  if (charts[id]) charts[id].destroy();
-  const isDoughnut = type === 'doughnut';
-  charts[id] = new Chart(canvas, {
-    type, data,
-    options: {
-      responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, resizeDelay: 100,
-      plugins: {
-        legend: { display: data.datasets?.length > 1 || isDoughnut, position: isDoughnut ? 'right' : 'top',
-          labels: { color: '#7d8590', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 12 } },
-      },
-      scales: isDoughnut ? {} : {
-        x: { ticks: { color: '#484f58', font: { size: 10, family: 'Inter' } }, grid: { color: 'rgba(28,38,54,.6)', drawBorder: false } },
-        y: { ticks: { color: '#484f58', font: { size: 10, family: 'Inter' } }, grid: { color: 'rgba(28,38,54,.6)', drawBorder: false } },
-      },
-      ...extraOpts,
-    }
-  });
+function currentView(){return location.hash.slice(1)||'overview'}
+function renderCurrentView(){const v=currentView();if(renderers[v])renderers[v]()}
+
+// NAV
+function navigate(){
+  const hash=currentView();
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='v-'+hash));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===hash));
+  document.querySelector('.sidebar').classList.remove('open');
+  renderCurrentView();
 }
+window.addEventListener('hashchange',navigate);
 
-// ---- Countdown ----
-function startCountdown() {
-  cdLeft = 300;
-  if (cdTimer) clearInterval(cdTimer);
-  cdTimer = setInterval(() => {
-    cdLeft--;
-    if (cdLeft <= 0) {
-      cdLeft = 0;
-      updateCD();
-      $('#cd-ring').classList.add('done');
-      setTimeout(() => { $('#cd-ring').classList.remove('done'); loadData(); cdLeft = 300; }, 800);
-      return;
-    }
-    updateCD();
-  }, 1000);
-  updateCD();
+// DATA
+async function loadData(){
+  const[latest,history]=await Promise.all([
+    fetch('data/metrics-latest.json?'+Date.now()).then(r=>r.json()).catch(()=>null),
+    fetch('data/metrics-history.json?'+Date.now()).then(r=>r.json()).catch(()=>[])
+  ]);
+  if(!latest)return;
+  if(latest.timestamp===lastTs)return;
+  lastTs=latest.timestamp;
+  DATA=latest;HISTORY=history;
+  renderCurrentView();
 }
-function updateCD() {
-  const m = Math.floor(cdLeft / 60), s = cdLeft % 60;
-  $('#cd-text').textContent = `${m}:${s.toString().padStart(2, '0')}`;
-  $('#cd-ring').style.strokeDashoffset = CIRC * (1 - cdLeft / 300);
+setInterval(loadData,30000);
+
+// COUNTDOWN
+let cdLeft=300;
+function tickCountdown(){
+  cdLeft--;
+  if(cdLeft<=0){cdLeft=300;loadData()}
+  const m=Math.floor(cdLeft/60),s=cdLeft%60;
+  document.getElementById('cd-text').textContent=`Next: ${m}:${s.toString().padStart(2,'0')}`;
+  const circ=131.95;
+  document.getElementById('cd-ring').style.strokeDashoffset=circ*(1-cdLeft/300);
 }
+setInterval(tickCountdown,1000);
 
-// ---- Relative time refresh ----
-setInterval(() => { if (D) { renderHealth(); renderSources(); renderActivity(); } }, 30000);
-
-// ---- Init ----
+// INIT
 loadData();
-startCountdown();
+navigate();
 </script>
 </body>
 </html>
