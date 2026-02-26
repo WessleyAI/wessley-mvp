@@ -75,5 +75,21 @@
     "total_docs": 19967,
     "total_vectors": 2360,
     "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:23:42Z",
+    "period": "5m",
+    "new_docs": 3,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "youtube": 3
+    },
+    "new_vehicles": [],
+    "total_docs": 19970,
+    "total_vectors": 2360,
+    "total_nodes": 1584
   }
 ]
