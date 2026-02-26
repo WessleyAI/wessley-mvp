@@ -15,6 +15,7 @@ import (
 	"github.com/WessleyAI/wessley-mvp/engine/semantic"
 	"github.com/WessleyAI/wessley-mvp/pkg/fn"
 	mlpb "github.com/WessleyAI/wessley-mvp/ml/proto/wessley/ml/v1"
+	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 )
 
@@ -111,19 +112,45 @@ func NewStore(vs *semantic.VectorStore, gs *graph.GraphStore) fn.Stage[EmbeddedD
 			return fn.Err[string](fmt.Errorf("graph save: %w", err))
 		}
 
+		// If VehicleInfo is present, ensure the vehicle hierarchy exists.
+		if doc.VehicleInfo != nil {
+			vi := graph.VehicleInfo{
+				Make:  doc.VehicleInfo.Make,
+				Model: doc.VehicleInfo.Model,
+				Year:  doc.VehicleInfo.Year,
+				Trim:  doc.VehicleInfo.Trim,
+			}
+			if err := gs.EnsureVehicleHierarchy(ctx, vi); err != nil {
+				// Log but don't fail the pipeline for hierarchy errors.
+				slog.Warn("ingest: vehicle hierarchy", "error", err, "doc_id", doc.ID)
+			}
+		}
+
 		// Store vectors in Qdrant.
 		records := make([]semantic.VectorRecord, len(doc.Chunks))
 		for i, chunk := range doc.Chunks {
+			// Generate deterministic UUID from doc ID and chunk index
+			pointID := uuid.NewSHA1(uuid.NameSpaceURL, []byte(fmt.Sprintf("%s-%d", doc.ID, chunk.Index))).String()
+			payload := map[string]any{
+				"content":     chunk.Text,
+				"doc_id":      doc.ID,
+				"source":      doc.Source,
+				"vehicle":     doc.Vehicle,
+				"chunk_index": chunk.Index,
+			}
+			// Add structured vehicle info to Qdrant payload.
+			if doc.VehicleInfo != nil {
+				payload["vehicle_make"] = doc.VehicleInfo.Make
+				payload["vehicle_model"] = doc.VehicleInfo.Model
+				payload["vehicle_year"] = doc.VehicleInfo.Year
+				if doc.VehicleInfo.Trim != "" {
+					payload["vehicle_trim"] = doc.VehicleInfo.Trim
+				}
+			}
 			records[i] = semantic.VectorRecord{
-				ID:        fmt.Sprintf("%s-%d", doc.ID, chunk.Index),
+				ID:        pointID,
 				Embedding: doc.Embeddings[i],
-				Payload: map[string]any{
-					"content":     chunk.Text,
-					"doc_id":      doc.ID,
-					"source":      doc.Source,
-					"vehicle":     doc.Vehicle,
-					"chunk_index": chunk.Index,
-				},
+				Payload:   payload,
 			}
 		}
 		if err := vs.Upsert(ctx, records); err != nil {

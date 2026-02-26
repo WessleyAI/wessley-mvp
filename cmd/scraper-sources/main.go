@@ -18,6 +18,7 @@ import (
 
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/forums"
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/ifixit"
+	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/manuals"
 	"github.com/WessleyAI/wessley-mvp/cmd/scraper-sources/nhtsa"
 	"github.com/WessleyAI/wessley-mvp/engine/scraper"
 	"github.com/WessleyAI/wessley-mvp/pkg/natsutil"
@@ -30,6 +31,8 @@ func main() {
 	sources := flag.String("sources", "nhtsa,ifixit,forums", "comma-separated sources to scrape")
 	nhtsaMakes := flag.String("nhtsa-makes", "TOYOTA,HONDA,FORD,CHEVROLET,BMW,NISSAN", "comma-separated vehicle makes for NHTSA")
 	nhtsaYear := flag.Int("nhtsa-year", 2024, "model year for NHTSA queries")
+	manualsDir := flag.String("manuals-dir", "", "directory containing PDF vehicle manuals")
+	manualsMax := flag.Int("manuals-max", 0, "max manual files to process (0 = unlimited)")
 	flag.Parse()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -61,6 +64,15 @@ func main() {
 			},
 			MaxGuides: 50,
 			RateLimit: 1 * time.Second,
+		})
+	}
+
+	var manualScraper *manuals.Scraper
+	if enabledSources["manuals"] && *manualsDir != "" {
+		manualScraper = manuals.NewScraper(manuals.Config{
+			Directory: *manualsDir,
+			MaxFiles:  *manualsMax,
+			RateLimit: 500 * time.Millisecond,
 		})
 	}
 
@@ -131,6 +143,19 @@ func main() {
 				log.Printf("ifixit error: %v", err)
 			} else {
 				log.Printf("ifixit: fetched %d posts", len(posts))
+				total += len(posts)
+				if err := emit(posts); err != nil {
+					return err
+				}
+			}
+		}
+
+		if manualScraper != nil {
+			posts, err := manualScraper.FetchAll(ctx)
+			if err != nil {
+				log.Printf("manuals error: %v", err)
+			} else {
+				log.Printf("manuals: fetched %d posts", len(posts))
 				total += len(posts)
 				if err := emit(posts); err != nil {
 					return err

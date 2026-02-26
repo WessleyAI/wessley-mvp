@@ -4,13 +4,14 @@ import "github.com/WessleyAI/wessley-mvp/engine/scraper"
 
 // ParsedDoc represents a scraped post after parsing/extraction.
 type ParsedDoc struct {
-	ID        string
-	Source    string
-	Title     string
-	Content   string
-	Vehicle   string
-	Sentences []string
-	Metadata  map[string]string
+	ID          string
+	Source      string
+	Title       string
+	Content     string
+	Vehicle     string
+	VehicleInfo *scraper.VehicleInfo
+	Sentences   []string
+	Metadata    map[string]string
 }
 
 // ChunkedDoc is a parsed document split into embeddable chunks.
@@ -41,12 +42,13 @@ func parsedDocFromPost(post scraper.ScrapedPost) ParsedDoc {
 		"vehicle": post.Metadata.Vehicle,
 	}
 	return ParsedDoc{
-		ID:        post.Source + ":" + post.SourceID,
-		Source:    post.Source,
-		Title:     post.Title,
-		Content:   post.Content,
-		Vehicle:   post.Metadata.Vehicle,
-		Sentences: splitSentences(post.Content),
-		Metadata:  meta,
+		ID:          post.Source + ":" + post.SourceID,
+		Source:      post.Source,
+		Title:       post.Title,
+		Content:     post.Content,
+		Vehicle:     post.Metadata.Vehicle,
+		VehicleInfo: post.Metadata.VehicleInfo,
+		Sentences:   splitSentences(post.Content),
+		Metadata:    meta,
 	}
 }

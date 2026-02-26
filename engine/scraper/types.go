@@ -15,12 +15,21 @@ type ScrapedPost struct {
 	Metadata    Metadata  `json:"metadata"`
 }
 
+// VehicleInfo holds structured vehicle identification.
+type VehicleInfo struct {
+	Make  string `json:"make,omitempty"`
+	Model string `json:"model,omitempty"`
+	Year  int    `json:"year,omitempty"`
+	Trim  string `json:"trim,omitempty"`
+}
+
 // Metadata holds extracted automotive context.
 type Metadata struct {
-	Vehicle  string   `json:"vehicle,omitempty"`
-	Symptoms []string `json:"symptoms,omitempty"`
-	Fixes    []string `json:"fixes,omitempty"`
-	Keywords []string `json:"keywords,omitempty"`
+	Vehicle     string       `json:"vehicle,omitempty"`
+	VehicleInfo *VehicleInfo `json:"vehicle_info,omitempty"`
+	Symptoms    []string     `json:"symptoms,omitempty"`
+	Fixes       []string     `json:"fixes,omitempty"`
+	Keywords    []string     `json:"keywords,omitempty"`
 }
 
 // ScrapeOpts configures a scrape run.
