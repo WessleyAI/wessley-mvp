@@ -25,6 +25,10 @@ var (
 	mErrorsTotal   = met.Counter("wessley_scraper_reddit_errors_total", "Total scraper errors")
 	mScrapeDur     = met.Histogram("wessley_scraper_reddit_scrape_duration_seconds", "Scrape cycle duration", nil)
 	mLastScrape    = met.Gauge("wessley_scraper_reddit_last_scrape_timestamp", "Epoch of last scrape")
+	mSubredditsScraped = func(sub string) *metrics.Counter {
+		return met.Counter(metrics.WithLabels("wessley_scraper_reddit_subreddits_scraped", "subreddit", sub), "Posts scraped per subreddit")
+	}
+	mBytesTotal    = met.Counter("wessley_scraper_reddit_bytes_total", "Total bytes written")
 )
 
 func main() {
@@ -37,6 +41,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
+	met.CollectRuntime("wessley_scraper_reddit", 15*time.Second)
 	met.ServeAsync(9093)
 
 	subreddits := []string{

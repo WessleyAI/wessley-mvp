@@ -63,11 +63,23 @@ func main() {
 	mManualsDiscovered := met.Counter("wessley_scraper_manuals_discovered_total", "Manuals discovered")
 	mManualsDownloaded := met.Counter("wessley_scraper_manuals_downloaded_total", "Manuals downloaded")
 	mManualsFailed := met.Counter("wessley_scraper_manuals_failed_total", "Manuals failed")
+	mBytesTotal := func(source string) *metrics.Counter {
+		return met.Counter(metrics.WithLabels("wessley_scraper_sources_bytes_total", "source", source), "Bytes scraped by source")
+	}
+	mManualsDownloadBytes := met.Counter("wessley_scraper_manuals_download_bytes_total", "Total manual download bytes")
+	mManualsDownloadDur := met.Histogram("wessley_scraper_manuals_download_duration_seconds", "Manual download duration", nil)
+	mManualsPdfPages := met.Counter("wessley_scraper_manuals_pdf_pages_total", "Total PDF pages processed")
+
 	// Suppress unused warnings for manual-mode metrics
 	_ = mManualsDiscovered
 	_ = mManualsDownloaded
 	_ = mManualsFailed
+	_ = mBytesTotal
+	_ = mManualsDownloadBytes
+	_ = mManualsDownloadDur
+	_ = mManualsPdfPages
 
+	met.CollectRuntime("wessley_scraper_sources", 15*time.Second)
 	met.ServeAsync(9092)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)

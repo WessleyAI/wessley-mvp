@@ -42,6 +42,17 @@ var (
 	mPipelineDur     = met.Histogram("wessley_ingest_pipeline_duration_seconds", "Per-doc pipeline time", nil)
 	mStageDur        = func(stage string) *metrics.Histogram { return met.Histogram(metrics.WithLabels("wessley_ingest_stage_duration_seconds", "stage", stage), "Per-stage duration", nil) }
 	mEmbedDur        = met.Histogram("wessley_ingest_embed_duration_seconds", "Ollama embed call time", nil)
+
+	// Additional metrics
+	mBytesProcessed          = met.Counter("wessley_ingest_bytes_processed_total", "Total bytes of source files processed")
+	mEmbedBatchSize          = met.Histogram("wessley_ingest_embed_batch_size", "Chunks per embed call", []float64{1, 5, 10, 25, 50, 100, 250, 500})
+	mNeo4jDuration           = met.Histogram("wessley_ingest_neo4j_duration_seconds", "Graph write latency", nil)
+	mQdrantDuration          = met.Histogram("wessley_ingest_qdrant_duration_seconds", "Vector write latency", nil)
+	mDedupHits               = met.Counter("wessley_ingest_dedup_hits_total", "Dedup cache hits")
+	mVehicleHierarchyCreated = met.Counter("wessley_ingest_vehicle_hierarchy_created_total", "New vehicle hierarchies created")
+	mSystemsDiscovered       = met.Counter("wessley_ingest_systems_discovered_total", "New system nodes created")
+	mComponentsExtracted     = met.Counter("wessley_ingest_components_extracted_total", "Components found in content")
+	mQueueDepth              = met.Gauge("wessley_ingest_queue_depth", "Files waiting to process")
 )
 
 const vectorDims = 768 // nomic-embed-text
@@ -61,7 +72,8 @@ func main() {
 	)
 	flag.Parse()
 
-	// Start metrics server
+	// Start metrics server with runtime collection
+	met.CollectRuntime("wessley_ingest", 15*time.Second)
 	met.ServeAsync(9091)
 
 	log := slog.Default()
@@ -152,8 +164,13 @@ func main() {
 				continue
 			}
 
+			mQueueDepth.Inc()
 			log.Info("processing file", "file", e.Name())
+			if info != nil {
+				mBytesProcessed.Add(info.Size())
+			}
 			count, errs := processFile(ctx, path, pipeline)
+			mQueueDepth.Dec()
 			log.Info("file done", "file", e.Name(), "ingested", count, "errors", errs)
 			mFilesProcessed.Inc()
 

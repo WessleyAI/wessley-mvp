@@ -8,12 +8,23 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"runtime"
 	"sort"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 )
+
+func runtimeMemAlloc() uint64 {
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	return m.Alloc
+}
+
+func runtimeNumGoroutine() int {
+	return runtime.NumGoroutine()
+}
 
 // DefaultBuckets are the default histogram buckets (in seconds).
 var DefaultBuckets = []float64{0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 30, 60}
@@ -305,6 +316,28 @@ func wrapLabels(labels string) string {
 	}
 	// labels starts with comma, strip it and wrap
 	return "{" + labels[1:] + "}"
+}
+
+// CollectRuntime periodically updates runtime gauges (memory, goroutines, uptime).
+func (r *Registry) CollectRuntime(prefix string, interval time.Duration) {
+	startTime := time.Now()
+	uptimeGauge := r.Gauge(prefix+"_uptime_seconds", "Process uptime in seconds")
+	memGauge := r.Gauge(prefix+"_memory_bytes", "Process memory usage")
+	goroutineGauge := r.Gauge(prefix+"_goroutines", "Number of goroutines")
+
+	go func() {
+		for {
+			uptimeGauge.Set(int64(time.Since(startTime).Seconds()))
+
+			var m [2]uint64
+			// Use atomic-friendly approach: store alloc from runtime
+			memGauge.Set(int64(runtimeMemAlloc()))
+			goroutineGauge.Set(int64(runtimeNumGoroutine()))
+
+			_ = m
+			time.Sleep(interval)
+		}
+	}()
 }
 
 // Handler returns an http.Handler that serves /metrics.
