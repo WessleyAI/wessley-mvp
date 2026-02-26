@@ -1,43 +1,43 @@
 [
   {
-    "time": "2026-02-26T17:24:03Z",
+    "time": "2026-02-26T17:33:43Z",
     "category": "system",
     "message": "scraper-reddit: running"
   },
   {
-    "time": "2026-02-26T17:24:03Z",
+    "time": "2026-02-26T17:33:43Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-26T17:24:03Z",
+    "time": "2026-02-26T17:33:43Z",
     "category": "system",
     "message": "ingest: running"
   },
   {
-    "time": "2026-02-26T17:24:03Z",
+    "time": "2026-02-26T17:33:43Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 25 hours"
   },
   {
-    "time": "2026-02-26T17:24:03Z",
+    "time": "2026-02-26T17:33:43Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 25 hours"
   },
   {
-    "time": "2026-02-26T17:24:03Z",
+    "time": "2026-02-26T17:33:43Z",
     "category": "system",
     "message": "Data directory: 73M\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-02-26T17:24:23Z",
+    "category": "ingestion",
+    "message": "File reddit-2026-02-25.json (47706KB) processed"
   },
   {
     "time": "2026-02-26T17:17:29Z",
     "category": "ingestion",
     "message": "File youtube-2026-02-25.json (1330KB) processed"
-  },
-  {
-    "time": "2026-02-26T17:16:48Z",
-    "category": "ingestion",
-    "message": "File reddit-2026-02-25.json (47405KB) processed"
   },
   {
     "time": "2026-02-26T17:04:29Z",
