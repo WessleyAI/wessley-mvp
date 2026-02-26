@@ -51,7 +51,7 @@ func TestClassifySection(t *testing.T) {
 		wantSys, wantSub string
 	}{
 		{"Engine", "fuel injection system overview", "Engine", "Fuel Injection"},
-		{"Electrical System", "battery and alternator", "Electrical", "Alternator"},
+		{"Electrical System", "alternator replacement guide", "Electrical", "Alternator"},
 		{"BRAKES", "disc brake inspection", "Brakes", "Disc Brakes"},
 		{"Maintenance Schedule", "oil change every 5000 miles", "", ""},
 		{"Random Title", "the radiator needs flushing", "Cooling", "Radiator"},

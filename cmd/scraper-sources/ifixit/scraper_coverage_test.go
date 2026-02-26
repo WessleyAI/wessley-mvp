@@ -165,7 +165,7 @@ func TestFetchAll_Dedup(t *testing.T) {
 	}
 }
 
-func TestExtractFixes(t *testing.T) {
+func TestExtractFixes_Coverage(t *testing.T) {
 	tests := []struct {
 		input    string
 		minCount int

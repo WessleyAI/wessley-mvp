@@ -14,22 +14,30 @@ func TestFetchAll(t *testing.T) {
 		{
 			ODINumber:          12345,
 			Manufacturer:       "Toyota Motor",
-			MakeName:           "TOYOTA",
-			ModelName:          "CAMRY",
-			ModelYear:          2020,
-			Component:          "ENGINE",
+			Components:         "ENGINE",
 			Summary:            "Engine stalling at highway speed with vibration and warning light on dashboard.",
 			DateComplaintFiled: "01/15/2024",
+			Products: []Product{{
+				Type:         "Vehicle",
+				ProductYear:  "2020",
+				ProductMake:  "TOYOTA",
+				ProductModel: "CAMRY",
+				Manufacturer: "Toyota Motor",
+			}},
 		},
 		{
 			ODINumber:          12346,
 			Manufacturer:       "Toyota Motor",
-			MakeName:           "TOYOTA",
-			ModelName:          "RAV4",
-			ModelYear:          2020,
-			Component:          "BRAKES",
+			Components:         "BRAKES",
 			Summary:            "Brake failure causing extended stopping distance and noise when braking.",
 			DateComplaintFiled: "02/20/2024",
+			Products: []Product{{
+				Type:         "Vehicle",
+				ProductYear:  "2020",
+				ProductMake:  "TOYOTA",
+				ProductModel: "RAV4",
+				Manufacturer: "Toyota Motor",
+			}},
 		},
 	}
 
