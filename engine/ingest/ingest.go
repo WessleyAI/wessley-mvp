@@ -112,7 +112,7 @@ func NewStore(vs *semantic.VectorStore, gs *graph.GraphStore) fn.Stage[EmbeddedD
 			return fn.Err[string](fmt.Errorf("graph save: %w", err))
 		}
 
-		// If VehicleInfo is present, ensure the vehicle hierarchy exists.
+		// If VehicleInfo is present, ensure the vehicle hierarchy exists and enrich.
 		if doc.VehicleInfo != nil {
 			vi := graph.VehicleInfo{
 				Make:  doc.VehicleInfo.Make,
@@ -123,6 +123,36 @@ func NewStore(vs *semantic.VectorStore, gs *graph.GraphStore) fn.Stage[EmbeddedD
 			if err := gs.EnsureVehicleHierarchy(ctx, vi); err != nil {
 				// Log but don't fail the pipeline for hierarchy errors.
 				slog.Warn("ingest: vehicle hierarchy", "error", err, "doc_id", doc.ID)
+			}
+
+			enricher := graph.NewEnricher(gs)
+
+			// For manual sources with section info, classify and create vehicle-scoped nodes.
+			if doc.Source == "manual" && doc.Metadata["section"] != "" {
+				sys, sub := graph.ClassifySection(doc.Metadata["section"], doc.ParsedDoc.Content)
+				if sys != "" {
+					if err := enricher.EnrichFromSource(ctx, vi, sys, doc.ID); err != nil {
+						slog.Warn("ingest: manual enrichment", "error", err, "doc_id", doc.ID)
+					}
+					_ = sub // subsystem handled inside EnrichFromSource
+				}
+			}
+
+			// For NHTSA/iFixit sources, classify the component/keyword string.
+			if doc.Source == "nhtsa" || doc.Source == "ifixit" {
+				componentStr := doc.Metadata["components"]
+				if componentStr == "" {
+					// Try keywords.
+					for _, kw := range doc.ChunkedDoc.ParsedDoc.Sentences {
+						componentStr = kw
+						break
+					}
+				}
+				if componentStr != "" {
+					if err := enricher.EnrichFromSource(ctx, vi, componentStr, doc.ID); err != nil {
+						slog.Warn("ingest: source enrichment", "error", err, "doc_id", doc.ID)
+					}
+				}
 			}
 		}
 

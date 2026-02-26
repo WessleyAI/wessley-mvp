@@ -146,8 +146,9 @@ func (s *Scraper) searchGuides(ctx context.Context, query string, limiter *time.
 			PublishedAt: published,
 			ScrapedAt:   now,
 			Metadata: scraper.Metadata{
-				Fixes:    extractFixes(content),
-				Keywords: []string{"ifixit", "repair-guide", query},
+				Fixes:      extractFixes(content),
+				Keywords:   []string{"ifixit", "repair-guide", query},
+				Components: query, // use search query as component hint for enrichment
 			},
 		})
 	}

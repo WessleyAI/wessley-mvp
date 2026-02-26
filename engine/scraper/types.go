@@ -30,6 +30,8 @@ type Metadata struct {
 	Symptoms    []string     `json:"symptoms,omitempty"`
 	Fixes       []string     `json:"fixes,omitempty"`
 	Keywords    []string     `json:"keywords,omitempty"`
+	Section     string       `json:"section,omitempty"`     // system/subsystem classification
+	Components  string       `json:"components,omitempty"`  // raw component string (e.g. from NHTSA)
 }
 
 // ScrapeOpts configures a scrape run.

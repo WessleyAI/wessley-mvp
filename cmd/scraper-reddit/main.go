@@ -34,6 +34,16 @@ func main() {
 		"AskMechanic",
 		"AutoRepair",
 		"Cartalk",
+		"cars",
+		"Justrolledintotheshop",
+		"autorepair",
+		"Autos",
+		"CarHelp",
+		"autobody",
+		"EngineBuilding",
+		"Diesel",
+		"electricvehicles",
+		"hybridcars",
 	}
 
 	scraper := reddit.NewScraper(reddit.Config{

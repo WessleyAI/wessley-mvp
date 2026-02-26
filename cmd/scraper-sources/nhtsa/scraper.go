@@ -181,9 +181,15 @@ func (s *Scraper) fetchMakeModel(ctx context.Context, make_, model string, limit
 			PublishedAt: published,
 			ScrapedAt:   now,
 			Metadata: scraper.Metadata{
-				Vehicle:  vehicle,
-				Symptoms: extractSymptoms(c.Summary),
-				Keywords: []string{strings.ToLower(c.Components), "nhtsa", "complaint"},
+				Vehicle:    vehicle,
+				VehicleInfo: &scraper.VehicleInfo{
+					Make:  vehicleMake,
+					Model: vehicleModel,
+					Year:  vehicleYear,
+				},
+				Symptoms:   extractSymptoms(c.Summary),
+				Keywords:   []string{strings.ToLower(c.Components), "nhtsa", "complaint"},
+				Components: c.Components,
 			},
 		})
 	}
