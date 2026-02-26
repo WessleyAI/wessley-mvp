@@ -3,451 +3,711 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Wessley AI — Dashboard</title>
+<title>Wessley AI — Knowledge Base Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
---bg:#0b0f15;--surface:#141a23;--surface2:#1c2430;--border:#232d3b;
---text:#e1e7ef;--text2:#6b7a8d;--blue:#4d8eff;--green:#34d399;
---amber:#fbbf24;--red:#f87171;--purple:#a78bfa;--sidebar-w:240px;--radius:10px;
+  --bg:#0f1117;--surface:#181a20;--surface2:#1e2028;--border:#2a2d38;
+  --text:#e4e4e7;--text2:#9ca3af;--text3:#6b7280;
+  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#a78bfa;
+  --cyan:#06b6d4;--orange:#f97316;
+  --sidebar-w:240px;
 }
-html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
-/* SIDEBAR */
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .25s}
+html{font-family:'Inter',system-ui,sans-serif;font-size:14px;background:var(--bg);color:var(--text)}
+body{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .2s}
 .sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
 .sidebar-header h1{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-.health-beacon{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);margin-top:8px}
-.health-beacon .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.nav-section{padding:16px 12px 4px;font-size:10px;font-weight:600;color:var(--text2);letter-spacing:1.2px;text-transform:uppercase}
-.sidebar nav{flex:1;overflow-y:auto;padding:4px 0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-left:3px solid transparent;transition:all .15s;text-decoration:none}
-.nav-item:hover{color:var(--text);background:rgba(77,142,255,.06)}
-.nav-item.active{color:var(--blue);border-left-color:var(--blue);background:rgba(77,142,255,.08)}
-.sidebar-footer{padding:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px}
-.countdown-ring{position:relative;width:50px;height:50px}
-.countdown-ring svg{transform:rotate(-90deg)}
-.countdown-ring circle{fill:none;stroke-width:3}
-.countdown-ring .bg{stroke:var(--border)}
-.countdown-ring .fg{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset .9s linear}
-.countdown-text{font-size:11px;color:var(--text2)}
-/* MOBILE */
-.sidebar-toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 10px;font-size:18px;cursor:pointer}
-@media(max-width:800px){
-.sidebar{transform:translateX(-100%)}
-.sidebar.open{transform:translateX(0)}
-.sidebar-toggle{display:block}
-.main{margin-left:0!important}
-}
-/* MAIN */
-.main{margin-left:var(--sidebar-w);height:100vh;overflow-y:auto;padding:24px 28px 40px}
-.view{display:none}
-.view.active{display:block}
-/* CARDS */
-.kpi-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px}
-.kpi-card{flex:1;min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:4px}
-.kpi-card .label{font-size:11px;color:var(--text2);font-weight:500}
-.kpi-card .value{font-size:26px;font-weight:700}
-.kpi-card .delta{font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;display:inline-block;width:fit-content}
-.delta.up{color:var(--green);background:rgba(52,211,153,.1)}
-.delta.down{color:var(--red);background:rgba(248,113,113,.1)}
-.delta.neutral{color:var(--text2);background:rgba(107,122,141,.1)}
-.sparkline{margin-top:4px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
-@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-.card h3{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px}
+.sidebar-header h1 span{color:var(--amber)}
+.sidebar-health{padding:8px 16px;font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.sidebar-health .dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
+.sidebar nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-group{padding:0 16px;margin-bottom:16px}
+.nav-group-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;user-select:none}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:rgba(59,130,246,.12);color:var(--blue)}
+.nav-item .icon{width:18px;text-align:center;font-size:14px}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.sidebar-footer .countdown{display:flex;align-items:center;gap:6px}
+
+/* Hamburger */
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;cursor:pointer;color:var(--text);font-size:18px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+
+/* Main */
+.main{margin-left:var(--sidebar-w);flex:1;padding:24px 28px;min-width:0}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab{padding:8px 16px;font-size:13px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* Cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.kpi-card .label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:6px}
+.kpi-card .value{font-size:28px;font-weight:700;line-height:1.1}
+.kpi-card .trend{font-size:12px;margin-left:6px}
+.kpi-card .context{font-size:12px;color:var(--text2);margin-top:6px}
+
+/* Story */
+.story{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:20px;font-size:15px;line-height:1.6;color:var(--text2)}
+.story strong{color:var(--text);font-weight:600}
+
+/* Health strip */
+.health-strip{display:flex;gap:14px;margin-bottom:20px}
+.health-pill{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:12px;display:flex;align-items:center;gap:8px;flex:1}
+.health-pill .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.health-pill .dot.green{background:var(--green)}.health-pill .dot.amber{background:var(--amber)}.health-pill .dot.red{background:var(--red)}
+.health-pill .hl{font-weight:600;color:var(--text)}
+
+/* Insights */
+.insights{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:20px}
+.insights h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:12px}
+.insight-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:13px;color:var(--text2);line-height:1.4}
+.insight-item+.insight-item{border-top:1px solid var(--border)}
+.insight-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+
+/* Two columns */
+.cols-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.panel h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:12px}
+
+/* Chart containers */
 .chart-wrap{position:relative;height:220px}
 .chart-wrap canvas{position:absolute;inset:0}
-/* MINI CARDS */
-.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
-.mini-card .mc-label{font-size:11px;color:var(--text2)}
-.mini-card .mc-value{font-size:18px;font-weight:700;margin-top:4px}
-/* TABLES */
-.tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
-.tbl th{text-align:left;color:var(--text2);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--border)}
-.tbl td{padding:6px 8px;border-bottom:1px solid var(--border);color:var(--text)}
-/* PILLS */
-.pill{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600}
-.pill.ok{background:rgba(52,211,153,.15);color:var(--green)}
-.pill.err{background:rgba(248,113,113,.15);color:var(--red)}
-.pill.warn{background:rgba(251,191,36,.15);color:var(--amber)}
-/* PIPELINE */
-.pipeline-flow{display:flex;gap:0;margin-bottom:20px;flex-wrap:wrap}
-.pipeline-stage{flex:1;min-width:100px;background:var(--surface2);border:1px solid var(--border);padding:14px;text-align:center;position:relative}
-.pipeline-stage:not(:last-child)::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px;z-index:1}
-.pipeline-stage .ps-name{font-size:11px;color:var(--text2);font-weight:600}
-.pipeline-stage .ps-val{font-size:20px;font-weight:700;margin-top:4px}
-/* SCRAPER CARDS */
-.scraper-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px}
-.scraper-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
-.scraper-card .sc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.scraper-card .sc-name{font-weight:600;font-size:14px}
-.scraper-card .sc-stat{font-size:12px;color:var(--text2);margin-top:4px}
-/* SERVICE CARDS */
-.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:20px}
-.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:14px}
-.svc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.svc-dot.ok{background:var(--green)}
-.svc-dot.err{background:var(--red)}
-.svc-dot.warn{background:var(--amber)}
-/* ACTIVITY */
-.activity-filters{display:flex;gap:8px;margin-bottom:14px}
-.af-pill{padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;background:var(--surface2);color:var(--text2);border:1px solid var(--border);font-weight:500}
-.af-pill.active{background:rgba(77,142,255,.15);color:var(--blue);border-color:var(--blue)}
-.activity-list{max-height:500px;overflow-y:auto}
-.activity-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
-.activity-item .ai-time{color:var(--text2);min-width:70px;flex-shrink:0}
-.activity-item .ai-icon{flex-shrink:0}
-/* FUNNEL */
-.funnel{display:flex;gap:8px;margin-bottom:16px;align-items:end}
-.funnel-bar{border-radius:6px 6px 0 0;min-width:80px;text-align:center;padding:10px 12px;font-weight:700;font-size:18px}
-.funnel-bar .fb-label{font-size:10px;font-weight:500;margin-top:4px}
-.empty-state{text-align:center;padding:40px;color:var(--text2);font-size:13px}
-.section-title{font-size:16px;font-weight:700;margin-bottom:16px}
+
+/* Stacked bar (CSS) */
+.source-bar{display:flex;height:32px;border-radius:6px;overflow:hidden;margin-bottom:10px}
+.source-bar .seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;min-width:20px;transition:width .3s}
+.source-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--text2)}
+.source-legend span{display:flex;align-items:center;gap:4px}
+.source-legend .swatch{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+/* Pipeline */
+.pipeline{display:flex;align-items:center;gap:0;margin-bottom:20px;overflow-x:auto;padding:12px 0}
+.pipe-stage{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 18px;text-align:center;min-width:120px}
+.pipe-stage .name{font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.pipe-stage .val{font-size:20px;font-weight:700}
+.pipe-stage .sub{font-size:10px;color:var(--text3);margin-top:2px}
+.pipe-arrow{font-size:18px;color:var(--text3);padding:0 6px;flex-shrink:0}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat-box{background:var(--surface2);border-radius:8px;padding:14px;text-align:center}
+.stat-box .num{font-size:22px;font-weight:700}
+.stat-box .lbl{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* Source cards */
+.source-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.source-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.source-card .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.source-card .head .name{font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:.03em}
+.source-card .head .status{font-size:11px;display:flex;align-items:center;gap:4px}
+.source-card .count{font-size:24px;font-weight:700;margin-bottom:6px}
+.source-card .bar-bg{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.source-card .bar-fill{height:100%;border-radius:3px;transition:width .3s}
+.source-card .meta{font-size:11px;color:var(--text3);line-height:1.6}
+
+/* Alert banner */
+.alert-banner{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.alert-banner.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--amber)}
+.alert-banner.info{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:var(--blue)}
+
+/* Tables */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border)}
+.data-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
+.data-table tr:last-child td{border-bottom:none}
+.cov-bar{display:inline-block;height:8px;border-radius:4px;background:var(--blue);vertical-align:middle}
+.table-wrap{overflow-x:auto}
+
+/* Topology */
+.topology{padding:20px;text-align:center}
+.topo-row{display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.topo-node{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-size:12px;text-align:center}
+.topo-node .cnt{font-weight:700;color:var(--blue)}
+.topo-node.empty .cnt{color:var(--text3)}
+.topo-arrow{color:var(--text3);font-size:14px}
+.topo-varrow{color:var(--text3);font-size:14px;margin:4px 0}
+
+/* Infra cards */
+.infra-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.infra-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.infra-card .title{font-weight:600;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.infra-card .detail{font-size:12px;color:var(--text3);line-height:1.8}
+.infra-card .detail strong{color:var(--text2);font-weight:500}
+
+/* Manual empty state */
+.manual-empty{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px;text-align:center;max-width:500px;margin:0 auto}
+.manual-empty h3{font-size:16px;margin-bottom:16px}
+.manual-funnel{display:flex;justify-content:center;align-items:center;gap:16px;margin-bottom:20px}
+.funnel-step{text-align:center}
+.funnel-step .circle{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:16px;font-weight:700;color:var(--text3)}
+.funnel-step .lbl{font-size:10px;color:var(--text3);text-transform:uppercase}
+.funnel-step .val{font-size:14px;font-weight:600;color:var(--text3)}
+.funnel-line{width:24px;height:2px;background:var(--border);margin-bottom:20px}
+.manual-empty p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:8px}
+.manual-empty code{background:var(--surface2);padding:2px 8px;border-radius:4px;font-size:12px}
+
+/* Logs */
+.log-filters{display:flex;gap:4px;margin-bottom:16px}
+.log-filter{padding:6px 12px;font-size:12px;border-radius:6px;cursor:pointer;background:var(--surface2);color:var(--text3);border:none}
+.log-filter.active{background:rgba(59,130,246,.15);color:var(--blue)}
+.log-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start}
+.log-item .time{color:var(--text3);font-size:11px;min-width:60px;flex-shrink:0}
+.log-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;flex-shrink:0}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px}
+
+/* Summary line */
+.summary-line{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.5}
+
+/* View title */
+.view-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.view-subtitle{font-size:13px;color:var(--text3);margin-bottom:20px}
+
+/* Hidden views */
+.view{display:none}.view.active{display:block}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Mobile */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .hamburger{display:block}
+  .main{margin-left:0;padding:16px;padding-top:52px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .cols-2,.source-cards,.infra-cards,.stats-grid{grid-template-columns:1fr}
+  .health-strip{flex-direction:column;gap:8px}
+  .pipeline{flex-wrap:wrap;justify-content:center}
+}
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open')">☰</div>
+<div class="overlay" onclick="document.querySelector('.sidebar').classList.remove('open');document.querySelector('.overlay').classList.remove('open')"></div>
+
 <aside class="sidebar">
-<div class="sidebar-header">
-<h1>⚡ Wessley AI</h1>
-<div class="health-beacon"><span class="dot"></span> Live</div>
-</div>
-<nav>
-<div class="nav-section">Monitor</div>
-<a class="nav-item active" data-view="overview" href="#overview">📊 Overview</a>
-<a class="nav-item" data-view="pipeline" href="#pipeline">🔄 Pipeline</a>
-<a class="nav-item" data-view="scrapers" href="#scrapers">🕷️ Scrapers</a>
-<div class="nav-section">Knowledge</div>
-<a class="nav-item" data-view="graph" href="#graph">🧠 Graph</a>
-<a class="nav-item" data-view="vehicles" href="#vehicles">🚗 Vehicles</a>
-<a class="nav-item" data-view="manuals" href="#manuals">📖 Manuals</a>
-<div class="nav-section">System</div>
-<a class="nav-item" data-view="infra" href="#infra">🖥️ Infrastructure</a>
-<a class="nav-item" data-view="activity" href="#activity">📋 Activity</a>
-</nav>
-<div class="sidebar-footer">
-<div class="countdown-ring">
-<svg width="50" height="50" viewBox="0 0 50 50">
-<circle class="bg" cx="25" cy="25" r="21"/>
-<circle class="fg" id="cd-ring" cx="25" cy="25" r="21" stroke-dasharray="131.95" stroke-dashoffset="0"/>
-</svg>
-</div>
-<div class="countdown-text" id="cd-text">Next: 5:00</div>
-</div>
+  <div class="sidebar-header">
+    <h1><span>⚡</span> Wessley AI</h1>
+  </div>
+  <div class="sidebar-health"><span class="dot" id="sidebarDot"></span><span id="sidebarHealth">System Healthy</span></div>
+  <nav>
+    <div class="nav-group">
+      <div class="nav-group-label">Command Center</div>
+      <div class="nav-item active" data-view="overview"><span class="icon">📊</span>Overview</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Data Pipeline</div>
+      <div class="nav-item" data-view="ingestion"><span class="icon">🔄</span>Ingestion</div>
+      <div class="nav-item" data-view="sources"><span class="icon">🕷️</span>Sources</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Knowledge Base</div>
+      <div class="nav-item" data-view="graph"><span class="icon">🧠</span>Graph</div>
+      <div class="nav-item" data-view="vehicles"><span class="icon">🚗</span>Vehicles</div>
+      <div class="nav-item" data-view="manuals"><span class="icon">📖</span>Manuals</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">System</div>
+      <div class="nav-item" data-view="infra"><span class="icon">🖥️</span>Infrastructure</div>
+      <div class="nav-item" data-view="logs"><span class="icon">📋</span>Logs</div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="countdown">▼ Next sync: <span id="countdown">--:--</span></div>
+  </div>
 </aside>
 
 <main class="main">
+
 <!-- OVERVIEW -->
 <div class="view active" id="v-overview">
-<div class="section-title">Overview</div>
-<div class="kpi-row" id="overview-kpis"></div>
-<div class="grid-2">
-<div class="card"><h3>Ingestion Rate (24h)</h3><div class="chart-wrap"><canvas id="ch-ingestion-rate"></canvas></div></div>
-<div class="card"><h3>By Source</h3><div class="chart-wrap"><canvas id="ch-by-source"></canvas></div></div>
+  <div class="view-title">Mission Control</div>
+  <div class="view-subtitle">Automotive knowledge base at a glance</div>
+  <div class="story" id="storyText"></div>
+  <div class="health-strip" id="healthStrip"></div>
+  <div class="kpi-grid" id="kpiGrid"></div>
+  <div class="insights" id="insightsPanel"><h3>Insights & Actions</h3><div id="insightsList"></div></div>
+  <div class="cols-2">
+    <div class="panel"><h3>Source Mix</h3><div id="sourceMixBar"></div></div>
+    <div class="panel"><h3>Top Makes by Coverage</h3><div class="chart-wrap"><canvas id="chartMakes"></canvas></div></div>
+  </div>
 </div>
-<div class="grid-3" id="overview-minis"></div>
+
+<!-- INGESTION -->
+<div class="view" id="v-ingestion">
+  <div class="view-title">Ingestion Pipeline</div>
+  <div class="view-subtitle">Data flow from sources to knowledge</div>
+  <div class="tabs">
+    <div class="tab active" data-tab="ing-overview" data-group="ing">Overview</div>
+    <div class="tab" data-tab="ing-throughput" data-group="ing">Throughput</div>
+    <div class="tab" data-tab="ing-errors" data-group="ing">Errors</div>
+  </div>
+  <div class="tab-content active" id="tc-ing-overview">
+    <div class="pipeline" id="pipelineFlow"></div>
+    <div class="stats-grid" id="ingStats"></div>
+  </div>
+  <div class="tab-content" id="tc-ing-throughput">
+    <div class="panel"><h3>Documents Ingested Over Time</h3><div class="chart-wrap"><canvas id="chartThroughput"></canvas></div><div id="throughputMsg" class="empty-state" style="display:none"></div></div>
+  </div>
+  <div class="tab-content" id="tc-ing-errors">
+    <div class="panel"><h3>Error Rate</h3><div id="errorSummary" style="margin-bottom:16px"></div><div class="chart-wrap"><canvas id="chartErrors"></canvas></div></div>
+  </div>
 </div>
-<!-- PIPELINE -->
-<div class="view" id="v-pipeline">
-<div class="section-title">Ingestion Pipeline</div>
-<div class="pipeline-flow" id="pipeline-stages"></div>
-<div class="grid-2">
-<div class="card"><h3>Throughput (24h)</h3><div class="chart-wrap"><canvas id="ch-throughput"></canvas></div></div>
-<div class="card"><h3>Error Rate (24h)</h3><div class="chart-wrap"><canvas id="ch-error-rate"></canvas></div></div>
+
+<!-- SOURCES -->
+<div class="view" id="v-sources">
+  <div class="view-title">Sources</div>
+  <div class="view-subtitle">Scraper status and performance</div>
+  <div class="summary-line" id="sourcesSummary"></div>
+  <div class="source-cards" id="sourceCards"></div>
+  <div class="panel"><h3>Source Comparison</h3><div class="chart-wrap"><canvas id="chartSourceComp"></canvas></div></div>
 </div>
-<div class="kpi-row" id="pipeline-stats"></div>
-</div>
-<!-- SCRAPERS -->
-<div class="view" id="v-scrapers">
-<div class="section-title">Scraper Status</div>
-<div class="scraper-grid" id="scraper-cards"></div>
-<div class="card"><h3>Documents by Source</h3><div class="chart-wrap"><canvas id="ch-scraper-bars"></canvas></div></div>
-</div>
+
 <!-- GRAPH -->
 <div class="view" id="v-graph">
-<div class="section-title">Knowledge Graph</div>
-<div class="kpi-row" id="graph-kpis"></div>
-<div class="grid-2">
-<div class="card"><h3>Nodes by Type</h3><div class="chart-wrap"><canvas id="ch-nodes-type"></canvas></div></div>
-<div class="card"><h3>Relationships by Type</h3><div class="chart-wrap"><canvas id="ch-rels-type"></canvas></div></div>
+  <div class="view-title">Knowledge Graph</div>
+  <div class="view-subtitle">Neo4j graph structure and growth</div>
+  <div class="tabs">
+    <div class="tab active" data-tab="graph-overview" data-group="graph">Overview</div>
+    <div class="tab" data-tab="graph-topology" data-group="graph">Topology</div>
+    <div class="tab" data-tab="graph-growth" data-group="graph">Growth</div>
+  </div>
+  <div class="tab-content active" id="tc-graph-overview">
+    <div id="graphAlert"></div>
+    <div class="kpi-grid" id="graphKpis"></div>
+    <div class="cols-2">
+      <div class="panel"><h3>Nodes by Type</h3><div class="chart-wrap"><canvas id="chartNodeTypes"></canvas></div></div>
+      <div class="panel"><h3>Top Makes</h3><div class="table-wrap"><table class="data-table" id="graphMakesTable"></table></div></div>
+    </div>
+  </div>
+  <div class="tab-content" id="tc-graph-topology">
+    <div class="panel">
+      <h3>Target Graph Schema</h3>
+      <div class="topology" id="topoView"></div>
+    </div>
+  </div>
+  <div class="tab-content" id="tc-graph-growth">
+    <div class="panel"><h3>Nodes Over Time</h3><div class="chart-wrap"><canvas id="chartNodeGrowth"></canvas></div><div id="growthMsg" class="empty-state" style="display:none"></div></div>
+  </div>
 </div>
-<div class="grid-2">
-<div class="card"><h3>Top Makes</h3><table class="tbl"><thead><tr><th>Make</th><th>Models</th><th>Docs</th></tr></thead><tbody id="tbl-makes"></tbody></table></div>
-<div class="card"><h3>Top Vehicles</h3><table class="tbl"><thead><tr><th>Vehicle</th><th>Docs</th><th>Components</th></tr></thead><tbody id="tbl-vehicles"></tbody></table></div>
-</div>
-</div>
+
 <!-- VEHICLES -->
 <div class="view" id="v-vehicles">
-<div class="section-title">Vehicle Coverage</div>
-<div class="kpi-row" id="vehicles-kpis"></div>
-<div class="grid-2">
-<div class="card"><h3>Top Vehicles by Docs</h3><div class="chart-wrap"><canvas id="ch-top-vehicles"></canvas></div></div>
-<div class="card"><h3>Top Makes</h3><div class="chart-wrap"><canvas id="ch-top-makes"></canvas></div></div>
+  <div class="view-title">Vehicle Coverage</div>
+  <div class="view-subtitle" id="vehicleSub"></div>
+  <div class="panel" style="margin-bottom:20px"><h3>Coverage by Make</h3><div class="table-wrap"><table class="data-table" id="vehicleMakeTable"></table></div></div>
+  <div class="panel"><h3>Top Vehicles</h3><div class="table-wrap"><table class="data-table" id="vehicleTopTable"></table></div></div>
 </div>
-</div>
+
 <!-- MANUALS -->
 <div class="view" id="v-manuals">
-<div class="section-title">Manual Tracker</div>
-<div id="manuals-content"></div>
+  <div class="view-title">Manual Tracker</div>
+  <div class="view-subtitle">Owner & service manual discovery</div>
+  <div id="manualsContent"></div>
 </div>
-<!-- INFRA -->
+
+<!-- INFRASTRUCTURE -->
 <div class="view" id="v-infra">
-<div class="section-title">Infrastructure</div>
-<div class="svc-grid" id="infra-cards"></div>
+  <div class="view-title">Infrastructure</div>
+  <div class="view-subtitle">Service health and connectivity</div>
+  <div class="infra-cards" id="infraCards"></div>
+  <div class="panel"><h3>Pipeline Processes</h3><div class="table-wrap"><table class="data-table" id="processTable"></table></div></div>
 </div>
-<!-- ACTIVITY -->
-<div class="view" id="v-activity">
-<div class="section-title">Activity Feed</div>
-<div class="activity-filters" id="activity-filters"></div>
-<div class="activity-list" id="activity-list"></div>
+
+<!-- LOGS -->
+<div class="view" id="v-logs">
+  <div class="view-title">Activity Log</div>
+  <div class="view-subtitle">Recent pipeline activity</div>
+  <div id="logsContent"></div>
 </div>
+
 </main>
 
 <script>
-let DATA=null, HISTORY=[], lastTs=null;
+/* State */
+let DATA=null, HIST=[], _ts=null, currentView='overview', syncInterval=300, syncCountdown=300;
 const charts={};
+const SRC_COLORS={reddit:'#f97316',nhtsa:'#3b82f6',youtube:'#ef4444',forums:'#a78bfa',ifixit:'#22c55e'};
+const SRC_NAMES={reddit:'Reddit',nhtsa:'NHTSA',youtube:'YouTube',forums:'Forums',ifixit:'iFixit'};
 
-function mkChart(id,type,data,opts={}){
-  const el=document.getElementById(id);
-  if(!el)return;
+/* Chart helper */
+function mkChart(id,cfg){
   if(charts[id]){charts[id].destroy();charts[id]=null}
-  charts[id]=new Chart(el,{type,data,options:{
-    responsive:true,maintainAspectRatio:false,animation:{duration:300},
-    plugins:{legend:{labels:{color:'#6b7a8d',font:{size:11,family:'Inter'}}}},
-    scales:type==='doughnut'||type==='pie'?{}:{
-      x:{ticks:{color:'#4a5568',font:{size:10}},grid:{color:'rgba(35,45,59,.5)'}},
-      y:{ticks:{color:'#4a5568',font:{size:10}},grid:{color:'rgba(35,45,59,.5)'},beginAtZero:true}
-    },...opts}});
+  const el=document.getElementById(id);if(!el)return;
+  charts[id]=new Chart(el,{...cfg,options:{responsive:true,maintainAspectRatio:false,animation:{duration:300},plugins:{legend:{display:false}},...cfg.options}});
 }
 
-function num(v){if(v==null)return'—';if(v>=1e6)return(v/1e6).toFixed(1)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return v.toLocaleString()}
-function ago(ts){if(!ts)return'—';const d=Date.now()-new Date(ts).getTime(),m=Math.floor(d/60000);if(m<1)return'just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago'}
-
-function sparkSVG(arr){
-  if(!arr||arr.length<2)return'';
-  const w=60,h=20,max=Math.max(...arr)||1,min=Math.min(...arr);
-  const pts=arr.map((v,i)=>`${(i/(arr.length-1))*w},${h-((v-min)/(max-min||1))*h}`).join(' ');
-  return`<svg class="sparkline" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="var(--blue)" stroke-width="1.5"/></svg>`;
-}
-
-function kpiCard(label,value,delta,hist){
-  const cls=delta>0?'up':delta<0?'down':'neutral';
-  const sign=delta>0?'+':'';
-  return`<div class="kpi-card"><div class="label">${label}</div><div class="value">${num(value)}</div>${delta!=null?`<div class="delta ${cls}">${sign}${delta}</div>`:''}${sparkSVG(hist)}</div>`;
-}
-
-function histField(field){
-  return HISTORY.slice(-12).map(h=>{
-    try{return field.split('.').reduce((o,k)=>o[k],h)||0}catch(e){return 0}
+/* Nav */
+document.querySelectorAll('.nav-item').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    el.classList.add('active');
+    currentView=el.dataset.view;
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('v-'+currentView).classList.add('active');
+    renderView();
+    document.querySelector('.sidebar').classList.remove('open');
+    document.querySelector('.overlay').classList.remove('open');
   });
+});
+
+/* Tabs */
+document.querySelectorAll('.tab').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const g=el.dataset.group;
+    document.querySelectorAll(`.tab[data-group="${g}"]`).forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll(`.tab-content`).forEach(tc=>{
+      if(tc.id===`tc-${el.dataset.tab}`)tc.classList.add('active');
+      else if(tc.id.startsWith(`tc-${g}`))tc.classList.remove('active');
+    });
+    renderView();
+  });
+});
+
+/* Insights */
+function generateInsights(d){
+  const ins=[];
+  const kg=d.knowledge_graph,ing=d.ingestion,sc=d.scrapers;
+  if(kg.total_relationships===0&&kg.total_nodes>0)ins.push({level:'error',msg:'Vehicle graph has 0 relationships — enricher needs to run to build Make → Model → Component connections'});
+  if(sc.manuals.discovered===0)ins.push({level:'warn',msg:'Manual crawler not started — 0 PDFs discovered from 30+ manufacturer portals'});
+  const total=ing.total_docs_ingested;
+  for(const[src,count]of Object.entries(ing.docs_by_source)){
+    if(count<total*0.02)ins.push({level:'warn',msg:`${SRC_NAMES[src]||src} has only ${count} docs (${(count/total*100).toFixed(1)}%) — consider adding more search queries`});
+  }
+  const sorted=Object.entries(ing.docs_by_source).sort((a,b)=>b[1]-a[1]);
+  const maxSrc=sorted[0];
+  if(maxSrc&&maxSrc[1]>total*0.7)ins.push({level:'info',msg:`${SRC_NAMES[maxSrc[0]]} is the primary source at ${(maxSrc[1]/total*100).toFixed(0)}% of corpus — performing well`});
+  const infra=d.infrastructure;
+  const allUp=Object.values(infra).every(s=>s.status==='connected');
+  if(allUp)ins.push({level:'ok',msg:'All 3 infrastructure services connected and operational'});
+  const errRate=total>0?ing.total_errors/total:0;
+  if(errRate<0.02)ins.push({level:'ok',msg:`Error rate ${(errRate*100).toFixed(1)}% — within tolerance (${ing.total_errors} of ${total})`});
+  else if(errRate<0.05)ins.push({level:'warn',msg:`Error rate ${(errRate*100).toFixed(1)}% — elevated, monitor closely`});
+  else ins.push({level:'error',msg:`Error rate ${(errRate*100).toFixed(1)}% — high, investigate pipeline`});
+  return ins.sort((a,b)=>{const o={error:0,warn:1,info:2,ok:3};return(o[a.level]??9)-(o[b.level]??9)});
 }
 
-// RENDERERS
-const renderers={
-overview(){
+function insightColor(level){return{error:'var(--red)',warn:'var(--amber)',info:'var(--blue)',ok:'var(--green)'}[level]||'var(--text3)'}
+
+/* Render functions */
+function renderOverview(){
   if(!DATA)return;
-  const ig=DATA.ingestion||{},kg=DATA.knowledge_graph||{},vs=DATA.vector_store||{};
-  const srcCount=Object.keys(DATA.scrapers||{}).filter(k=>k!=='manuals'&&(DATA.scrapers[k].status==='active'||DATA.scrapers[k].total_posts>0)).length;
-  const errRate=ig.total_docs_ingested?(ig.total_errors/ig.total_docs_ingested*100).toFixed(1)+'%':'0%';
-  document.getElementById('overview-kpis').innerHTML=[
-    kpiCard('Total Docs',ig.total_docs_ingested||0,null,histField('ingestion.total_docs_ingested')),
-    kpiCard('Graph Nodes',kg.total_nodes||0,null,histField('knowledge_graph.total_nodes')),
-    kpiCard('Vectors',vs.total_vectors||0,null,histField('vector_store.total_vectors')),
-    kpiCard('Error Rate',errRate),
-    kpiCard('Sources Active',srcCount)
-  ].join('');
+  const d=DATA,ing=d.ingestion,kg=d.knowledge_graph,sc=d.scrapers;
+  const total=ing.total_docs_ingested;
+  const makes=kg.top_makes.length;
+  const vehicles=kg.top_vehicles.length;
+  const activeSrc=Object.entries(sc).filter(([k,v])=>k!=='manuals'&&v.status==='running').length;
+  const allUp=Object.values(d.infrastructure).every(s=>s.status==='connected');
 
-  // ingestion rate chart
-  const hLabels=HISTORY.slice(-24).map((_,i)=>i+'h');
-  const hData=HISTORY.slice(-24).map(h=>h?.ingestion?.total_docs_ingested||0);
-  mkChart('ch-ingestion-rate','line',{labels:hLabels,datasets:[{label:'Docs',data:hData,borderColor:'var(--blue)',backgroundColor:'rgba(77,142,255,.1)',fill:true,tension:.3,pointRadius:0}]});
+  // Growth rate from history
+  let growthRate='';
+  if(HIST.length>=2){const oldest=HIST[0],newest=HIST[HIST.length-1];const dt=(new Date(newest.timestamp)-new Date(oldest.timestamp))/3600000;const dd=newest.total_docs-oldest.total_docs;if(dt>0)growthRate=` Knowledge is growing at <strong>~${Math.round(dd/dt)} docs/hour</strong>.`}
 
-  // by source doughnut
-  const src=ig.docs_by_source||{};
-  const sKeys=Object.keys(src), sVals=sKeys.map(k=>src[k]);
-  const colors=['#4d8eff','#34d399','#fbbf24','#f87171','#a78bfa','#f472b6','#fb923c'];
-  mkChart('ch-by-source','doughnut',{labels:sKeys,datasets:[{data:sVals,backgroundColor:colors.slice(0,sKeys.length)}]});
+  // Story
+  const topMake=kg.top_makes[0];
+  document.getElementById('storyText').innerHTML=`Wessley knows about <strong>${total.toLocaleString()}</strong> repair topics across <strong>${makes} makes</strong> and <strong>${vehicles}+ vehicles</strong>, sourced from <strong>${activeSrc} active crawlers</strong>.${growthRate} ${allUp?'All systems operational.':'<span style="color:var(--amber)">Some systems need attention.</span>'} ${topMake?`<strong>${topMake.name}</strong> has the deepest coverage with ${topMake.documents} documents.`:''}`;
 
-  // mini cards
-  const sc=DATA.scrapers||{};
-  const lastScrape=Object.values(sc).reduce((a,s)=>s.last_scrape&&new Date(s.last_scrape)>new Date(a||0)?s.last_scrape:a,null);
-  const man=sc.manuals||{};
-  document.getElementById('overview-minis').innerHTML=`
-    <div class="mini-card"><div class="mc-label">Last Scrape</div><div class="mc-value">${ago(lastScrape)}</div></div>
-    <div class="mini-card"><div class="mc-label">Manuals Discovered</div><div class="mc-value">${num(man.discovered||0)}</div></div>
-    <div class="mini-card"><div class="mc-label">Files Processed</div><div class="mc-value">${num(ig.files_processed||0)}</div></div>`;
-},
+  // Health
+  const errRate=total>0?ing.total_errors/total:0;
+  const pipeH=errRate<0.05?'green':'amber';
+  const knowH=total>0?(HIST.length>1&&HIST[HIST.length-1].total_docs>HIST[0].total_docs?'green':'amber'):(total>0?'amber':'red');
+  const infraH=allUp?'green':'amber';
+  document.getElementById('healthStrip').innerHTML=`
+    <div class="health-pill"><span class="dot ${pipeH}"></span>Pipeline: <span class="hl">${pipeH==='green'?'Healthy':'Degraded'}</span></div>
+    <div class="health-pill"><span class="dot ${knowH==='green'?'green':'amber'}"></span>Knowledge: <span class="hl">${total===0?'Empty':knowH==='green'?'Growing':'Building'}</span></div>
+    <div class="health-pill"><span class="dot ${infraH}"></span>Infrastructure: <span class="hl">${allUp?'All Connected':'Partial'}</span></div>`;
 
-pipeline(){
+  // KPIs
+  const topM=kg.top_makes[0];
+  document.getElementById('kpiGrid').innerHTML=`
+    <div class="kpi-card"><div class="label">Knowledge Base</div><div class="value">${total.toLocaleString()}<span class="trend" style="color:var(--green)">→</span></div><div class="context">across ${makes} makes, ${activeSrc} sources</div></div>
+    <div class="kpi-card"><div class="label">Embeddings</div><div class="value">${d.vector_store.total_vectors.toLocaleString()}</div><div class="context">${d.vector_store.dimensions}-dim, Qdrant ${d.vector_store.status}</div></div>
+    <div class="kpi-card"><div class="label">Error Rate</div><div class="value">${(errRate*100).toFixed(1)}%</div><div class="context">${ing.total_errors} of ${total} — ${errRate<0.02?'within tolerance':'elevated'}</div></div>
+    <div class="kpi-card"><div class="label">Coverage</div><div class="value">${makes} makes</div><div class="context">${topM?topM.name+' leads with '+topM.documents+' docs':''}</div></div>`;
+
+  // Insights
+  const insights=generateInsights(d);
+  document.getElementById('insightsList').innerHTML=insights.map(i=>`<div class="insight-item"><span class="insight-dot" style="background:${insightColor(i.level)}"></span>${i.msg}</div>`).join('');
+
+  // Source mix bar
+  const srcEntries=Object.entries(ing.docs_by_source).sort((a,b)=>b[1]-a[1]);
+  let barHtml='<div class="source-bar">';
+  srcEntries.forEach(([k,v])=>{const pct=(v/total*100);barHtml+=`<div class="seg" style="width:${pct}%;background:${SRC_COLORS[k]||'#666'}">${pct>5?pct.toFixed(0)+'%':''}</div>`});
+  barHtml+='</div><div class="source-legend">';
+  srcEntries.forEach(([k,v])=>{barHtml+=`<span><span class="swatch" style="background:${SRC_COLORS[k]}"></span>${SRC_NAMES[k]||k} ${v.toLocaleString()} (${(v/total*100).toFixed(1)}%)</span>`});
+  barHtml+='</div>';
+  document.getElementById('sourceMixBar').innerHTML=barHtml;
+
+  // Makes chart
+  const top5=kg.top_makes.slice(0,5);
+  mkChart('chartMakes',{type:'bar',data:{labels:top5.map(m=>m.name),datasets:[{data:top5.map(m=>m.documents),backgroundColor:'rgba(59,130,246,.7)',borderRadius:4}]},options:{indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af'}},y:{grid:{display:false},ticks:{color:'#e4e4e7'}}}}});
+}
+
+function renderIngestion(){
   if(!DATA)return;
-  const ig=DATA.ingestion||{};
-  const stages=['Validate','Parse','Chunk','Embed','Store'];
-  document.getElementById('pipeline-stages').innerHTML=stages.map(s=>`<div class="pipeline-stage"><div class="ps-name">${s}</div><div class="ps-val">—</div></div>`).join('');
-  
-  const hLabels=HISTORY.slice(-24).map((_,i)=>i+'h');
-  mkChart('ch-throughput','line',{labels:hLabels,datasets:[{label:'Docs/h',data:HISTORY.slice(-24).map(h=>h?.ingestion?.total_docs_ingested||0),borderColor:'var(--blue)',tension:.3,pointRadius:0,fill:true,backgroundColor:'rgba(77,142,255,.08)'}]});
-  mkChart('ch-error-rate','line',{labels:hLabels,datasets:[{label:'Errors',data:HISTORY.slice(-24).map(h=>h?.ingestion?.total_errors||0),borderColor:'var(--red)',tension:.3,pointRadius:0,fill:true,backgroundColor:'rgba(248,113,113,.08)'}]});
-  
-  document.getElementById('pipeline-stats').innerHTML=[
-    kpiCard('Total Ingested',ig.total_docs_ingested||0),
-    kpiCard('Total Errors',ig.total_errors||0),
-    kpiCard('Files Processed',ig.files_processed||0)
-  ].join('');
-},
+  const d=DATA,ing=d.ingestion;
+  // Pipeline
+  const stages=[
+    {name:'Source Files',val:ing.files_processed,sub:'files'},
+    {name:'Validate',val:ing.total_docs_ingested,sub:'docs'},
+    {name:'Parse & Chunk',val:d.vector_store.total_vectors,sub:'chunks'},
+    {name:'Embed (Ollama)',val:d.vector_store.total_vectors,sub:'embeddings'},
+    {name:'Store',val:`${d.knowledge_graph.total_nodes}n + ${d.vector_store.total_vectors}v`,sub:'Neo4j + Qdrant'}
+  ];
+  document.getElementById('pipelineFlow').innerHTML=stages.map((s,i)=>`${i>0?'<div class="pipe-arrow">→</div>':''}<div class="pipe-stage"><div class="name">${s.name}</div><div class="val">${typeof s.val==='number'?s.val.toLocaleString():s.val}</div><div class="sub">${s.sub}</div></div>`).join('');
 
-scrapers(){
-  if(!DATA)return;
-  const sc=DATA.scrapers||{};
-  const names=['reddit','nhtsa','ifixit','youtube'];
-  document.getElementById('scraper-cards').innerHTML=names.map(n=>{
-    const s=sc[n]||{};
-    const st=s.status||'unknown';
-    const cls=st==='active'?'ok':st==='error'?'err':'warn';
-    return`<div class="scraper-card"><div class="sc-header"><span class="sc-name">${n}</span><span class="pill ${cls}">${st}</span></div><div class="sc-stat">${num(s.total_posts||s.total_docs||0)} docs</div><div class="sc-stat">Last: ${ago(s.last_scrape)}</div></div>`;
-  }).join('');
-  
-  const labels=names,vals=names.map(n=>(sc[n]||{}).total_posts||(sc[n]||{}).total_docs||0);
-  mkChart('ch-scraper-bars','bar',{labels,datasets:[{label:'Documents',data:vals,backgroundColor:'#4d8eff'}]},{indexAxis:'y'});
-},
+  document.getElementById('ingStats').innerHTML=`
+    <div class="stat-box"><div class="num">${ing.total_docs_ingested.toLocaleString()}</div><div class="lbl">Total Ingested</div></div>
+    <div class="stat-box"><div class="num">${ing.total_errors}</div><div class="lbl">Total Errors</div></div>
+    <div class="stat-box"><div class="num">${ing.files_processed}</div><div class="lbl">Files Processed</div></div>
+    <div class="stat-box"><div class="num">${d.vector_store.total_vectors.toLocaleString()}</div><div class="lbl">Chunks Created</div></div>
+    <div class="stat-box"><div class="num">${d.vector_store.total_vectors.toLocaleString()}</div><div class="lbl">Embeddings</div></div>
+    <div class="stat-box"><div class="num">—</div><div class="lbl">Avg Pipeline Time</div></div>`;
 
-graph(){
-  if(!DATA)return;
-  const kg=DATA.knowledge_graph||{};
-  const nbt=kg.nodes_by_type||{},rbt=kg.relationships_by_type||{};
-  document.getElementById('graph-kpis').innerHTML=[
-    kpiCard('Total Nodes',kg.total_nodes||0),
-    kpiCard('Total Relationships',kg.total_relationships||0),
-    kpiCard('Node Types',Object.keys(nbt).length),
-    kpiCard('Rel Types',Object.keys(rbt).length)
-  ].join('');
-  
-  mkChart('ch-nodes-type','bar',{labels:Object.keys(nbt),datasets:[{label:'Nodes',data:Object.values(nbt),backgroundColor:'#4d8eff'}]},{indexAxis:'y'});
-  mkChart('ch-rels-type','bar',{labels:Object.keys(rbt),datasets:[{label:'Rels',data:Object.values(rbt),backgroundColor:'#a78bfa'}]},{indexAxis:'y'});
-  
-  const makes=(kg.top_makes||[]).slice(0,10);
-  document.getElementById('tbl-makes').innerHTML=makes.map(m=>`<tr><td>${m.name||''}</td><td>${m.models||0}</td><td>${m.documents||0}</td></tr>`).join('')||'<tr><td colspan=3 style="color:var(--text2)">No data</td></tr>';
-  const vehs=(kg.top_vehicles||[]).slice(0,10);
-  document.getElementById('tbl-vehicles').innerHTML=vehs.map(v=>`<tr><td>${v.vehicle||''}</td><td>${v.documents||0}</td><td>${v.components||0}</td></tr>`).join('')||'<tr><td colspan=3 style="color:var(--text2)">No data</td></tr>';
-},
+  // Throughput
+  if(HIST.length<2){
+    document.getElementById('chartThroughput').style.display='none';
+    document.getElementById('throughputMsg').style.display='block';
+    document.getElementById('throughputMsg').textContent='📊 Building history… Data points appear every 5 minutes as the pipeline runs. Charts will populate automatically.';
+  }else{
+    document.getElementById('chartThroughput').style.display='';
+    document.getElementById('throughputMsg').style.display='none';
+    mkChart('chartThroughput',{type:'line',data:{labels:HIST.map(h=>new Date(h.timestamp).toLocaleTimeString()),datasets:[{data:HIST.map(h=>h.total_docs),borderColor:'var(--blue)',backgroundColor:'rgba(59,130,246,.1)',fill:true,tension:.3,pointRadius:2}]},options:{scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af',maxTicksLimit:10}},y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af'}}}}});
+  }
 
-vehicles(){
-  if(!DATA)return;
-  const kg=DATA.knowledge_graph||{};
-  const makes=kg.top_makes||[],vehs=kg.top_vehicles||[];
-  document.getElementById('vehicles-kpis').innerHTML=[
-    kpiCard('Total Makes',makes.length),
-    kpiCard('Total Vehicles',vehs.length)
-  ].join('');
-  const topV=vehs.slice(0,10);
-  mkChart('ch-top-vehicles','bar',{labels:topV.map(v=>v.vehicle),datasets:[{label:'Docs',data:topV.map(v=>v.documents||0),backgroundColor:'#4d8eff'}]},{indexAxis:'y'});
-  const topM=makes.slice(0,10);
-  mkChart('ch-top-makes','bar',{labels:topM.map(m=>m.name),datasets:[{label:'Models',data:topM.map(m=>m.models||0),backgroundColor:'#34d399'}]},{indexAxis:'y'});
-},
+  // Errors
+  const errRate=ing.total_docs_ingested>0?(ing.total_errors/ing.total_docs_ingested*100).toFixed(1):0;
+  document.getElementById('errorSummary').innerHTML=`<div style="font-size:13px;color:var(--text2)">${ing.total_errors} errors (${errRate}%) — ${errRate<2?'all within acceptable range':'elevated, monitor closely'}</div>`;
+  if(HIST.length>=2){
+    mkChart('chartErrors',{type:'line',data:{labels:HIST.map(h=>new Date(h.timestamp).toLocaleTimeString()),datasets:[{data:HIST.map(h=>h.errors_delta||0),borderColor:'var(--red)',backgroundColor:'rgba(239,68,68,.1)',fill:true,tension:.3,pointRadius:2}]},options:{scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af',maxTicksLimit:10}},y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af'}}}}});
+  }
+}
 
-manuals(){
+function renderSources(){
   if(!DATA)return;
-  const m=(DATA.scrapers||{}).manuals||{};
-  if(!m.discovered&&!m.downloaded&&!m.ingested){
-    document.getElementById('manuals-content').innerHTML='<div class="empty-state">📖 Manual crawling not yet started.<br>Run <code>--manuals-discover</code> to begin.</div>';
+  const d=DATA,sc=d.scrapers,ing=d.ingestion;
+  const total=ing.total_docs_ingested;
+  const sources=['reddit','nhtsa','youtube','forums','ifixit'];
+  const activeCnt=sources.filter(s=>sc[s]&&sc[s].status==='running').length;
+
+  document.getElementById('sourcesSummary').innerHTML=`${activeCnt} of ${sources.length} sources active. ${Object.entries(ing.docs_by_source).sort((a,b)=>b[1]-a[1])[0]?SRC_NAMES[Object.entries(ing.docs_by_source).sort((a,b)=>b[1]-a[1])[0][0]]+' is the primary source.':''} Manual crawler not yet started.`;
+
+  document.getElementById('sourceCards').innerHTML=sources.map(s=>{
+    const info=sc[s]||{};
+    const count=ing.docs_by_source[s]||0;
+    const pct=total>0?(count/total*100):0;
+    const lastScrape=info.last_scrape?timeAgo(new Date(info.last_scrape)):'-';
+    return`<div class="source-card">
+      <div class="head"><span class="name">${SRC_NAMES[s]||s}</span><span class="status"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:${info.status==='running'?'var(--green)':'var(--text3)'}"></span>${info.status||'unknown'}</span></div>
+      <div class="count">${count.toLocaleString()} <span style="font-size:13px;font-weight:400;color:var(--text3)">documents</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${SRC_COLORS[s]}"></div></div>
+      <div class="meta">${pct.toFixed(1)}% of corpus · Last: ${lastScrape}</div>
+    </div>`}).join('');
+
+  const srcData=Object.entries(ing.docs_by_source).sort((a,b)=>b[1]-a[1]);
+  mkChart('chartSourceComp',{type:'bar',data:{labels:srcData.map(([k])=>SRC_NAMES[k]||k),datasets:[{data:srcData.map(([,v])=>v),backgroundColor:srcData.map(([k])=>SRC_COLORS[k]||'#666'),borderRadius:4}]},options:{indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af'}},y:{grid:{display:false},ticks:{color:'#e4e4e7'}}}}});
+}
+
+function renderGraph(){
+  if(!DATA)return;
+  const kg=DATA.knowledge_graph;
+
+  // Alert
+  if(kg.total_relationships===0&&kg.total_nodes>0){
+    document.getElementById('graphAlert').innerHTML=`<div class="alert-banner warn">⚠️ Graph has no relationships yet. The enricher needs to process ingested documents to build vehicle → system → component connections.</div>`;
+  }else{document.getElementById('graphAlert').innerHTML=''}
+
+  // KPIs
+  document.getElementById('graphKpis').innerHTML=`
+    <div class="kpi-card"><div class="label">Nodes</div><div class="value">${kg.total_nodes.toLocaleString()}</div><div class="context">${Object.keys(kg.nodes_by_type).length} type(s)</div></div>
+    <div class="kpi-card"><div class="label">Relationships</div><div class="value">${kg.total_relationships.toLocaleString()}</div><div class="context">${kg.total_relationships===0?'enricher pending':'active'}</div></div>
+    <div class="kpi-card"><div class="label">Node Types</div><div class="value">${Object.keys(kg.nodes_by_type).length}</div><div class="context">${Object.keys(kg.nodes_by_type).join(', ')}</div></div>
+    <div class="kpi-card"><div class="label">Makes Tracked</div><div class="value">${kg.top_makes.length}</div><div class="context">${kg.top_makes.slice(0,3).map(m=>m.name).join(', ')}…</div></div>`;
+
+  // Node types chart
+  const types=Object.entries(kg.nodes_by_type);
+  mkChart('chartNodeTypes',{type:'bar',data:{labels:types.map(([k])=>k),datasets:[{data:types.map(([,v])=>v),backgroundColor:'rgba(167,139,250,.7)',borderRadius:4}]},options:{indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af'}},y:{grid:{display:false},ticks:{color:'#e4e4e7'}}}}});
+
+  // Makes table
+  const maxDocs=kg.top_makes[0]?.documents||1;
+  document.getElementById('graphMakesTable').innerHTML=`<thead><tr><th>Make</th><th>Models</th><th>Docs</th><th>Coverage</th></tr></thead><tbody>${kg.top_makes.map(m=>`<tr><td style="color:var(--text);font-weight:500">${m.name}</td><td>${m.models}</td><td>${m.documents}</td><td><span class="cov-bar" style="width:${(m.documents/maxDocs*100).toFixed(0)}%"></span></td></tr>`).join('')}</tbody>`;
+
+  // Topology
+  const nbt=kg.nodes_by_type;
+  document.getElementById('topoView').innerHTML=`
+    <div class="topo-row"><div class="topo-node empty"><div>Make</div><div class="cnt">0</div></div><span class="topo-arrow">→</span><div class="topo-node empty"><div>Model</div><div class="cnt">0</div></div><span class="topo-arrow">→</span><div class="topo-node empty"><div>Generation</div><div class="cnt">0</div></div><span class="topo-arrow">→</span><div class="topo-node empty"><div>Trim</div><div class="cnt">0</div></div></div>
+    <div class="topo-varrow">↓</div>
+    <div class="topo-row"><div class="topo-node empty"><div>ModelYear</div><div class="cnt">0</div></div><span class="topo-arrow">→</span><div class="topo-node empty"><div>System</div><div class="cnt">0</div></div><span class="topo-arrow">→</span><div class="topo-node empty"><div>Subsystem</div><div class="cnt">0</div></div><span class="topo-arrow">→</span><div class="topo-node ${nbt.Component?'':'empty'}"><div>Component</div><div class="cnt">${nbt.Component||0}</div></div></div>
+    <div class="topo-varrow">↓</div>
+    <div class="topo-row"><div class="topo-node empty"><div>Document</div><div class="cnt">0</div></div></div>
+    <p style="margin-top:16px;font-size:12px;color:var(--text3)">Nodes highlighted in blue have data. The enricher will populate the full hierarchy.</p>`;
+
+  // Growth
+  if(HIST.length<5){
+    document.getElementById('chartNodeGrowth').style.display='none';
+    document.getElementById('growthMsg').style.display='block';
+    document.getElementById('growthMsg').textContent='📊 Collecting data points… Growth chart requires at least 5 history entries (25 minutes of pipeline activity).';
+  }else{
+    document.getElementById('chartNodeGrowth').style.display='';
+    document.getElementById('growthMsg').style.display='none';
+    mkChart('chartNodeGrowth',{type:'line',data:{labels:HIST.map(h=>new Date(h.timestamp).toLocaleTimeString()),datasets:[{label:'Nodes',data:HIST.map(h=>h.total_nodes),borderColor:'var(--purple)',tension:.3,pointRadius:2},{label:'Relationships',data:HIST.map(h=>h.total_relations||0),borderColor:'var(--cyan)',tension:.3,pointRadius:2}]},options:{scales:{x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af',maxTicksLimit:10}},y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9ca3af'}}},plugins:{legend:{display:true,labels:{color:'#9ca3af'}}}}});
+  }
+}
+
+function renderVehicles(){
+  if(!DATA)return;
+  const kg=DATA.knowledge_graph;
+  const maxDocs=kg.top_makes[0]?.documents||1;
+  document.getElementById('vehicleSub').textContent=`Tracking ${kg.top_makes.length} makes, ${kg.top_vehicles.length}+ vehicles. ${kg.top_makes[0]?.name||''} has the deepest coverage.`;
+
+  document.getElementById('vehicleMakeTable').innerHTML=`<thead><tr><th>Make</th><th>Models</th><th>Documents</th><th>Coverage Depth</th><th>Status</th></tr></thead><tbody>${kg.top_makes.map(m=>{
+    const pct=m.documents/maxDocs*100;
+    const status=pct>50?'🟢 Good':pct>15?'🟡 Moderate':'🟡 Low';
+    return`<tr><td style="color:var(--text);font-weight:500">${m.name}</td><td>${m.models}</td><td>${m.documents}</td><td><span class="cov-bar" style="width:${pct.toFixed(0)}%"></span></td><td>${status}</td></tr>`}).join('')}</tbody>`;
+
+  document.getElementById('vehicleTopTable').innerHTML=`<thead><tr><th>Vehicle</th><th>Documents</th><th>Components</th><th>Systems Mapped</th></tr></thead><tbody>${kg.top_vehicles.map(v=>`<tr><td style="color:var(--text);font-weight:500">${v.vehicle}</td><td>${v.documents}</td><td>${v.components}</td><td style="color:var(--text3)">0 of 12</td></tr>`).join('')}</tbody>`;
+}
+
+function renderManuals(){
+  if(!DATA)return;
+  const m=DATA.scrapers.manuals;
+  if(m.discovered===0){
+    document.getElementById('manualsContent').innerHTML=`<div class="manual-empty">
+      <h3>📖 Manual Discovery</h3>
+      <div class="manual-funnel">
+        <div class="funnel-step"><div class="circle">0</div><div class="lbl">Discover</div></div>
+        <div class="funnel-line"></div>
+        <div class="funnel-step"><div class="circle">0</div><div class="lbl">Download</div></div>
+        <div class="funnel-line"></div>
+        <div class="funnel-step"><div class="circle">0</div><div class="lbl">Ingest</div></div>
+        <div class="funnel-line"></div>
+        <div class="funnel-step"><div class="circle">0</div><div class="lbl">Complete</div></div>
+      </div>
+      <p>The manual crawler hasn't been started yet.<br>It will scan <strong>30+ manufacturer portals</strong>:<br>Toyota, Honda, Ford, BMW, Mercedes, Chevrolet…</p>
+      <p style="margin-top:12px">To start: <code>--manuals-discover</code></p>
+      <p style="margin-top:12px;color:var(--text3)">Expected: 500–2,000 owner manuals covering 2015–2026 model years</p>
+    </div>`;
+  }else{
+    document.getElementById('manualsContent').innerHTML=`<div class="manual-empty">
+      <h3>📖 Manual Discovery</h3>
+      <div class="manual-funnel">
+        <div class="funnel-step"><div class="circle">${m.discovered}</div><div class="lbl">Discover</div></div><div class="funnel-line"></div>
+        <div class="funnel-step"><div class="circle">${m.downloaded}</div><div class="lbl">Download</div></div><div class="funnel-line"></div>
+        <div class="funnel-step"><div class="circle">${m.ingested}</div><div class="lbl">Ingest</div></div><div class="funnel-line"></div>
+        <div class="funnel-step"><div class="circle">${m.ingested}</div><div class="lbl">Complete</div></div>
+      </div>
+      ${m.failed>0?`<p style="color:var(--amber)">${m.failed} failed downloads</p>`:''}
+    </div>`;
+  }
+}
+
+function renderInfra(){
+  if(!DATA)return;
+  const infra=DATA.infrastructure,kg=DATA.knowledge_graph,vs=DATA.vector_store;
+  document.getElementById('infraCards').innerHTML=`
+    <div class="infra-card">
+      <div class="title"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:${infra.neo4j.status==='connected'?'var(--green)':'var(--red)'}"></span>Neo4j</div>
+      <div class="detail"><strong>Status:</strong> ${infra.neo4j.status}<br><strong>Version:</strong> ${infra.neo4j.version}<br><strong>Nodes:</strong> ${kg.total_nodes.toLocaleString()}<br><strong>Relationships:</strong> ${kg.total_relationships.toLocaleString()}<br><strong>Port:</strong> 7687</div>
+    </div>
+    <div class="infra-card">
+      <div class="title"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:${infra.qdrant.status==='connected'?'var(--green)':'var(--red)'}"></span>Qdrant</div>
+      <div class="detail"><strong>Status:</strong> ${infra.qdrant.status}<br><strong>Vectors:</strong> ${vs.total_vectors.toLocaleString()}<br><strong>Collection:</strong> ${vs.collection}<br><strong>Dimensions:</strong> ${vs.dimensions}<br><strong>Health:</strong> ${vs.status}</div>
+    </div>
+    <div class="infra-card">
+      <div class="title"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:${infra.ollama.status==='connected'?'var(--green)':'var(--red)'}"></span>Ollama</div>
+      <div class="detail"><strong>Status:</strong> ${infra.ollama.status}<br><strong>Model:</strong> ${infra.ollama.model}<br><strong>Dimensions:</strong> ${vs.dimensions}<br><strong>Port:</strong> 11434</div>
+    </div>`;
+
+  document.getElementById('processTable').innerHTML=`<thead><tr><th>Process</th><th>Status</th><th>Interval</th></tr></thead><tbody>
+    <tr><td>scraper-reddit</td><td style="color:var(--green)">● Running</td><td>5 min</td></tr>
+    <tr><td>scraper-nhtsa</td><td style="color:var(--green)">● Running</td><td>30 min</td></tr>
+    <tr><td>scraper-ifixit</td><td style="color:var(--green)">● Running</td><td>30 min</td></tr>
+    <tr><td>scraper-youtube</td><td style="color:var(--green)">● Running</td><td>30 min</td></tr>
+    <tr><td>ingest</td><td style="color:var(--green)">● Running</td><td>30 sec</td></tr>
+    <tr><td>enricher</td><td style="color:var(--text3)">○ Not started</td><td>—</td></tr>
+    <tr><td>manual-crawler</td><td style="color:var(--text3)">○ Not started</td><td>—</td></tr>
+  </tbody>`;
+}
+
+function renderLogs(){
+  if(!HIST||HIST.length<=1){
+    document.getElementById('logsContent').innerHTML=`<div class="empty-state" style="padding:60px 20px">
+      <div style="font-size:24px;margin-bottom:12px">📋</div>
+      <div>Activity history is building. Entries appear every 5 minutes as the pipeline runs.</div>
+      <div style="margin-top:8px;color:var(--text3)">Currently ${HIST.length} data point(s). Need at least 2 for delta computation.</div>
+    </div>`;
     return;
   }
-  const maxV=Math.max(m.discovered||0,m.downloaded||0,m.ingested||0,1);
-  const bar=(v,c,l)=>`<div class="funnel-bar" style="background:${c};height:${Math.max(40,v/maxV*120)}px">${v}<div class="fb-label">${l}</div></div>`;
-  document.getElementById('manuals-content').innerHTML=`
-    <div class="funnel">${bar(m.discovered||0,'rgba(77,142,255,.3)','Discovered')}${bar(m.downloaded||0,'rgba(52,211,153,.3)','Downloaded')}${bar(m.ingested||0,'rgba(167,139,250,.3)','Ingested')}</div>
-    <div class="kpi-row">${kpiCard('Discovered',m.discovered||0)}${kpiCard('Downloaded',m.downloaded||0)}${kpiCard('Ingested',m.ingested||0)}${kpiCard('Failed',m.failed||0)}</div>`;
-},
-
-infra(){
-  if(!DATA)return;
-  const inf=DATA.infrastructure||{};
-  const svcs=[
-    {key:'neo4j',icon:'🗄️',detail:s=>`Version: ${s.version||'—'}`},
-    {key:'qdrant',icon:'🔮',detail:s=>`Vectors: ${num(s.vectors||0)}`},
-    {key:'ollama',icon:'🤖',detail:s=>`Model: ${s.model||'—'}`}
-  ];
-  document.getElementById('infra-cards').innerHTML=svcs.map(({key,icon,detail})=>{
-    const s=inf[key]||{};
-    const st=s.status||'unknown';
-    const cls=st==='connected'||st==='running'||st==='healthy'?'ok':st==='error'?'err':'warn';
-    return`<div class="svc-card"><div class="svc-dot ${cls}"></div><div><div style="font-weight:600">${icon} ${key}</div><div style="font-size:12px;color:var(--text2);margin-top:4px">${detail(s)}</div><div style="font-size:11px;color:var(--text2)">Status: ${st}</div></div></div>`;
-  }).join('');
-},
-
-activity(){
-  const filters=['All','Ingestion','Errors','Vehicles'];
-  document.getElementById('activity-filters').innerHTML=filters.map((f,i)=>`<div class="af-pill${i===0?' active':''}" data-filter="${f.toLowerCase()}">${f}</div>`).join('');
-  
-  const items=HISTORY.slice(-50).reverse().map(h=>{
-    const ts=h?.timestamp?new Date(h.timestamp).toLocaleTimeString():'';
-    const docs=h?.ingestion?.total_docs_ingested;
-    const errs=h?.ingestion?.total_errors;
-    let icon='📊',msg='Metrics snapshot',cat='all';
-    if(errs>0){icon='❌';msg=`${errs} errors recorded`;cat='errors'}
-    else if(docs>0){icon='📥';msg=`${docs} docs ingested`;cat='ingestion'}
-    return`<div class="activity-item" data-cat="${cat}"><span class="ai-time">${ts}</span><span class="ai-icon">${icon}</span><span>${msg}</span></div>`;
-  });
-  document.getElementById('activity-list').innerHTML=items.join('')||'<div class="empty-state">No activity yet</div>';
-  
-  document.querySelectorAll('.af-pill').forEach(p=>p.onclick=function(){
-    document.querySelectorAll('.af-pill').forEach(x=>x.classList.remove('active'));
-    this.classList.add('active');
-    const f=this.dataset.filter;
-    document.querySelectorAll('.activity-item').forEach(el=>{
-      el.style.display=(f==='all'||el.dataset.cat===f)?'flex':'none';
-    });
-  });
+  let items=[];
+  for(let i=HIST.length-1;i>=1;i--){
+    const h=HIST[i],t=new Date(h.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    if(h.new_docs>0)items.push({t,cat:'ingestion',msg:`${h.new_docs} new documents ingested`});
+    if(h.new_vectors>0)items.push({t,cat:'system',msg:`${h.new_vectors} new vectors embedded`});
+    if(h.errors_delta>0)items.push({t,cat:'error',msg:`${h.errors_delta} new errors`});
+    if(h.new_docs===0&&h.errors_delta===0)items.push({t,cat:'system',msg:'Pipeline idle — no new activity'});
+  }
+  const catColors={ingestion:'var(--blue)',error:'var(--red)',system:'var(--text3)',source:'var(--orange)'};
+  document.getElementById('logsContent').innerHTML=`<div class="log-filters"><button class="log-filter active">All</button><button class="log-filter">Ingestion</button><button class="log-filter">Errors</button><button class="log-filter">System</button></div>` + items.slice(0,50).map(i=>`<div class="log-item"><span class="time">${i.t}</span><span class="log-badge" style="background:${catColors[i.cat]||'var(--text3)'};color:#fff">${i.cat}</span><span>${i.msg}</span></div>`).join('');
 }
-};
 
-function currentView(){return location.hash.slice(1)||'overview'}
-function renderCurrentView(){const v=currentView();if(renderers[v])renderers[v]()}
-
-// NAV
-function navigate(){
-  const hash=currentView();
-  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='v-'+hash));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===hash));
-  document.querySelector('.sidebar').classList.remove('open');
-  renderCurrentView();
+function timeAgo(date){
+  const s=Math.floor((Date.now()-date)/1000);
+  if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
 }
-window.addEventListener('hashchange',navigate);
 
-// DATA
-async function loadData(){
-  const[latest,history]=await Promise.all([
-    fetch('data/metrics-latest.json?'+Date.now()).then(r=>r.json()).catch(()=>null),
-    fetch('data/metrics-history.json?'+Date.now()).then(r=>r.json()).catch(()=>[])
-  ]);
-  if(!latest)return;
-  if(latest.timestamp===lastTs)return;
-  lastTs=latest.timestamp;
-  DATA=latest;HISTORY=history;
-  renderCurrentView();
+/* Render dispatcher */
+function renderView(){
+  switch(currentView){
+    case'overview':renderOverview();break;
+    case'ingestion':renderIngestion();break;
+    case'sources':renderSources();break;
+    case'graph':renderGraph();break;
+    case'vehicles':renderVehicles();break;
+    case'manuals':renderManuals();break;
+    case'infra':renderInfra();break;
+    case'logs':renderLogs();break;
+  }
+  // Sidebar health
+  if(DATA){
+    const allUp=Object.values(DATA.infrastructure).every(s=>s.status==='connected');
+    document.getElementById('sidebarDot').style.background=allUp?'var(--green)':'var(--amber)';
+    document.getElementById('sidebarHealth').textContent=allUp?'System Healthy':'System Degraded';
+  }
 }
-setInterval(loadData,30000);
 
-// COUNTDOWN
-let cdLeft=300;
-function tickCountdown(){
-  cdLeft--;
-  if(cdLeft<=0){cdLeft=300;loadData()}
-  const m=Math.floor(cdLeft/60),s=cdLeft%60;
-  document.getElementById('cd-text').textContent=`Next: ${m}:${s.toString().padStart(2,'0')}`;
-  const circ=131.95;
-  document.getElementById('cd-ring').style.strokeDashoffset=circ*(1-cdLeft/300);
+/* Load */
+async function load(){
+  const d=await fetch('data/metrics-latest.json?'+Date.now()).then(r=>r.json()).catch(()=>null);
+  const h=await fetch('data/metrics-history.json?'+Date.now()).then(r=>r.json()).catch(()=>[]);
+  if(!d||d.timestamp===_ts)return;
+  _ts=d.timestamp;DATA=d;HIST=h;
+  renderView();
 }
-setInterval(tickCountdown,1000);
 
-// INIT
-loadData();
-navigate();
+/* Countdown */
+setInterval(()=>{
+  syncCountdown--;if(syncCountdown<=0){syncCountdown=syncInterval;load()}
+  const m=Math.floor(syncCountdown/60),s=syncCountdown%60;
+  document.getElementById('countdown').textContent=`${m}:${s.toString().padStart(2,'0')}`;
+},1000);
+
+load();
+setInterval(load,60000);
 </script>
 </body>
 </html>
