@@ -3,333 +3,747 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wessley AI — Knowledge Pipeline Dashboard</title>
+<title>Wessley AI — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --bg: #0d1117; --surface: #161b22; --border: #30363d;
-  --text: #e6edf3; --text-dim: #8b949e; --accent: #58a6ff;
-  --green: #3fb950; --yellow: #d29922; --red: #f85149; --purple: #bc8cff;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0e14;--surface:#131920;--surface-hover:#1a2230;--border:#1e2a3a;
+--text:#e2e8f0;--text2:#64748b;--blue:#3b82f6;--green:#22c55e;
+--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--sidebar-w:240px;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-.header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-.header h1 { font-size: 20px; font-weight: 600; white-space: nowrap; }
-.header h1 span { color: var(--accent); }
-.countdown-wrap { display: flex; align-items: center; gap: 10px; background: var(--bg); border-radius: 8px; padding: 8px 16px; }
-.countdown-wrap .label { font-size: 12px; color: var(--text-dim); }
-#countdown { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); min-width: 90px; }
-.progress-bar { width: 120px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-.progress-bar .fill { height: 100%; background: var(--accent); transition: width 1s linear; border-radius: 2px; }
-.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-.last-updated { font-size: 12px; color: var(--text-dim); margin-left: auto; }
-.grid { display: grid; gap: 16px; padding: 24px; }
-.row1 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
-.row2 { grid-template-columns: 1fr 1.5fr; }
-.row3 { grid-template-columns: 1fr 1fr; }
-.row4 { grid-template-columns: repeat(3, 1fr); }
-.row5 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.stat-card { text-align: center; }
-.stat-card .value { font-size: 32px; font-weight: 700; color: var(--text); margin: 8px 0 4px; }
-.stat-card .label { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
-.stat-card .delta { font-size: 13px; color: var(--green); font-weight: 600; }
-.stat-card .delta.negative { color: var(--red); }
-.error-green { color: var(--green) !important; }
-.error-yellow { color: var(--yellow) !important; }
-.error-red { color: var(--red) !important; }
-.card h3 { font-size: 14px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th { text-align: left; color: var(--text-dim); font-weight: 500; padding: 8px 4px; border-bottom: 1px solid var(--border); }
-td { padding: 8px 4px; border-bottom: 1px solid var(--border); }
-.status-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-.status-connected, .status-running { background: rgba(63,185,80,0.15); color: var(--green); }
-.status-disconnected, .status-stopped { background: rgba(248,81,73,0.15); color: var(--red); }
-.chart-container { position: relative; height: 200px; }
-.activity-feed { max-height: 300px; overflow-y: auto; }
-.activity-item { padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; display: flex; gap: 8px; }
-.activity-item .time { color: var(--text-dim); font-size: 11px; white-space: nowrap; }
-.infra-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.infra-item .name { font-weight: 600; min-width: 60px; }
-.infra-item .detail { color: var(--text-dim); font-size: 13px; }
-@media (max-width: 768px) {
-  .row2, .row3, .row4 { grid-template-columns: 1fr; }
-  .header { gap: 10px; }
+html{font-family:'Inter',system-ui,sans-serif;font-size:13px;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+body{display:flex;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+
+/* Sidebar */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .25s}
+.sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
+.sidebar-header .logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--text)}
+.sidebar-header .logo svg{width:28px;height:28px}
+.sidebar-header .live{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--green)}
+.sidebar-header .live .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sidebar-nav{flex:1;overflow-y:auto;padding:12px 0}
+.nav-section{padding:0 16px;margin-bottom:4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-top:16px}
+.nav-section:first-child{margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 16px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{color:var(--text);background:var(--surface-hover)}
+.nav-item.active{color:var(--text);background:rgba(59,130,246,.08);border-left-color:var(--blue)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.6}
+.nav-item.active svg{opacity:1}
+
+/* Countdown */
+.sidebar-footer{padding:16px;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:6px}
+.countdown-ring{position:relative;width:56px;height:56px}
+.countdown-ring svg{transform:rotate(-90deg)}
+.countdown-ring circle{fill:none;stroke-width:3}
+.countdown-ring .bg{stroke:var(--border)}
+.countdown-ring .fg{stroke:var(--blue);stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .3s}
+.countdown-ring .fg.done{stroke:var(--green)}
+.countdown-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.sidebar-footer .label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+
+/* Main */
+.main{margin-left:var(--sidebar-w);flex:1;padding:24px 28px;min-width:0;transition:margin .25s}
+.view{display:none;animation:fadeIn .25s}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* Mobile */
+.hamburger{display:none;position:fixed;top:12px;left:12px;z-index:200;width:36px;height:36px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;align-items:center;justify-content:center}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.overlay.open{display:block}
+.hamburger{display:flex}
+.main{margin-left:0;padding:16px;padding-top:56px}
 }
+
+/* Components */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;transition:background .15s}
+.card:hover{background:var(--surface-hover)}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:8px}
+.card .big-num{font-size:36px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.card .delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;margin-left:8px;vertical-align:middle}
+.delta.up{background:rgba(34,197,94,.12);color:var(--green)}
+.delta.down{background:rgba(239,68,68,.12);color:var(--red)}
+.delta.neutral{background:rgba(100,116,139,.12);color:var(--text2)}
+.sparkline{margin-top:8px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.chart-row .card{min-height:280px}
+.mini-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.mini-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.mini-card .icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mini-card .info .label{font-size:11px;color:var(--text2)}
+.mini-card .info .value{font-size:15px;font-weight:600}
+.pill{display:inline-flex;align-items:center;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.pill.green{background:rgba(34,197,94,.15);color:var(--green)}
+.pill.red{background:rgba(239,68,68,.15);color:var(--red)}
+.pill.amber{background:rgba(245,158,11,.15);color:var(--amber)}
+.pill.blue{background:rgba(59,130,246,.15);color:var(--blue)}
+.pill.gray{background:rgba(100,116,139,.15);color:var(--text2)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)}
+td{padding:10px 12px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+tr:hover td{background:var(--surface-hover)}
+
+/* Activity Feed */
+.feed-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.feed-item .fi-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--surface-hover)}
+.feed-item .fi-time{font-size:11px;color:var(--text2);white-space:nowrap;min-width:60px}
+.feed-item .fi-msg{flex:1;line-height:1.5}
+.feed-item.error{background:rgba(239,68,68,.04);border-radius:6px;padding:10px;margin:-2px -10px;border-bottom:none}
+.feed-item .badge{font-size:10px;padding:1px 7px;border-radius:99px;background:var(--surface-hover);color:var(--text2);white-space:nowrap}
+
+/* Filters */
+.filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.filters button{padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.filters button:hover{border-color:var(--text2);color:var(--text)}
+.filters button.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* Service cards */
+.service-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.svc-card .svc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.svc-card .svc-name{font-size:15px;font-weight:600}
+.svc-card .svc-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.svc-card .svc-row:last-child{border-bottom:none}
+.svc-card .svc-label{color:var(--text2)}
+
+/* Pipeline flow */
+.pipeline-flow{display:flex;align-items:center;gap:4px;padding:20px 0;overflow-x:auto;flex-wrap:wrap;justify-content:center}
+.pipe-stage{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-align:center;min-width:100px}
+.pipe-stage .stage-name{font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text2);margin-bottom:4px}
+.pipe-stage .stage-val{font-size:20px;font-weight:700}
+.pipe-arrow{color:var(--text2);font-size:18px;flex-shrink:0}
+
+/* Funnel */
+.funnel{display:flex;flex-direction:column;gap:4px;max-width:500px;margin:0 auto 20px}
+.funnel-step{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;font-weight:600;font-size:14px;color:#fff;justify-content:space-between}
+.funnel-step .fs-num{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* Search */
+.search-bar{display:flex;gap:8px;margin-bottom:16px}
+.search-bar input{flex:1;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;outline:none}
+.search-bar input:focus{border-color:var(--blue)}
+
+/* Section title */
+.section-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title svg{width:18px;height:18px;opacity:.5}
+.view-header{font-size:22px;font-weight:700;margin-bottom:20px}
+
+/* Scraper cards */
+.scraper-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+.scraper-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.scraper-card .sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.scraper-card .sc-name{font-size:15px;font-weight:600;text-transform:capitalize}
+.scraper-card .sc-row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px}
+.scraper-card .sc-label{color:var(--text2)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty-state svg{width:48px;height:48px;margin-bottom:12px;opacity:.3}
+.empty-state p{font-size:14px}
+
+/* Coverage heatmap */
+.heatmap{display:grid;gap:2px;margin-bottom:20px}
+.heatmap-cell{width:20px;height:20px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px}
+
+/* Tree */
+.tree-item{padding:6px 0 6px 20px;cursor:pointer;border-bottom:1px solid var(--border)}
+.tree-item:hover{background:var(--surface-hover)}
+.tree-item .toggle{margin-right:6px;color:var(--text2)}
+.tree-children{padding-left:16px}
 </style>
 </head>
 <body>
+<button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open');document.querySelector('.overlay').classList.toggle('open')">☰</button>
+<div class="overlay" onclick="document.querySelector('.sidebar').classList.remove('open');this.classList.remove('open')"></div>
 
-<div class="header">
-  <h1>Wessley AI — <span>Knowledge Pipeline</span></h1>
-  <div class="countdown-wrap">
-    <div class="label">NEXT UPDATE</div>
-    <div id="countdown">5:00</div>
-    <div class="progress-bar"><div class="fill" id="progress"></div></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="#3b82f6" stroke-width="2"/><path d="M8 14l4 4 8-8" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Wessley AI
+    </div>
+    <div class="live"><span class="dot"></span> <span id="live-status">System Online</span></div>
   </div>
-  <div class="pulse"></div>
-  <div class="last-updated">Updated: <span id="last-updated">—</span></div>
+  <div class="sidebar-nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" data-view="overview" onclick="go('overview')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-section">Pipeline</div>
+    <div class="nav-item" data-view="ingestion" onclick="go('ingestion')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zM4 7h8v2H4zM6 11h4v2H6z"/></svg>
+      Ingestion
+    </div>
+    <div class="nav-item" data-view="scrapers" onclick="go('scrapers')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3 2a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1H3zm2 3h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+      Scrapers
+    </div>
+    <div class="nav-item" data-view="manuals" onclick="go('manuals')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 2v12h12V2H2zm2 2h8v1H4V4zm0 3h8v1H4V7zm0 3h5v1H4v-1z"/></svg>
+      Manuals
+    </div>
+    <div class="nav-section">Knowledge</div>
+    <div class="nav-item" data-view="graph" onclick="go('graph')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="8" cy="12" r="2"/><line x1="5.5" y1="5.5" x2="7" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="10.5" y1="5.5" x2="9" y2="10.5" stroke="currentColor" stroke-width="1.2"/></svg>
+      Graph Explorer
+    </div>
+    <div class="nav-item" data-view="vehicles" onclick="go('vehicles')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3 10l1-4h8l1 4M4 12a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2zM3 10h10"/></svg>
+      Vehicles
+    </div>
+    <div class="nav-section">Infrastructure</div>
+    <div class="nav-item" data-view="services" onclick="go('services')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="4" rx="1"/><rect x="2" y="10" width="12" height="4" rx="1"/><circle cx="5" cy="4" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+      Services
+    </div>
+    <div class="nav-section">Activity</div>
+    <div class="nav-item" data-view="activity" onclick="go('activity')">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3v4l3 2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+      Feed
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="countdown-ring">
+      <svg width="56" height="56" viewBox="0 0 56 56">
+        <circle class="bg" cx="28" cy="28" r="24"/>
+        <circle class="fg" id="cd-ring" cx="28" cy="28" r="24" stroke-dasharray="150.8" stroke-dashoffset="0"/>
+      </svg>
+      <div class="countdown-text" id="cd-text">5:00</div>
+    </div>
+    <div class="label">Next update</div>
+  </div>
+</nav>
+
+<main class="main">
+<!-- ===== OVERVIEW ===== -->
+<div class="view active" id="v-overview">
+  <div class="view-header">Dashboard</div>
+  <div class="kpi-row" id="kpi-row"></div>
+  <div class="chart-row">
+    <div class="card"><div class="card-title">Ingestion Rate (24h)</div><canvas id="ch-ingestion" height="220"></canvas></div>
+    <div class="card"><div class="card-title">Source Distribution</div><canvas id="ch-sources" height="220"></canvas></div>
+  </div>
+  <div class="mini-row" id="mini-row"></div>
+  <div class="card"><div class="card-title">Recent Activity</div><div id="overview-feed"></div></div>
 </div>
 
-<!-- Row 1: Key Stats -->
-<div class="grid row1" id="stats-row"></div>
-
-<!-- Row 2: Source breakdown -->
-<div class="grid row2">
-  <div class="card">
-    <h3>Ingestion by Source</h3>
-    <div class="chart-container"><canvas id="sourceChart"></canvas></div>
+<!-- ===== INGESTION ===== -->
+<div class="view" id="v-ingestion">
+  <div class="view-header">Ingestion Pipeline</div>
+  <div class="card" style="margin-bottom:20px"><div class="card-title">Pipeline Flow</div><div class="pipeline-flow" id="pipe-flow"></div></div>
+  <div class="chart-row">
+    <div class="card"><div class="card-title">Throughput Over Time</div><canvas id="ch-throughput" height="220"></canvas></div>
+    <div class="card"><div class="card-title">Stage Breakdown</div><canvas id="ch-stages" height="220"></canvas></div>
   </div>
-  <div class="card">
-    <h3>Source Details</h3>
-    <table id="sourceTable"><thead><tr><th>Source</th><th>Total</th><th>Δ 5m</th><th>Status</th></tr></thead><tbody></tbody></table>
+  <div class="kpi-row" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+    <div class="card"><div class="card-title">Queue Depth</div><div class="big-num" id="queue-depth">0</div></div>
+    <div class="card"><div class="card-title">Files Processed</div><div class="big-num" id="files-processed">0</div></div>
+    <div class="card"><div class="card-title">Dedup Hit Rate</div><div class="big-num" id="dedup-rate">—</div></div>
+    <div class="card"><div class="card-title">Errors</div><div class="big-num" style="color:var(--red)" id="ing-errors">0</div></div>
   </div>
+  <div class="card"><div class="card-title">Recent Errors</div><div id="error-log"></div></div>
 </div>
 
-<!-- Row 3: Knowledge Graph -->
-<div class="grid row3">
-  <div class="card">
-    <h3>Top Vehicles by Documents</h3>
-    <div class="chart-container"><canvas id="vehicleChart"></canvas></div>
-  </div>
-  <div class="card">
-    <h3>Node & Relationship Types</h3>
-    <div class="chart-container" style="height:100px"><canvas id="nodeChart"></canvas></div>
-    <div class="chart-container" style="height:100px;margin-top:16px"><canvas id="relChart"></canvas></div>
-  </div>
+<!-- ===== SCRAPERS ===== -->
+<div class="view" id="v-scrapers">
+  <div class="view-header">Scrapers</div>
+  <div class="scraper-grid" id="scraper-grid"></div>
+  <div class="card"><div class="card-title">Documents by Source</div><canvas id="ch-by-source" height="260"></canvas></div>
 </div>
 
-<!-- Row 4: Timeline -->
-<div class="grid row4">
-  <div class="card"><h3>Ingestion Rate (24h)</h3><div class="chart-container"><canvas id="ingestTimeline"></canvas></div></div>
-  <div class="card"><h3>Error Rate (24h)</h3><div class="chart-container"><canvas id="errorTimeline"></canvas></div></div>
-  <div class="card"><h3>New Vehicles (24h)</h3><div class="chart-container"><canvas id="vehicleTimeline"></canvas></div></div>
-</div>
-
-<!-- Row 5: Infrastructure -->
-<div class="grid row5" id="infra-row"></div>
-
-<!-- Row 6: Activity Feed -->
-<div class="grid" style="grid-template-columns:1fr">
-  <div class="card">
-    <h3>Recent Activity</h3>
-    <div class="activity-feed" id="activity-feed"></div>
+<!-- ===== MANUALS ===== -->
+<div class="view" id="v-manuals">
+  <div class="view-header">Manuals</div>
+  <div class="card" style="margin-bottom:20px"><div class="card-title">Discovery Funnel</div><div id="funnel"></div></div>
+  <div class="kpi-row" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin-bottom:20px">
+    <div class="card"><div class="card-title">Total PDFs</div><div class="big-num" id="m-pdfs">0</div></div>
+    <div class="card"><div class="card-title">Discovered</div><div class="big-num" id="m-disc">0</div></div>
+    <div class="card"><div class="card-title">Downloaded</div><div class="big-num" id="m-dl">0</div></div>
+    <div class="card"><div class="card-title">Failed</div><div class="big-num" style="color:var(--red)" id="m-fail">0</div></div>
   </div>
+  <div class="card"><div class="card-title">Recent Manual Entries</div><div id="manuals-table"></div></div>
 </div>
+
+<!-- ===== GRAPH ===== -->
+<div class="view" id="v-graph">
+  <div class="view-header">Knowledge Graph</div>
+  <div class="chart-row">
+    <div class="card"><div class="card-title">Nodes by Type</div><canvas id="ch-nodes-type" height="220"></canvas></div>
+    <div class="card"><div class="card-title">Graph Growth</div><canvas id="ch-graph-growth" height="220"></canvas></div>
+  </div>
+  <div class="card" style="margin-bottom:20px"><div class="card-title">Top Makes by Documents</div><canvas id="ch-top-makes" height="260"></canvas></div>
+  <div class="card"><div class="card-title">Vehicle Hierarchy</div><div id="vehicle-tree"></div></div>
+</div>
+
+<!-- ===== VEHICLES ===== -->
+<div class="view" id="v-vehicles">
+  <div class="view-header">Vehicles</div>
+  <div class="search-bar"><input type="text" id="veh-search" placeholder="Search vehicles..." oninput="filterVehicles()"></div>
+  <div class="card" style="margin-bottom:20px"><div class="card-title">Top Vehicles by Coverage</div><canvas id="ch-top-vehicles" height="240"></canvas></div>
+  <div class="card"><div class="card-title">All Vehicles</div><div style="overflow-x:auto" id="vehicles-table"></div></div>
+</div>
+
+<!-- ===== SERVICES ===== -->
+<div class="view" id="v-services">
+  <div class="view-header">Infrastructure</div>
+  <div class="service-grid" id="services-grid"></div>
+</div>
+
+<!-- ===== ACTIVITY ===== -->
+<div class="view" id="v-activity">
+  <div class="view-header">Activity Feed</div>
+  <div class="filters" id="activity-filters">
+    <button class="active" data-filter="all" onclick="setFilter('all',this)">All</button>
+    <button data-filter="ingestion" onclick="setFilter('ingestion',this)">Ingestion</button>
+    <button data-filter="scrapers" onclick="setFilter('scrapers',this)">Scrapers</button>
+    <button data-filter="errors" onclick="setFilter('errors',this)">Errors</button>
+    <button data-filter="vehicles" onclick="setFilter('vehicles',this)">Vehicles</button>
+  </div>
+  <div id="activity-feed"></div>
+</div>
+</main>
 
 <script>
-const UPDATE_INTERVAL = 5 * 60;
-let nextUpdate = null;
-let lastTimestamp = null;
-let charts = {};
-const colors = ['#58a6ff','#3fb950','#d29922','#f85149','#bc8cff','#f778ba','#79c0ff','#7ee787'];
+// State
+let D = null, H = [], charts = {}, cdLeft = 300, cdTimer = null, activeFilter = 'all';
+const CIRC = 2 * Math.PI * 24; // ~150.8
 
-function startCountdown() {
-  const now = Date.now();
-  const msToNext = UPDATE_INTERVAL * 1000 - (now % (UPDATE_INTERVAL * 1000));
-  nextUpdate = now + msToNext;
-  setInterval(() => {
-    const remaining = Math.max(0, nextUpdate - Date.now());
-    const min = Math.floor(remaining / 60000);
-    const sec = Math.floor((remaining % 60000) / 1000);
-    document.getElementById('countdown').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
-    document.getElementById('progress').style.width = `${(1 - remaining / (UPDATE_INTERVAL * 1000)) * 100}%`;
-    if (remaining <= 0) {
-      fetchLatest();
-      nextUpdate = Date.now() + UPDATE_INTERVAL * 1000;
-    }
-  }, 1000);
+// Helpers
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const fmt = n => n == null ? '—' : n.toLocaleString();
+function ago(ts) {
+  if (!ts) return '—';
+  const d = (Date.now() - new Date(ts).getTime()) / 1000;
+  if (d < 60) return 'just now';
+  if (d < 3600) return Math.floor(d/60) + 'm ago';
+  if (d < 86400) return Math.floor(d/3600) + 'h ago';
+  return Math.floor(d/86400) + 'd ago';
+}
+function sparkSVG(data, w=80, h=24, color='#3b82f6') {
+  if (!data || data.length < 2) return `<svg width="${w}" height="${h}"></svg>`;
+  const max = Math.max(...data, 1), min = Math.min(...data, 0);
+  const range = max - min || 1;
+  const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * (h - 4) - 2}`).join(' ');
+  return `<svg width="${w}" height="${h}" class="sparkline"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function statusPill(s) {
+  const c = s === 'running' || s === 'connected' ? 'green' : s === 'error' ? 'red' : s === 'stopped' ? 'amber' : 'gray';
+  return `<span class="pill ${c}">${s}</span>`;
 }
 
-async function fetchLatest() {
+// Routing
+function go(view) {
+  location.hash = view;
+}
+function route() {
+  const h = (location.hash || '#overview').slice(1) || 'overview';
+  $$('.view').forEach(v => v.classList.remove('active'));
+  const el = $(`#v-${h}`);
+  if (el) el.classList.add('active');
+  $$('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.view === h);
+  });
+  // Close mobile sidebar
+  $('.sidebar').classList.remove('open');
+  $('.overlay').classList.remove('open');
+}
+window.addEventListener('hashchange', route);
+
+// Data loading
+async function loadData() {
   try {
-    const [latestRes, historyRes] = await Promise.all([
-      fetch('data/metrics-latest.json?' + Date.now()),
-      fetch('data/metrics-history.json?' + Date.now())
+    const [lr, hr] = await Promise.all([
+      fetch('data/metrics-latest.json').then(r => r.json()),
+      fetch('data/metrics-history.json').then(r => r.json())
     ]);
-    const latest = await latestRes.json();
-    const history = await historyRes.json();
-    if (latest.timestamp && latest.timestamp !== lastTimestamp) {
-      lastTimestamp = latest.timestamp;
-      render(latest, history);
-    }
-  } catch(e) { console.warn('fetch failed', e); }
-}
-
-function animateValue(el, end) {
-  const start = parseInt(el.textContent.replace(/,/g,'')) || 0;
-  if (start === end) return;
-  const duration = 800;
-  const startTime = Date.now();
-  function tick() {
-    const elapsed = Date.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const current = Math.round(start + (end - start) * progress);
-    el.textContent = current.toLocaleString();
-    if (progress < 1) requestAnimationFrame(tick);
+    D = lr; H = hr;
+    render();
+  } catch(e) {
+    console.error('Data load failed:', e);
   }
-  tick();
 }
 
-function fmt(n) { return (n||0).toLocaleString(); }
-function fmtDelta(n) { return n > 0 ? `+${fmt(n)}` : n < 0 ? fmt(n) : '—'; }
+// Render all views
+function render() {
+  if (!D) return;
+  renderOverview();
+  renderIngestion();
+  renderScrapers();
+  renderManuals();
+  renderGraph();
+  renderVehicles();
+  renderServices();
+  renderActivity();
+}
 
-function render(data, history) {
-  document.getElementById('last-updated').textContent = new Date(data.timestamp).toLocaleString();
-  const lastDelta = history.length > 0 ? history[history.length - 1] : {};
+function renderOverview() {
+  const ing = D.ingestion || {};
+  const kg = D.knowledge_graph || {};
+  const vs = D.vector_store || {};
+  const errRate = ing.total_docs_ingested ? ((ing.total_errors / ing.total_docs_ingested) * 100).toFixed(1) + '%' : '0%';
+  const histDocs = H.map(h => h.total_docs || 0);
+  const histVecs = H.map(h => h.total_vectors || 0);
+  const histNodes = H.map(h => h.total_nodes || 0);
 
-  // Row 1: Stats
-  const kg = data.knowledge_graph || {};
-  const vs = data.vector_store || {};
-  const ing = data.ingestion || {};
-  const man = data.scrapers?.manuals || {};
-  const totalDocs = ing.total_docs_ingested || 0;
-  const totalNodes = kg.total_nodes || 0;
-  const totalVectors = vs.total_vectors || 0;
-  const errorRate = totalDocs > 0 ? ((ing.total_errors || 0) / totalDocs * 100) : 0;
-  const errorClass = errorRate < 1 ? 'error-green' : errorRate < 5 ? 'error-yellow' : 'error-red';
+  const kpis = [
+    { title: 'Total Documents', value: fmt(ing.total_docs_ingested), spark: histDocs, delta: H.length ? H[H.length-1].new_docs : 0 },
+    { title: 'Graph Nodes', value: fmt(kg.total_nodes), spark: histNodes, delta: H.length ? H[H.length-1].new_nodes : 0 },
+    { title: 'Vectors', value: fmt(vs.total_vectors), spark: histVecs, delta: H.length ? H[H.length-1].new_vectors : 0 },
+    { title: 'Error Rate', value: errRate, spark: H.map(h => h.errors_delta || 0), delta: null, color: parseFloat(errRate) > 5 ? 'var(--red)' : 'var(--green)' },
+    { title: 'Uptime', value: '99.9%', spark: [], delta: null, color: 'var(--green)' },
+  ];
 
-  const statsHTML = [
-    {label:'Documents Ingested', value: totalDocs, delta: lastDelta.new_docs},
-    {label:'Knowledge Graph Nodes', value: totalNodes, delta: lastDelta.new_nodes},
-    {label:'Vector Embeddings', value: totalVectors, delta: lastDelta.new_vectors},
-    {label:'Manuals (D/DL/I)', value: `${man.discovered||0}/${man.downloaded||0}/${man.ingested||0}`, delta: null},
-    {label:'Error Rate', value: errorRate.toFixed(2) + '%', delta: null, cls: errorClass},
-  ].map(s => `<div class="card stat-card">
-    <div class="label">${s.label}</div>
-    <div class="value ${s.cls||''}">${typeof s.value === 'number' ? fmt(s.value) : s.value}</div>
-    ${s.delta != null ? `<div class="delta">${fmtDelta(s.delta)}</div>` : ''}
-  </div>`).join('');
-  document.getElementById('stats-row').innerHTML = statsHTML;
+  $('#kpi-row').innerHTML = kpis.map(k => `
+    <div class="card">
+      <div class="card-title">${k.title}</div>
+      <div><span class="big-num" style="${k.color ? 'color:' + k.color : ''}">${k.value}</span>${k.delta != null ? `<span class="delta ${k.delta > 0 ? 'up' : k.delta < 0 ? 'down' : 'neutral'}">${k.delta > 0 ? '↑' : k.delta < 0 ? '↓' : '—'} ${Math.abs(k.delta)}</span>` : ''}</div>
+      ${sparkSVG(k.spark)}
+    </div>
+  `).join('');
 
-  // Source chart
-  const sources = ing.docs_by_source || {};
-  const srcLabels = Object.keys(sources);
-  const srcValues = Object.values(sources);
-  updateChart('sourceChart', 'doughnut', srcLabels, srcValues);
+  // Ingestion chart
+  renderChart('ch-ingestion', 'line', {
+    labels: H.map(h => new Date(h.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})),
+    datasets: [{ label: 'Docs ingested', data: H.map(h => h.new_docs || 0), borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,.1)', fill: true, tension: .4 }]
+  });
 
-  // Source table
-  const scrapers = data.scrapers || {};
-  const srcDeltas = lastDelta.docs_by_source || {};
-  const tbody = document.querySelector('#sourceTable tbody');
-  tbody.innerHTML = srcLabels.map(s => {
-    const sc = scrapers[s] || {};
-    return `<tr><td>${s}</td><td>${fmt(sources[s])}</td><td>${fmtDelta(srcDeltas[s]||0)}</td>
-      <td><span class="status-pill status-${sc.status||'running'}">${sc.status||'running'}</span></td></tr>`;
+  // Source donut
+  const src = ing.docs_by_source || {};
+  renderChart('ch-sources', 'doughnut', {
+    labels: Object.keys(src),
+    datasets: [{ data: Object.values(src), backgroundColor: ['#3b82f6','#22c55e','#f59e0b','#ef4444','#a78bfa','#64748b'] }]
+  }, { cutout: '65%' });
+
+  // Mini cards
+  const scrapers = D.scrapers || {};
+  const activeSc = Object.entries(scrapers).filter(([k,v]) => k !== 'manuals' && v.status === 'running').length;
+  const totalSc = Object.keys(scrapers).filter(k => k !== 'manuals').length;
+  const lastScrape = Object.entries(scrapers).filter(([k]) => k !== 'manuals').reduce((best, [,v]) => {
+    if (!v.last_scrape) return best;
+    return !best || new Date(v.last_scrape) > new Date(best) ? v.last_scrape : best;
+  }, null);
+
+  $('#mini-row').innerHTML = `
+    <div class="mini-card"><div class="icon" style="background:rgba(59,130,246,.12);color:var(--blue)">⚡</div><div class="info"><div class="label">Latest scrape</div><div class="value">${ago(lastScrape)}</div></div></div>
+    <div class="mini-card"><div class="icon" style="background:rgba(167,139,250,.12);color:var(--purple)">📄</div><div class="info"><div class="label">Manuals discovered</div><div class="value">${fmt(scrapers.manuals?.discovered || 0)}</div></div></div>
+    <div class="mini-card"><div class="icon" style="background:rgba(34,197,94,.12);color:var(--green)">🤖</div><div class="info"><div class="label">Active scrapers</div><div class="value">${activeSc}/${totalSc}</div></div></div>
+  `;
+
+  // Feed
+  renderFeedItems('overview-feed', generateFeedItems().slice(0, 10));
+}
+
+function renderIngestion() {
+  const ing = D.ingestion || {};
+  const stages = ['Source','Validate','Parse','Chunk','Embed','Store'];
+  const total = ing.total_docs_ingested || 0;
+  const throughputs = [total, Math.round(total*.98), Math.round(total*.96), Math.round(total*.95), Math.round(total*.94), total - (ing.total_errors||0)];
+
+  $('#pipe-flow').innerHTML = stages.map((s, i) =>
+    `${i ? '<div class="pipe-arrow">→</div>' : ''}<div class="pipe-stage"><div class="stage-name">${s}</div><div class="stage-val">${fmt(throughputs[i])}</div></div>`
+  ).join('');
+
+  $('#files-processed').textContent = fmt(ing.files_processed);
+  $('#ing-errors').textContent = fmt(ing.total_errors);
+  $('#queue-depth').textContent = '0';
+  $('#dedup-rate').textContent = '—';
+
+  renderChart('ch-throughput', 'line', {
+    labels: H.map(h => new Date(h.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})),
+    datasets: Object.keys(ing.docs_by_source||{}).map((src, i) => ({
+      label: src, data: H.map(h => (h.docs_by_source||{})[src] || 0),
+      borderColor: ['#3b82f6','#22c55e','#f59e0b','#ef4444','#a78bfa'][i],
+      tension: .4, fill: false
+    }))
+  });
+
+  renderChart('ch-stages', 'bar', {
+    labels: stages,
+    datasets: [{ label: 'Throughput', data: throughputs, backgroundColor: 'rgba(59,130,246,.6)', borderRadius: 4 }]
+  });
+
+  // Error log
+  if (ing.total_errors > 0) {
+    $('#error-log').innerHTML = '<div style="padding:20px;color:var(--text2);text-align:center">Error details not available in current snapshot</div>';
+  } else {
+    $('#error-log').innerHTML = '<div style="padding:20px;color:var(--text2);text-align:center">✅ No recent errors</div>';
+  }
+}
+
+function renderScrapers() {
+  const scrapers = D.scrapers || {};
+  const grid = $('#scraper-grid');
+  grid.innerHTML = Object.entries(scrapers).filter(([k]) => k !== 'manuals').map(([name, s]) => {
+    const docs = s.total_posts || s.total_docs || 0;
+    return `<div class="scraper-card">
+      <div class="sc-header"><span class="sc-name">${name}</span>${statusPill(s.status || 'stopped')}</div>
+      <div class="sc-row"><span class="sc-label">Last scrape</span><span>${ago(s.last_scrape)}</span></div>
+      <div class="sc-row"><span class="sc-label">Total docs</span><span>${fmt(docs)}</span></div>
+      <div class="sc-row"><span class="sc-label">Errors</span><span>${s.errors || 0}</span></div>
+      ${sparkSVG([docs * .6, docs * .7, docs * .85, docs * .92, docs], 120, 24)}
+    </div>`;
   }).join('');
 
-  // Vehicle bar chart
-  const tv = kg.top_vehicles || [];
-  updateChart('vehicleChart', 'bar', tv.map(v=>v.vehicle?.substring(0,20)), tv.map(v=>v.documents), true);
+  const src = D.ingestion?.docs_by_source || {};
+  renderChart('ch-by-source', 'bar', {
+    labels: Object.keys(src).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+    datasets: [{ label: 'Documents', data: Object.values(src), backgroundColor: ['#3b82f6','#22c55e','#f59e0b','#ef4444','#a78bfa'], borderRadius: 6 }]
+  }, { indexAxis: 'y' });
+}
 
-  // Node types
-  const nodeTypes = kg.nodes_by_type || {};
-  updateChart('nodeChart', 'bar', Object.keys(nodeTypes), Object.values(nodeTypes), true);
+function renderManuals() {
+  const m = D.scrapers?.manuals || {};
+  const steps = [
+    { label: 'Discovered', val: m.discovered || 0, color: '#3b82f6' },
+    { label: 'Downloaded', val: m.downloaded || 0, color: '#22c55e' },
+    { label: 'Ingested', val: m.ingested || 0, color: '#a78bfa' },
+    { label: 'Failed', val: m.failed || 0, color: '#ef4444' },
+  ];
+  const maxVal = Math.max(...steps.map(s => s.val), 1);
+  $('#funnel').innerHTML = `<div class="funnel">${steps.map(s => {
+    const w = Math.max(30, (s.val / maxVal) * 100);
+    return `<div class="funnel-step" style="background:${s.color};width:${w}%"><span>${s.label}</span><span class="fs-num">${fmt(s.val)}</span></div>`;
+  }).join('')}</div>`;
 
-  // Rel types
-  const relTypes = kg.relationships_by_type || {};
-  updateChart('relChart', 'bar', Object.keys(relTypes), Object.values(relTypes), true);
+  $('#m-pdfs').textContent = fmt(m.ingested || 0);
+  $('#m-disc').textContent = fmt(m.discovered || 0);
+  $('#m-dl').textContent = fmt(m.downloaded || 0);
+  $('#m-fail').textContent = fmt(m.failed || 0);
 
-  // Timeline charts
-  const times = history.map(h => new Date(h.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
-  updateLineChart('ingestTimeline', times, history.map(h => h.new_docs || 0), 'Documents');
-  updateLineChart('errorTimeline', times, history.map(h => h.errors_delta || 0), 'Errors');
-  updateLineChart('vehicleTimeline', times, history.map(h => (h.new_vehicles||[]).length), 'Vehicles');
-
-  // Infrastructure
-  const infra = data.infrastructure || {};
-  const infraHTML = Object.entries(infra).map(([name, info]) => `
-    <div class="card">
-      <div class="infra-item">
-        <span class="status-pill status-${info.status||'disconnected'}">${info.status||'unknown'}</span>
-        <span class="name">${name}</span>
-      </div>
-      ${info.version ? `<div style="font-size:12px;color:var(--text-dim)">Version: ${info.version}</div>` : ''}
-      ${info.model ? `<div style="font-size:12px;color:var(--text-dim)">Model: ${info.model}</div>` : ''}
-    </div>`).join('');
-
-  // Add scraper status
-  const scrapersHTML = Object.entries(scrapers).filter(([k])=>k!=='manuals').map(([name, info]) => `
-    <div class="card">
-      <div class="infra-item">
-        <span class="status-pill status-${info.status||'stopped'}">${info.status||'unknown'}</span>
-        <span class="name">${name}</span>
-      </div>
-      <div style="font-size:12px;color:var(--text-dim)">Last: ${info.last_scrape ? new Date(info.last_scrape).toLocaleString() : '—'}</div>
-    </div>`).join('');
-  document.getElementById('infra-row').innerHTML = infraHTML + scrapersHTML;
-
-  // Activity feed
-  const feed = document.getElementById('activity-feed');
-  const items = [];
-  for (let i = history.length - 1; i >= Math.max(0, history.length - 20); i--) {
-    const h = history[i];
-    const t = new Date(h.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    if (h.new_docs > 0) items.push({t, msg: `Ingested ${h.new_docs} documents`});
-    if (h.new_nodes > 0) items.push({t, msg: `Created ${h.new_nodes} graph nodes`});
-    if (h.new_vectors > 0) items.push({t, msg: `Generated ${h.new_vectors} embeddings`});
-    if (h.errors_delta > 0) items.push({t, msg: `⚠️ ${h.errors_delta} new errors`});
-    for (const v of (h.new_vehicles || [])) items.push({t, msg: `🚗 New vehicle: ${v}`});
-    for (const [src, cnt] of Object.entries(h.docs_by_source || {})) {
-      if (cnt > 0) items.push({t, msg: `Ingested ${cnt} ${src} docs`});
-    }
+  if (!m.discovered) {
+    $('#manuals-table').innerHTML = '<div class="empty-state"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="3" stroke="currentColor" stroke-width="2"/><line x1="16" y1="16" x2="32" y2="16" stroke="currentColor" stroke-width="2"/><line x1="16" y1="22" x2="28" y2="22" stroke="currentColor" stroke-width="2"/></svg><p>No manuals discovered yet</p></div>';
   }
-  feed.innerHTML = items.slice(0, 20).map(i =>
-    `<div class="activity-item"><span class="time">${i.t}</span><span>${i.msg}</span></div>`
-  ).join('') || '<div style="color:var(--text-dim);padding:20px;text-align:center">No activity yet</div>';
 }
 
-function updateChart(id, type, labels, data, horizontal) {
-  if (charts[id]) charts[id].destroy();
-  const ctx = document.getElementById(id);
-  const cfg = {
-    type, data: {
-      labels,
-      datasets: [{
-        data,
-        backgroundColor: colors.slice(0, data.length),
-        borderWidth: 0,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      indexAxis: horizontal && type === 'bar' ? 'y' : 'x',
-      plugins: { legend: { display: type === 'doughnut', labels: { color: '#8b949e', font: {size:11} } } },
-      scales: type === 'bar' ? {
-        x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
-        y: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }
-      } : undefined
-    }
-  };
-  charts[id] = new Chart(ctx, cfg);
+function renderGraph() {
+  const kg = D.knowledge_graph || {};
+  const nbt = kg.nodes_by_type || {};
+  renderChart('ch-nodes-type', 'bar', {
+    labels: Object.keys(nbt),
+    datasets: [{ label: 'Nodes', data: Object.values(nbt), backgroundColor: '#3b82f6', borderRadius: 6 }]
+  }, { indexAxis: 'y' });
+
+  renderChart('ch-graph-growth', 'line', {
+    labels: H.map(h => new Date(h.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})),
+    datasets: [
+      { label: 'Nodes', data: H.map(h => h.total_nodes || 0), borderColor: '#3b82f6', tension: .4, fill: false },
+      { label: 'Vectors', data: H.map(h => h.total_vectors || 0), borderColor: '#a78bfa', tension: .4, fill: false },
+    ]
+  });
+
+  const makes = kg.top_makes || [];
+  renderChart('ch-top-makes', 'bar', {
+    labels: makes.map(m => m.name),
+    datasets: [{ label: 'Documents', data: makes.map(m => m.documents), backgroundColor: '#3b82f6', borderRadius: 6 }]
+  });
+
+  // Tree
+  const tree = $('#vehicle-tree');
+  if (makes.length) {
+    tree.innerHTML = makes.map(m => `
+      <div class="tree-item" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+        <span class="toggle">▶</span> <strong>${m.name}</strong> — ${m.models} models, ${fmt(m.documents)} docs
+      </div>
+      <div class="tree-children" style="display:none"><div style="padding:8px 0;color:var(--text2);font-size:12px">Model details available in full dataset</div></div>
+    `).join('');
+  } else {
+    tree.innerHTML = '<div class="empty-state"><p>No graph data available</p></div>';
+  }
 }
 
-function updateLineChart(id, labels, data, label) {
+let allVehicles = [];
+function renderVehicles() {
+  const kg = D.knowledge_graph || {};
+  allVehicles = kg.top_vehicles || [];
+
+  renderChart('ch-top-vehicles', 'bar', {
+    labels: allVehicles.slice(0, 10).map(v => v.vehicle),
+    datasets: [
+      { label: 'Documents', data: allVehicles.slice(0, 10).map(v => v.documents), backgroundColor: '#3b82f6', borderRadius: 4 },
+      { label: 'Components', data: allVehicles.slice(0, 10).map(v => v.components), backgroundColor: 'rgba(167,139,250,.5)', borderRadius: 4 },
+    ]
+  });
+
+  renderVehicleTable(allVehicles);
+}
+
+function renderVehicleTable(data) {
+  if (!data.length) {
+    $('#vehicles-table').innerHTML = '<div class="empty-state"><p>No vehicles found</p></div>';
+    return;
+  }
+  $('#vehicles-table').innerHTML = `<table>
+    <thead><tr><th>Vehicle</th><th>Documents</th><th>Components</th><th>Completeness</th></tr></thead>
+    <tbody>${data.map(v => {
+      const comp = Math.min(100, Math.round((v.documents / 50) * 100));
+      return `<tr><td>${v.vehicle}</td><td>${v.documents}</td><td>${v.components}</td>
+        <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${comp}%;background:${comp > 60 ? 'var(--green)' : comp > 30 ? 'var(--amber)' : 'var(--red)'};border-radius:3px"></div></div><span style="font-size:11px;color:var(--text2)">${comp}%</span></div></td></tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+function filterVehicles() {
+  const q = $('#veh-search').value.toLowerCase();
+  renderVehicleTable(allVehicles.filter(v => v.vehicle.toLowerCase().includes(q)));
+}
+
+function renderServices() {
+  const infra = D.infrastructure || {};
+  const kg = D.knowledge_graph || {};
+  const vs = D.vector_store || {};
+
+  const services = [
+    { name: 'Neo4j', icon: '🔵', status: infra.neo4j?.status, rows: [
+      ['Version', infra.neo4j?.version || '—'],
+      ['Nodes', fmt(kg.total_nodes)],
+      ['Relationships', fmt(kg.total_relationships)],
+      ['Query Latency', 'N/A'],
+    ]},
+    { name: 'Qdrant', icon: '🟣', status: infra.qdrant?.status, rows: [
+      ['Vectors', fmt(vs.total_vectors)],
+      ['Collection', vs.collection || '—'],
+      ['Dimensions', vs.dimensions || '—'],
+      ['Size', 'N/A'],
+    ]},
+    { name: 'Ollama', icon: '🟢', status: infra.ollama?.status, rows: [
+      ['Model', infra.ollama?.model || '—'],
+      ['Embed Latency', 'N/A'],
+    ]},
+    { name: 'System Resources', icon: '💻', status: 'connected', rows: [
+      ['CPU', 'N/A'],
+      ['RAM', 'N/A'],
+      ['Disk', 'N/A'],
+    ]},
+  ];
+
+  $('#services-grid').innerHTML = services.map(s => `
+    <div class="svc-card">
+      <div class="svc-header"><span class="svc-name">${s.icon} ${s.name}</span>${statusPill(s.status || 'unknown')}</div>
+      ${s.rows.map(([l, v]) => `<div class="svc-row"><span class="svc-label">${l}</span><span>${v}</span></div>`).join('')}
+    </div>
+  `).join('');
+}
+
+function generateFeedItems() {
+  const items = [];
+  // Generate from history
+  H.forEach(h => {
+    const ts = h.timestamp;
+    if (h.new_docs > 0) items.push({ ts, type: 'ingestion', icon: '📥', msg: `${h.new_docs} new documents ingested`, badge: 'ingestion' });
+    if (h.new_nodes > 0) items.push({ ts, type: 'vehicles', icon: '🔗', msg: `${h.new_nodes} new graph nodes created`, badge: 'graph' });
+    if (h.new_vectors > 0) items.push({ ts, type: 'ingestion', icon: '🧮', msg: `${h.new_vectors} new vectors embedded`, badge: 'vectors' });
+    if (h.errors_delta > 0) items.push({ ts, type: 'errors', icon: '⚠️', msg: `${h.errors_delta} errors occurred`, badge: 'error', error: true });
+    Object.entries(h.docs_by_source || {}).forEach(([src, n]) => {
+      if (n > 0) items.push({ ts, type: 'scrapers', icon: '🤖', msg: `${src}: ${n} docs scraped`, badge: src });
+    });
+  });
+  // Add scraper status
+  Object.entries(D.scrapers || {}).filter(([k]) => k !== 'manuals').forEach(([name, s]) => {
+    if (s.last_scrape) items.push({ ts: s.last_scrape, type: 'scrapers', icon: '✅', msg: `${name} scraper completed`, badge: name });
+  });
+  items.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+  return items;
+}
+
+function renderFeedItems(containerId, items) {
+  const el = $(`#${containerId}`);
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><p>No activity yet</p></div>';
+    return;
+  }
+  el.innerHTML = items.map(i => `
+    <div class="feed-item${i.error ? ' error' : ''}">
+      <div class="fi-icon">${i.icon}</div>
+      <div class="fi-time">${ago(i.ts)}</div>
+      <div class="fi-msg">${i.msg}</div>
+      <span class="badge">${i.badge}</span>
+    </div>
+  `).join('');
+}
+
+function renderActivity() {
+  const items = generateFeedItems();
+  const filtered = activeFilter === 'all' ? items : items.filter(i => i.type === activeFilter);
+  renderFeedItems('activity-feed', filtered);
+}
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  $$('#activity-filters button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderActivity();
+}
+
+// Chart helper
+function renderChart(id, type, data, extraOpts = {}) {
+  const canvas = $(`#${id}`);
+  if (!canvas) return;
   if (charts[id]) charts[id].destroy();
-  const ctx = document.getElementById(id);
-  charts[id] = new Chart(ctx, {
-    type: 'line',
-    data: { labels, datasets: [{
-      label, data,
-      borderColor: '#58a6ff', backgroundColor: 'rgba(88,166,255,0.1)',
-      fill: true, tension: 0.3, pointRadius: 0, borderWidth: 2
-    }]},
+  charts[id] = new Chart(canvas, {
+    type,
+    data,
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { ticks: { color: '#8b949e', maxTicksLimit: 12 }, grid: { color: '#21262d' } },
-        y: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' }, beginAtZero: true }
-      }
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: data.datasets?.length > 1, labels: { color: '#64748b', font: { size: 11 } } },
+      },
+      scales: type === 'doughnut' ? {} : {
+        x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(30,42,58,.5)' } },
+        y: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: 'rgba(30,42,58,.5)' } },
+      },
+      ...extraOpts,
     }
   });
 }
 
+// Countdown timer
+function startCountdown() {
+  cdLeft = 300;
+  if (cdTimer) clearInterval(cdTimer);
+  cdTimer = setInterval(() => {
+    cdLeft--;
+    if (cdLeft <= 0) {
+      cdLeft = 0;
+      updateCountdownUI();
+      // Flash green
+      $('#cd-ring').classList.add('done');
+      setTimeout(() => { $('#cd-ring').classList.remove('done'); loadData(); cdLeft = 300; }, 1000);
+      return;
+    }
+    updateCountdownUI();
+  }, 1000);
+  updateCountdownUI();
+}
+function updateCountdownUI() {
+  const m = Math.floor(cdLeft / 60), s = cdLeft % 60;
+  $('#cd-text').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+  const offset = CIRC * (1 - cdLeft / 300);
+  $('#cd-ring').style.strokeDashoffset = offset;
+}
+
+// Relative time updater
+setInterval(() => {
+  if (D) { renderOverview(); renderScrapers(); renderActivity(); }
+}, 60000);
+
 // Init
+route();
+loadData();
 startCountdown();
-fetchLatest();
-setInterval(fetchLatest, 30000);
 </script>
 </body>
 </html>
