@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 	"time"
@@ -65,7 +66,7 @@ func (s *Scraper) FetchAll(ctx context.Context) ([]scraper.ScrapedPost, error) {
 }
 
 func (s *Scraper) fetchForum(ctx context.Context, forum ForumConfig, query string, limiter *time.Ticker) ([]scraper.ScrapedPost, error) {
-	searchURL := forum.BaseURL + fmt.Sprintf(forum.SearchPath, query)
+	searchURL := forum.BaseURL + fmt.Sprintf(forum.SearchPath, url.QueryEscape(query))
 
 	result := fn.Retry(ctx, fn.RetryOpts{
 		MaxAttempts: 3,
