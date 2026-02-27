@@ -174,8 +174,13 @@ func main() {
 			log.Info("file done", "file", e.Name(), "ingested", count, "errors", errs)
 			mFilesProcessed.Inc()
 
-			processed[key] = true
-			saveState(*stateFile, processed)
+			// Only mark as fully processed if no errors (allows retry on next scan)
+			if errs == 0 {
+				processed[key] = true
+				saveState(*stateFile, processed)
+			} else {
+				log.Warn("file had errors, will retry on next scan", "file", e.Name(), "errors", errs)
+			}
 		}
 	}
 
@@ -268,13 +273,25 @@ func (r rawPost) toScrapedPost() scraper.ScrapedPost {
 		if content == "" {
 			content = r.Summary
 		}
+		var vi *scraper.VehicleInfo
+		if r.Make != "" && r.Model != "" && r.Year > 0 {
+			vi = &scraper.VehicleInfo{
+				Make:  r.Make,
+				Model: r.Model,
+				Year:  r.Year,
+			}
+		}
 		return scraper.ScrapedPost{
 			Source:   "nhtsa",
 			SourceID: r.ODINumber,
 			Title:    vehicle + " - NHTSA Complaint",
 			Content:  content,
 			URL:      "https://www.nhtsa.gov/",
-			Metadata: scraper.Metadata{Vehicle: vehicle},
+			Metadata: scraper.Metadata{
+				Vehicle:     vehicle,
+				VehicleInfo: vi,
+				Components:  r.Summary,
+			},
 		}
 	}
 	

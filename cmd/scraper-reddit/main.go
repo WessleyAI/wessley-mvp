@@ -35,7 +35,7 @@ func main() {
 	natsURL := flag.String("nats", "", "NATS URL (if empty, output JSON to stdout)")
 	subject := flag.String("subject", "wessley.scraper.reddit.posts", "NATS subject to publish to")
 	limit := flag.Int("limit", 25, "posts per subreddit per fetch")
-	interval := flag.Duration("interval", 5*time.Minute, "polling interval (0 = one-shot)")
+	interval := flag.Duration("interval", 15*time.Minute, "polling interval (0 = one-shot)")
 	flag.Parse()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)

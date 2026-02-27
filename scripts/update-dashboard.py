@@ -62,8 +62,12 @@ nodes_by_type = {}
 rels_by_type = {}
 result = neo4j_query([
     "MATCH (n) RETURN labels(n)[0] AS type, count(*) AS cnt",
-    "MATCH ()-[r]->() RETURN type(r) AS type, count(*) AS cnt"
+    "MATCH ()-[r]->() RETURN type(r) AS type, count(*) AS cnt",
+    "MATCH (n:ManualEntry) RETURN count(n) AS cnt",
+    "MATCH (n) WHERE n.source IS NOT NULL RETURN n.source AS src, count(*) AS cnt"
 ])
+manual_count = 0
+neo4j_docs_by_source = {}
 if result and "results" in result:
     for row in result["results"][0].get("data", []):
         t, c = row["row"]
@@ -71,6 +75,15 @@ if result and "results" in result:
     for row in result["results"][1].get("data", []):
         t, c = row["row"]
         if t: rels_by_type[t] = c
+    if len(result["results"]) > 2:
+        for row in result["results"][2].get("data", []):
+            manual_count = row["row"][0]
+    if len(result["results"]) > 3:
+        for row in result["results"][3].get("data", []):
+            src, cnt = row["row"]
+            if src:
+                key = src.split(":")[0].lower()
+                neo4j_docs_by_source[key] = neo4j_docs_by_source.get(key, 0) + cnt
 
 total_nodes = sum(nodes_by_type.values())
 total_rels = sum(rels_by_type.values())
@@ -96,6 +109,11 @@ for f in glob.glob(os.path.join(DATA_SRC, "*.json")):
             docs_by_source[src] = docs_by_source.get(src, 0) + 1
     except:
         pass
+
+# Merge Neo4j source counts into docs_by_source (prefer Neo4j as source of truth)
+if neo4j_docs_by_source:
+    for src, cnt in neo4j_docs_by_source.items():
+        docs_by_source[src] = max(docs_by_source.get(src, 0), cnt)
 
 # Use Neo4j node count as source of truth for total docs (not regex counting which double-counts)
 total_docs = total_nodes if total_nodes > 0 else sum(docs_by_source.values())
@@ -168,7 +186,7 @@ snapshot = {
         "nhtsa": {"status": sources_running, "last_scrape": now, "total_docs": docs_by_source.get("nhtsa", 0)},
         "ifixit": {"status": sources_running, "last_scrape": now, "total_docs": docs_by_source.get("ifixit", 0)},
         "youtube": {"status": sources_running, "last_scrape": now, "total_docs": docs_by_source.get("youtube", 0)},
-        "manuals": {"discovered": 0, "downloaded": 0, "ingested": 0, "failed": 0}
+        "manuals": {"discovered": manual_count or nodes_by_type.get("ManualEntry", 0), "downloaded": manual_count or nodes_by_type.get("ManualEntry", 0), "ingested": manual_count or nodes_by_type.get("ManualEntry", 0), "failed": 0}
     },
     "infrastructure": {
         "neo4j": {"status": neo4j_status, "version": "5.x"},

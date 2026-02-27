@@ -7,35 +7,29 @@
         "title": "Duplicate TestExtractFixes in iFixit package",
         "category": "bug",
         "detail": "Renamed TestExtractFixes in scraper_coverage_test.go to TestExtractFixes_Coverage to resolve redeclaration build failure",
-        "files_changed": [
-          "cmd/scraper-sources/ifixit/scraper_coverage_test.go"
-        ]
+        "files_changed": ["cmd/scraper-sources/ifixit/scraper_coverage_test.go"]
       },
       {
         "title": "NHTSA test uses stale Complaint struct fields",
         "category": "bug",
         "detail": "Updated scraper_test.go to use refactored Complaint struct with Products[]Product slice instead of removed flat fields (MakeName, ModelName, ModelYear, Component)",
-        "files_changed": [
-          "cmd/scraper-sources/nhtsa/scraper_test.go"
-        ]
+        "files_changed": ["cmd/scraper-sources/nhtsa/scraper_test.go"]
       },
       {
         "title": "Flaky TestClassifySection in engine/graph",
         "category": "test",
         "detail": "Test used ambiguous content 'battery and alternator' matching two subsystem keywords in a map (non-deterministic iteration). Changed to unambiguous 'alternator replacement guide'",
-        "files_changed": [
-          "engine/graph/enricher_test.go"
-        ]
+        "files_changed": ["engine/graph/enricher_test.go"]
       }
     ],
     "skipped": [
       {
         "title": "Knowledge graph has ZERO relationships",
-        "reason": "Requires debugging the enricher call path from ingest pipeline and possibly running the enricher manually. Not a simple code fix \u2014 needs investigation of runtime behavior and Neo4j queries."
+        "reason": "Requires debugging the enricher call path from ingest pipeline and possibly running the enricher manually. Not a simple code fix — needs investigation of runtime behavior and Neo4j queries."
       },
       {
         "title": "Embedding pipeline stalled (11.8% coverage)",
-        "reason": "Requires runtime debugging of Ollama embedding calls and Qdrant upserts. The code compiles fine \u2014 this is likely a runtime/config issue, not a code bug."
+        "reason": "Requires runtime debugging of Ollama embedding calls and Qdrant upserts. The code compiles fine — this is likely a runtime/config issue, not a code bug."
       },
       {
         "title": "Reddit scraper producing zero posts",
@@ -43,95 +37,13 @@
       },
       {
         "title": "Manuals scraper inactive",
-        "reason": "Pipeline never run \u2014 needs configuration and activation, not a code fix."
+        "reason": "Pipeline never run — needs configuration and activation, not a code fix."
       }
     ],
-    "tests_before": {
-      "passed": 10,
-      "failed": 3
-    },
-    "tests_after": {
-      "passed": 13,
-      "failed": 0
-    },
+    "tests_before": {"passed": 10, "failed": 3},
+    "tests_after": {"passed": 13, "failed": 0},
     "build_status": "pass",
     "commit": "b340d31",
     "summary": "Fixed all 3 test suite build failures: iFixit duplicate function, NHTSA stale struct fields, graph flaky test. All packages now compile and pass."
-  },
-  {
-    "timestamp": "2026-02-27T13:21:57Z",
-    "analysis_timestamp": "2026-02-26T19:10:00+02:00",
-    "fixed": [],
-    "skipped": [
-      {
-        "title": "Knowledge graph has ZERO relationships",
-        "reason": "Architectural/runtime issue \u2014 enricher needs debugging against live Neo4j, not a code fix"
-      },
-      {
-        "title": "Embedding pipeline stalled at 11.8%",
-        "reason": "Runtime pipeline issue \u2014 requires live debugging of Ollama embed calls and Qdrant upserts"
-      },
-      {
-        "title": "Reddit scraper producing zero posts",
-        "reason": "Runtime/auth config issue, not a code bug"
-      },
-      {
-        "title": "Manuals scraper inactive",
-        "reason": "Config/activation issue, not a code bug"
-      },
-      {
-        "title": "Graph enricher not creating relationships",
-        "reason": "Same as zero-relationships critical \u2014 needs live infrastructure debugging"
-      },
-      {
-        "title": "Vector embedding not keeping pace",
-        "reason": "Same as embedding pipeline stalled \u2014 runtime issue"
-      }
-    ],
-    "tests_before": {
-      "passed": 18,
-      "failed": 0
-    },
-    "tests_after": {
-      "passed": 18,
-      "failed": 0
-    },
-    "build_status": "pass",
-    "commit": null,
-    "summary": "No code fixes needed \u2014 all tests pass, build clean. Previously flagged test issues (ifixit duplicate, nhtsa stale fields) already resolved. Remaining issues are runtime/infrastructure (enricher, embeddings, scrapers)."
-  },
-  {
-    "timestamp": "2026-02-27T13:22:18Z",
-    "analysis_timestamp": "2026-02-26T19:10:00+02:00",
-    "fixed": [],
-    "skipped": [
-      {
-        "title": "Knowledge graph zero relationships",
-        "reason": "Runtime/infrastructure issue - enricher not creating edges, not a code bug"
-      },
-      {
-        "title": "Embedding pipeline stalled",
-        "reason": "Runtime issue - Ollama/Qdrant pipeline, not a build error"
-      },
-      {
-        "title": "Reddit scraper zero posts",
-        "reason": "Runtime/auth issue, not a code bug"
-      },
-      {
-        "title": "Manuals scraper inactive",
-        "reason": "Configuration/runtime issue"
-      }
-    ],
-    "tests_before": {
-      "passed": 13,
-      "failed": 0
-    },
-    "tests_after": {
-      "passed": 13,
-      "failed": 0
-    },
-    "build_status": "pass",
-    "commit": null,
-    "summary": "All clear \u2014 dashboard builds, Go builds, all tests pass. Previously flagged ifixit/nhtsa test bugs already fixed. Remaining issues are runtime/infrastructure."
   }
 ]

@@ -179,7 +179,7 @@ func (s *Scraper) httpGet(ctx context.Context, url string) (io.ReadCloser, error
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "wessley-scraper/1.0 (automotive repair data collection)")
+	req.Header.Set("User-Agent", "wessley-ai:v1.0 (by /u/wessley-bot; automotive repair data collection)")
 
 	resp, err := s.client.Do(req)
 	if err != nil {
