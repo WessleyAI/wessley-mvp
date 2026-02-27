@@ -99,5 +99,39 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed \u2014 all tests pass, build clean. Previously flagged test issues (ifixit duplicate, nhtsa stale fields) already resolved. Remaining issues are runtime/infrastructure (enricher, embeddings, scrapers)."
+  },
+  {
+    "timestamp": "2026-02-27T13:22:18Z",
+    "analysis_timestamp": "2026-02-26T19:10:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Knowledge graph zero relationships",
+        "reason": "Runtime/infrastructure issue - enricher not creating edges, not a code bug"
+      },
+      {
+        "title": "Embedding pipeline stalled",
+        "reason": "Runtime issue - Ollama/Qdrant pipeline, not a build error"
+      },
+      {
+        "title": "Reddit scraper zero posts",
+        "reason": "Runtime/auth issue, not a code bug"
+      },
+      {
+        "title": "Manuals scraper inactive",
+        "reason": "Configuration/runtime issue"
+      }
+    ],
+    "tests_before": {
+      "passed": 13,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 13,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "All clear \u2014 dashboard builds, Go builds, all tests pass. Previously flagged ifixit/nhtsa test bugs already fixed. Remaining issues are runtime/infrastructure."
   }
 ]
