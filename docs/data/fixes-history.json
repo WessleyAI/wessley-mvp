@@ -126,5 +126,47 @@
     "build_status": "pass",
     "commit": "833ca32",
     "summary": "Fixed Reddit scraper test (stale UA assertion). All test suites now pass. Previously reported ifixit/nhtsa bugs already fixed in prior run."
+  },
+  {
+    "timestamp": "2026-02-27T21:21:03Z",
+    "analysis_timestamp": "2026-02-27T20:09:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Knowledge graph has ZERO relationships",
+        "reason": "Enricher code is correct but only runs when new data is ingested through the pipeline. Existing 4,065 nodes were never backfilled. Needs a one-time migration script or manual enricher run \u2014 not a code bug."
+      },
+      {
+        "title": "ManualEntry nodes not embedded in Qdrant",
+        "reason": "ManualEntry is a registry/metadata node (URL, status, source_site) \u2014 not a content document. It tracks discovered PDFs, not their text. Embedding requires the PDF download+extraction pipeline to run first, converting manuals into ScrapedPost content."
+      },
+      {
+        "title": "Duplicate ingest processes",
+        "reason": "Only one ingest process running now (PID 38903). The go run instance (PID 65156) already died. No action needed."
+      },
+      {
+        "title": "Reddit scraper producing zero posts",
+        "reason": "Auth/rate-limit issue with Reddit API, not a code bug."
+      },
+      {
+        "title": "NHTSA/iFixit/YouTube scrapers stopped",
+        "reason": "Runtime/operational \u2014 scrapers need to be restarted manually. Not a code issue."
+      },
+      {
+        "title": "Embedding pipeline stalled (0 new vectors in hours)",
+        "reason": "No new files in /tmp/wessley-data/ to process. Scrapers are stopped so no new content is flowing in."
+      }
+    ],
+    "tests_before": {
+      "passed": 18,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 18,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed. Build passes, all 18 test suites pass. All issues are runtime/operational: enricher backfill needed, scrapers stopped, ManualEntry is metadata not content. Duplicate ingest process already resolved itself."
   }
 ]
