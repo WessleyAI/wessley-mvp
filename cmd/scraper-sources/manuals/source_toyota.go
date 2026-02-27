@@ -52,7 +52,8 @@ func (s *ToyotaSource) Discover(ctx context.Context, makes []string, years []int
 			default:
 			}
 
-			url := fmt.Sprintf("https://www.toyota.com/t3Portal/document/om-s/%s/%d/pdf", model, year)
+			// Use Toyota's current owners manual portal URL pattern
+			url := fmt.Sprintf("https://www.toyota.com/owners/resources/warranty-owners-manuals/%s/%d", model, year)
 			entry := graph.ManualEntry{
 				ID:           graph.ManualEntryID(url),
 				URL:          url,

@@ -36,10 +36,12 @@ type EmbeddedDoc struct {
 // parsedDocFromPost converts a ScrapedPost into a ParsedDoc.
 func parsedDocFromPost(post scraper.ScrapedPost) ParsedDoc {
 	meta := map[string]string{
-		"source":  post.Source,
-		"author":  post.Author,
-		"url":     post.URL,
-		"vehicle": post.Metadata.Vehicle,
+		"source":     post.Source,
+		"author":     post.Author,
+		"url":        post.URL,
+		"vehicle":    post.Metadata.Vehicle,
+		"components": post.Metadata.Components,
+		"section":    post.Metadata.Section,
 	}
 	return ParsedDoc{
 		ID:          post.Source + ":" + post.SourceID,

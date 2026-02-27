@@ -44,8 +44,8 @@ func (s *HondaSource) Discover(ctx context.Context, makes []string, years []int)
 			default:
 			}
 
-			// Honda's owner manual URL pattern
-			url := fmt.Sprintf("https://owners.honda.com/Documentconnection/VisualPDF?body=%s&year=%d", model, year)
+			// Honda's current owner manual URL pattern
+			url := fmt.Sprintf("https://owners.honda.com/vehicles/information/%d/%s/manuals", year, model)
 			entries = append(entries, graph.ManualEntry{
 				ID:           graph.ManualEntryID(url),
 				URL:          url,

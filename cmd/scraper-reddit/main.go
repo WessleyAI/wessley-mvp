@@ -34,6 +34,7 @@ var (
 func main() {
 	natsURL := flag.String("nats", "", "NATS URL (if empty, output JSON to stdout)")
 	subject := flag.String("subject", "wessley.scraper.reddit.posts", "NATS subject to publish to")
+	outputDir := flag.String("output-dir", "", "directory to write JSON files for ingest pipeline (e.g. /tmp/wessley-data)")
 	limit := flag.Int("limit", 25, "posts per subreddit per fetch")
 	interval := flag.Duration("interval", 15*time.Minute, "polling interval (0 = one-shot)")
 	flag.Parse()
@@ -80,6 +81,12 @@ func main() {
 		log.Printf("publishing to NATS subject %s", *subject)
 	}
 
+	// Ensure output dir exists if specified
+	if *outputDir != "" {
+		os.MkdirAll(*outputDir, 0o755)
+		log.Printf("writing JSON files to %s", *outputDir)
+	}
+
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 
@@ -104,6 +111,21 @@ func main() {
 				if err := enc.Encode(p); err != nil {
 					return fmt.Errorf("encode: %w", err)
 				}
+			}
+		}
+		// Write posts to output dir as JSON files for ingest pipeline
+		if *outputDir != "" && len(posts) > 0 {
+			filename := fmt.Sprintf("%s/reddit-%d.json", *outputDir, time.Now().UnixNano())
+			f, err := os.Create(filename)
+			if err != nil {
+				log.Printf("output-dir write error: %v", err)
+			} else {
+				fenc := json.NewEncoder(f)
+				for _, p := range posts {
+					fenc.Encode(p)
+				}
+				f.Close()
+				log.Printf("wrote %d posts to %s", len(posts), filename)
 			}
 		}
 		return nil

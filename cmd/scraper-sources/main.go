@@ -31,6 +31,7 @@ import (
 func main() {
 	natsURL := flag.String("nats", "", "NATS URL (if empty, output JSON to stdout)")
 	subject := flag.String("subject", "wessley.scraper.sources.posts", "NATS subject to publish to")
+	outputDir := flag.String("output-dir", "", "directory to write JSON files for ingest pipeline (e.g. /tmp/wessley-data)")
 	interval := flag.Duration("interval", 30*time.Minute, "polling interval (0 = one-shot)")
 	sources := flag.String("sources", "nhtsa,ifixit,forums", "comma-separated sources to scrape")
 	nhtsaMakes := flag.String("nhtsa-makes", "TOYOTA,HONDA,FORD,CHEVROLET,BMW,NISSAN", "comma-separated vehicle makes for NHTSA")
@@ -237,6 +238,12 @@ func main() {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetIndent("", "  ")
 
+	// Ensure output dir exists if specified
+	if *outputDir != "" {
+		os.MkdirAll(*outputDir, 0o755)
+		log.Printf("writing JSON files to %s", *outputDir)
+	}
+
 	emit := func(posts []scraper.ScrapedPost) error {
 		for _, p := range posts {
 			if nc != nil {
@@ -247,6 +254,27 @@ func main() {
 				if err := enc.Encode(p); err != nil {
 					return fmt.Errorf("encode: %w", err)
 				}
+			}
+		}
+		// Write posts to output dir as JSON files for ingest pipeline
+		if *outputDir != "" && len(posts) > 0 {
+			source := "unknown"
+			if len(posts) > 0 {
+				source = posts[0].Source
+			}
+			// Replace colons in source (e.g. "reddit:MechanicAdvice" → "reddit-MechanicAdvice")
+			source = strings.ReplaceAll(source, ":", "-")
+			filename := fmt.Sprintf("%s/%s-%d.json", *outputDir, source, time.Now().UnixNano())
+			f, err := os.Create(filename)
+			if err != nil {
+				log.Printf("output-dir write error: %v", err)
+			} else {
+				fenc := json.NewEncoder(f)
+				for _, p := range posts {
+					fenc.Encode(p)
+				}
+				f.Close()
+				log.Printf("wrote %d posts to %s", len(posts), filename)
 			}
 		}
 		return nil
