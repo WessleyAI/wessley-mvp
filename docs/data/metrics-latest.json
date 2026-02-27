@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-27T22:58:58Z",
+  "timestamp": "2026-02-27T23:08:57Z",
   "knowledge_graph": {
     "total_nodes": 4864,
     "total_relationships": 1076,
@@ -100,32 +100,32 @@
     "total_docs_ingested": 4864,
     "total_errors": 23,
     "docs_by_source": {
-      "nhtsa": 5966,
+      "nhtsa": 6640,
       "manual": 12,
-      "ifixit": 198
+      "ifixit": 220
     },
-    "last_ingestion": "2026-02-27T22:58:58Z",
-    "files_processed": 48
+    "last_ingestion": "2026-02-27T23:08:57Z",
+    "files_processed": 52
   },
   "scrapers": {
     "reddit": {
       "status": "stopped",
-      "last_scrape": "2026-02-27T22:58:58Z",
+      "last_scrape": "2026-02-27T23:08:57Z",
       "total_posts": 0
     },
     "nhtsa": {
       "status": "running",
-      "last_scrape": "2026-02-27T22:58:58Z",
-      "total_docs": 5966
+      "last_scrape": "2026-02-27T23:08:57Z",
+      "total_docs": 6640
     },
     "ifixit": {
       "status": "running",
-      "last_scrape": "2026-02-27T22:58:58Z",
-      "total_docs": 198
+      "last_scrape": "2026-02-27T23:08:57Z",
+      "total_docs": 220
     },
     "youtube": {
       "status": "running",
-      "last_scrape": "2026-02-27T22:58:58Z",
+      "last_scrape": "2026-02-27T23:08:57Z",
       "total_docs": 0
     },
     "manuals": {
