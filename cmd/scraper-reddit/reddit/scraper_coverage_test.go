@@ -475,8 +475,8 @@ func TestHttpGet_UserAgent(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	body.Close()
-	if !strings.Contains(gotUA, "wessley-scraper") {
-		t.Errorf("expected wessley-scraper user agent, got %s", gotUA)
+	if !strings.Contains(gotUA, "wessley-ai") {
+		t.Errorf("expected wessley-ai user agent, got %s", gotUA)
 	}
 }
 
