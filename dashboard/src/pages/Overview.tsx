@@ -33,8 +33,8 @@ export function Overview({ data }: { data: DashboardData }) {
   // If no scraper data, use analysis metrics
   if (scraperSources.length === 0 && analysis) {
     scraperSources.push(
-      { name: 'NHTSA', value: Math.round(analysis.metrics.total_docs * analysis.metrics.nhtsa_pct) },
-      { name: 'Other', value: Math.round(analysis.metrics.total_docs * (1 - analysis.metrics.nhtsa_pct)) },
+      { name: 'NHTSA', value: Math.round(analysis.metrics.total_docs * (analysis.metrics.nhtsa_pct ?? 0)) },
+      { name: 'Other', value: Math.round(analysis.metrics.total_docs * (1 - (analysis.metrics.nhtsa_pct ?? 0))) },
     );
   }
 

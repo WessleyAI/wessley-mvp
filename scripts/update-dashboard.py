@@ -237,9 +237,12 @@ if prev:
         if d > 0:
             delta["docs_by_source"][src] = d
 
-history.append(delta)
-if len(history) > 288:
-    history = history[-288:]
+# Deduplicate by timestamp
+existing_ts = {e["timestamp"] for e in history}
+if delta["timestamp"] not in existing_ts:
+    history.append(delta)
+if len(history) > 1000:
+    history = history[-1000:]
 
 with open(HISTORY, "w") as f:
     json.dump(history, f, indent=2)
