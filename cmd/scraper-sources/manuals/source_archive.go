@@ -30,12 +30,14 @@ func (s *ArchiveSource) Name() string { return "archive" }
 func (s *ArchiveSource) Discover(ctx context.Context, makes []string, years []int) ([]graph.ManualEntry, error) {
 	var entries []graph.ManualEntry
 
-	queries := []string{
-		`subject:"vehicle manual" OR subject:"owner manual" OR subject:"service manual"`,
-	}
-	// Add make-specific queries
+	var queries []string
+	// Per-make queries that actually return results on Archive.org
 	for _, make_ := range makes {
-		queries = append(queries, fmt.Sprintf(`title:"%s" AND (subject:"manual" OR title:"manual")`, make_))
+		queries = append(queries,
+			fmt.Sprintf(`"%s" "repair manual" AND mediatype:texts`, make_),
+			fmt.Sprintf(`"%s" "service manual" AND mediatype:texts`, make_),
+			fmt.Sprintf(`"%s" "owner manual" AND mediatype:texts`, make_),
+		)
 	}
 
 	for _, q := range queries {
@@ -82,7 +84,7 @@ type archiveFile struct {
 
 func (s *ArchiveSource) searchArchive(ctx context.Context, query string, makes []string) ([]graph.ManualEntry, error) {
 	u := "https://archive.org/advancedsearch.php?" + url.Values{
-		"q":         {query + " AND mediatype:texts"},
+		"q":         {query},
 		"fl[]":      {"identifier,title,subject,year"},
 		"output":    {"json"},
 		"rows":      {"100"},
