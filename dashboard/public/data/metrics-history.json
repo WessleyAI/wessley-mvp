@@ -1,0 +1,151 @@
+[
+  {
+    "timestamp": "2026-02-26T10:15:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 0,
+      "ifixit": 0,
+      "reddit": 0,
+      "youtube": 0
+    },
+    "total_docs": 1499,
+    "total_vectors": 2232,
+    "total_nodes": 1499
+  },
+  {
+    "timestamp": "2026-02-26T17:02:05Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 19564,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:03:43Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 19564,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:08:43Z",
+    "period": "5m",
+    "new_docs": 403,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "ifixit": 11,
+      "nhtsa": 392
+    },
+    "new_vehicles": [],
+    "total_docs": 19967,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:13:43Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 19967,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:23:42Z",
+    "period": "5m",
+    "new_docs": 3,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "youtube": 3
+    },
+    "new_vehicles": [],
+    "total_docs": 19970,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:24:03Z",
+    "period": "5m",
+    "new_docs": -18386,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 1584,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-26T17:33:43Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 1584,
+    "total_vectors": 2360,
+    "total_nodes": 1584
+  },
+  {
+    "timestamp": "2026-02-27T10:34:11Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 1705,
+    "total_vectors": 2527,
+    "total_nodes": 1705
+  },
+  {
+    "timestamp": "2026-02-27T10:38:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 1705,
+    "total_vectors": 2527,
+    "total_nodes": 1705
+  }
+]
