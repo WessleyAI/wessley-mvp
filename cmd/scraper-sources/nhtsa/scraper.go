@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	neturl "net/url"
 	"strings"
 	"time"
 
@@ -128,7 +129,7 @@ func (s *Scraper) fetchModels(ctx context.Context, make_ string, limiter *time.T
 }
 
 func (s *Scraper) fetchMakeModel(ctx context.Context, make_, model string, limiter *time.Ticker) ([]scraper.ScrapedPost, error) {
-	url := fmt.Sprintf("%s?make=%s&model=%s&modelYear=%d", complaintsURL, make_, model, s.cfg.ModelYear)
+	url := fmt.Sprintf("%s?make=%s&model=%s&modelYear=%d", complaintsURL, neturl.QueryEscape(make_), neturl.QueryEscape(model), s.cfg.ModelYear)
 
 	result := fn.Retry(ctx, fn.RetryOpts{
 		MaxAttempts: 3,
