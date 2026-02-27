@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { MobileNav } from '@/components/layout/MobileNav';
+import { useData } from '@/hooks/useData';
+import { Overview } from '@/pages/Overview';
+import { Pipeline } from '@/pages/Pipeline';
+import { Sources } from '@/pages/Sources';
+import { Graph } from '@/pages/Graph';
+import { Vehicles } from '@/pages/Vehicles';
+import { Manuals } from '@/pages/Manuals';
+import { Controls } from '@/pages/Controls';
+import { Analysis } from '@/pages/Analysis';
+import { Fixes } from '@/pages/Fixes';
+import { Infrastructure } from '@/pages/Infrastructure';
+import { Logs } from '@/pages/Logs';
+import { Loader2 } from 'lucide-react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const data = useData();
+
+  if (data.loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (data.error && !data.metrics) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center space-y-2">
+          <p className="text-red-400">Failed to load data</p>
+          <p className="text-xs text-muted-foreground">{data.error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <HashRouter>
+      <div className="dark min-h-screen bg-background text-foreground">
+        <Sidebar />
+        <main className="lg:ml-60 p-4 md:p-6 pb-20 lg:pb-6">
+          <Routes>
+            <Route path="/" element={<Overview data={data} />} />
+            <Route path="/pipeline" element={<Pipeline data={data} />} />
+            <Route path="/sources" element={<Sources data={data} />} />
+            <Route path="/graph" element={<Graph data={data} />} />
+            <Route path="/vehicles" element={<Vehicles data={data} />} />
+            <Route path="/manuals" element={<Manuals data={data} />} />
+            <Route path="/controls" element={<Controls data={data} />} />
+            <Route path="/analysis" element={<Analysis data={data} />} />
+            <Route path="/fixes" element={<Fixes data={data} />} />
+            <Route path="/infra" element={<Infrastructure data={data} />} />
+            <Route path="/logs" element={<Logs data={data} />} />
+          </Routes>
+        </main>
+        <MobileNav />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </HashRouter>
+  );
 }
 
-export default App
+export default App;
