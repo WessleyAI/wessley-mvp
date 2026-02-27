@@ -1,42 +1,82 @@
 [
   {
-    "time": "2026-02-27T18:18:57Z",
+    "time": "2026-02-27T18:28:58Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-27T18:18:57Z",
+    "time": "2026-02-27T18:28:58Z",
     "category": "system",
-    "message": "scraper-sources: STOPPED"
+    "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-27T18:18:57Z",
+    "time": "2026-02-27T18:28:58Z",
     "category": "system",
     "message": "ingest: STOPPED"
   },
   {
-    "time": "2026-02-27T18:18:57Z",
+    "time": "2026-02-27T18:28:58Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 8 hours"
   },
   {
-    "time": "2026-02-27T18:18:57Z",
+    "time": "2026-02-27T18:28:58Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 8 hours"
   },
   {
-    "time": "2026-02-27T18:18:57Z",
+    "time": "2026-02-27T18:28:58Z",
     "category": "system",
-    "message": "Data directory: 12K\t/tmp/wessley-data"
+    "message": "Data directory: 844K\t/tmp/wessley-data"
   },
   {
-    "time": "2026-02-27T18:18:17Z",
+    "time": "2026-02-27T18:27:54Z",
     "category": "ingestion",
-    "message": "File test-nhtsa-002.json (0KB) processed"
+    "message": "File ifixit-1772216874361918000.json (4KB) processed"
   },
   {
-    "time": "2026-02-27T18:18:17Z",
+    "time": "2026-02-27T18:27:47Z",
     "category": "ingestion",
-    "message": "File test-nhtsa-001.json (0KB) processed"
+    "message": "File nhtsa-1772216867268475000.json (392KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:26:12Z",
+    "category": "ingestion",
+    "message": "File ifixit-1772216772560613000.json (4KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:26:05Z",
+    "category": "ingestion",
+    "message": "File nhtsa-1772216765167355000.json (378KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:24:00Z",
+    "category": "ingestion",
+    "message": "File seed-nhtsa-012.json (0KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:24:00Z",
+    "category": "ingestion",
+    "message": "File seed-nhtsa-011.json (0KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:24:00Z",
+    "category": "ingestion",
+    "message": "File seed-nhtsa-010.json (0KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:24:00Z",
+    "category": "ingestion",
+    "message": "File seed-nhtsa-009.json (0KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:24:00Z",
+    "category": "ingestion",
+    "message": "File seed-nhtsa-008.json (0KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:24:00Z",
+    "category": "ingestion",
+    "message": "File seed-nhtsa-007.json (0KB) processed"
   }
 ]
