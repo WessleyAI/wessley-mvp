@@ -1,138 +1,152 @@
 {
-  "timestamp": "2026-02-26T19:10:00+02:00",
+  "timestamp": "2026-02-27T16:09:00+02:00",
   "critical": [
     {
-      "title": "Knowledge graph has ZERO relationships — completely flat",
-      "detail": "Neo4j contains 1,584 nodes ALL labeled 'Component' with 0 relationships. The entire Make→Model→Year→System→Component hierarchy is missing. The graph is useless for structured queries — it's just a flat list. The enricher is either not running or not creating relationships. top_makes in metrics appear to come from document metadata, not actual graph structure.",
-      "fix": "Debug engine/graph/enricher.go — verify it creates relationships. Check if seed.go is being called to bootstrap the hierarchy. Run the enricher manually and check logs. The graph should have Make, Model, Year, System, and Component nodes with proper edges."
+      "title": "Knowledge graph still has ZERO relationships — no improvement",
+      "detail": "Neo4j has 4,065 nodes (Component: 1,705 + ManualEntry: 2,360) but still 0 relationships. The graph is a flat list with no Make→Model→Year→System→Component hierarchy. This persists from the last report — the enricher is fundamentally broken or never called. Structured queries remain impossible.",
+      "fix": "Trace engine/graph/enricher.go call path from ingest. Add explicit logging around MERGE/CREATE relationship Cypher. Verify seed.go bootstraps the hierarchy. This is the single biggest architectural gap."
     },
     {
-      "title": "Embedding pipeline stalled — only 2,360 vectors for 19,967 docs (11.8%)",
-      "detail": "History shows 0 new vectors across all recent snapshots despite 403 new docs in the last period. The ingest process is running (PID 40432, 31min CPU) and processing files, but vectors are not being created. Either Ollama embedding is failing silently, or the vector upsert to Qdrant is broken. Qdrant shows indexed_vectors_count=0 which means HNSW index hasn't been built (below 10k threshold, but still concerning).",
-      "fix": "Check ingest logs for embedding errors. Verify Ollama nomic-embed-text model responds to embedding requests. Check if transform.go is chunking documents before embedding. The 88.2% gap means RAG quality is severely degraded."
-    },
-    {
-      "title": "Two test suites have build failures",
-      "detail": "ifixit: TestExtractFixes redeclared (duplicate function in scraper_test.go:28 and scraper_coverage_test.go:168). nhtsa: scraper_test.go references removed struct fields (MakeName, ModelName, ModelYear, Component) on Complaint type — struct was refactored but tests weren't updated.",
-      "fix": "ifixit: rename or remove duplicate TestExtractFixes in scraper_coverage_test.go. nhtsa: update scraper_test.go to use current Complaint struct fields (check nhtsa/types.go for correct field names)."
+      "title": "Embedding pipeline severely behind — 2,527 vectors for 4,065 docs (62.2%)",
+      "detail": "While the ratio improved from 11.8% to 62.2% (due to doc count reset, not vector growth — only +167 vectors since last report), 37.8% of documents still have no embeddings. History shows 932 new docs today with 0 new vectors in the latest snapshots. The embedding step stalls after initial batch.",
+      "fix": "Check ingest logs (/tmp/wessley-ingest.log) for Ollama errors. Verify transform.go embeds all new documents, not just first-run. The ingest process (PID 6694) is running but may be stuck in a loop without embedding."
     }
   ],
   "warnings": [
     {
-      "title": "Extreme source imbalance — NHTSA is 96.9% of all documents",
-      "detail": "NHTSA: 19,339 (96.9%), iFixit: 550 (2.8%), YouTube: 78 (0.4%), Reddit: 0 (0%). A single-source knowledge base is fragile and biased toward complaint data. NHTSA complaints are useful but lack repair procedures, how-to content, and community knowledge."
+      "title": "Data reset occurred — 19,967 docs dropped to 1,584 on Feb 26",
+      "detail": "History shows a -18,386 doc drop at 17:24 on Feb 26. The knowledge base was essentially rebuilt from scratch. Current 4,065 docs is 80% smaller than the previous peak. This was likely intentional cleanup, but the rebuild is slow.",
+      "fix": "If intentional, document why. If not, investigate what caused the mass deletion."
     },
     {
-      "title": "Reddit scraper running but producing zero posts",
-      "detail": "Process is running (PID 40408, 33s CPU over hours) but total_posts=0. Either auth is failing, subreddits aren't configured, or Reddit API is blocking requests. This is a dead process consuming resources."
+      "title": "Reddit scraper still producing zero posts",
+      "detail": "Process running (PID 65162, started 2:54PM today) with -limit 50 flag but total_posts=0 across two days. This is a dead process — likely auth failure or missing API credentials.",
+      "fix": "Check Reddit API credentials. Run scraper manually with verbose logging to see the actual error."
     },
     {
-      "title": "Manuals scraper completely inactive",
-      "detail": "Despite having 26+ manufacturer sources coded (Toyota, Honda, Ford, BMW, etc.), discovered=0, downloaded=0, ingested=0. The entire manuals pipeline appears to never have run successfully. This is the highest-value untapped source."
+      "title": "Source diversity unknown — docs_by_source empty in metrics",
+      "detail": "metrics-latest.json shows docs_by_source:{} — the per-source breakdown is not being tracked. Last report showed 96.9% NHTSA dominance. Can't assess current diversity without this data.",
+      "fix": "Fix the metrics collector to populate docs_by_source from Neo4j labels or document metadata."
     },
     {
-      "title": "No new vehicles being discovered",
-      "detail": "recent_vehicles is empty in metrics, new_vehicles is empty in all history entries. The vehicle discovery/tagging pipeline from ingested documents isn't working, which compounds the flat graph problem."
+      "title": "Manuals scraper config present but stats still zero",
+      "detail": "Scraper is running with -manuals-process -manuals-dir flags, and 2,360 ManualEntry nodes appeared in Neo4j (new since last report!), but metrics still show discovered=0, downloaded=0, ingested=0. The metrics aren't tracking ManualEntry creation properly.",
+      "fix": "Update metrics collector to count ManualEntry nodes. The data IS flowing — metrics just aren't reflecting it."
     },
     {
-      "title": "Disk usage growing — 722MB for codebase",
-      "detail": "/tmp/wessley-mvp at 722MB is large for a Go project. Likely includes git history with data files, built binaries, or vendored dependencies. /tmp/wessley-data at 73MB is fine for now but will grow."
+      "title": "YouTube scraper not in active process list",
+      "detail": "Last report showed YouTube active (3 docs scraped). Current scraper command only runs nhtsa,ifixit,forums — YouTube is missing. Previously had 78 YouTube docs.",
+      "fix": "Add youtube to the -sources flag or run cmd/scraper-youtube separately."
     }
   ],
   "healthy": [
-    "Infrastructure: Neo4j 5.x, Qdrant, Ollama all connected and responding (Qdrant query: 1.8ms)",
-    "Docker containers: neo4j and qdrant running 25h+ with no restarts",
-    "Build: go build ./... passes cleanly (no compilation errors in main code)",
-    "Core test suites: api, graph, ingest, rag, scraper, semantic all passing",
-    "NHTSA scraper: actively ingesting (392 new docs in last 5min window)",
-    "iFixit scraper: actively ingesting (11 new docs in last 5min window)",
-    "Ollama: running with nomic-embed-text, 78% CPU indicates active use",
-    "Ingest process: running with 206MB memory, actively processing files",
-    "Error rate: 23/19,967 = 0.12% — excellent"
+    "Build: go build ./... passes cleanly — no compilation errors",
+    "Tests: ALL 17 test suites passing (up from 15 last report — ifixit and nhtsa test failures FIXED)",
+    "Infrastructure: Neo4j 5.x and Qdrant both running 46h+ in Docker, healthy",
+    "Qdrant: status green, 2,527 points, query latency <1ms",
+    "Ollama: running with nomic-embed-text model, serving embeddings",
+    "Ingest process: running (PID 6694) with 30s interval, processing /tmp/wessley-data",
+    "Scrapers: nhtsa+ifixit+forums actively running (PID 65159), restarted today",
+    "Error rate: 23/4,065 = 0.57% — acceptable",
+    "Disk: 429MB (down from 722MB — cleanup worked)",
+    "Dashboard: complete redesign shipped with Vercel/Linear aesthetic + framer-motion",
+    "ManualEntry nodes: 2,360 new nodes — manuals pipeline IS producing data"
   ],
   "suggestions": [
     {
-      "title": "Fix and activate the manuals scraper — highest ROI data source",
-      "impact": "Owner manuals contain structured, authoritative repair/maintenance info. Could add thousands of high-quality documents with proper vehicle tagging. This is the differentiator vs just having NHTSA complaints.",
-      "effort": "med"
-    },
-    {
-      "title": "Debug and fix Reddit scraper authentication",
-      "impact": "Reddit has rich community repair knowledge (r/MechanicAdvice, r/Cartalk, etc.). Even 1,000 posts would significantly diversify the knowledge base with real-world troubleshooting.",
+      "title": "Fix metrics to track ManualEntry ingestion properly",
+      "impact": "2,360 ManualEntry nodes exist but metrics show 0 for manuals. Dashboard is underreporting actual progress. Quick win for visibility.",
       "effort": "low"
     },
     {
-      "title": "Add forums scraper sources (forums/ package exists but appears unused)",
-      "impact": "Automotive forums (Bob Is The Oil Guy, Toyota Nation, etc.) are gold mines of repair knowledge with vehicle-specific threading.",
-      "effort": "med"
-    },
-    {
-      "title": "Implement HNSW index optimization for Qdrant",
-      "impact": "indexed_vectors_count=0 means all searches are brute-force. At 2,360 vectors it's fine, but at 50k+ it'll degrade. Set indexing_threshold lower or trigger manual indexing.",
+      "title": "Re-add YouTube scraper to active process set",
+      "impact": "YouTube repair videos are high-value content. Was producing data before but dropped from current scraper config.",
       "effort": "low"
     },
     {
-      "title": "Add a dedup layer before ingestion",
-      "impact": "With NHTSA bulk imports, duplicates are likely. A content-hash dedup check before embedding would save Ollama compute and storage.",
+      "title": "Debug Reddit scraper auth — two days of zero output",
+      "impact": "r/MechanicAdvice alone has millions of posts. Even 100 relevant posts would diversify the knowledge base significantly.",
       "effort": "low"
     },
     {
-      "title": "Implement metrics for embedding throughput and latency",
-      "impact": "Currently blind to why vectors aren't keeping up with docs. Add per-batch timing and success/fail counters to ingest pipeline.",
+      "title": "Lower Qdrant HNSW indexing threshold from 10,000 to 2,000",
+      "impact": "indexed_vectors_count is still 0 — all searches are brute-force scan. At 2,527 vectors it's tolerable, but building the index now ensures smooth scaling.",
+      "effort": "low"
+    },
+    {
+      "title": "Implement relationship creation in the enricher — the graph's core value",
+      "impact": "This transforms the product from 'document search' to 'automotive knowledge graph'. Structured traversal enables queries like 'all known brake issues for 2024 Camry' that flat search can't do well.",
+      "effort": "high"
+    },
+    {
+      "title": "Add embedding progress tracking to dashboard",
+      "impact": "Show vectors/docs ratio on the dashboard so the embedding gap is visible. Currently this critical metric is hidden.",
       "effort": "low"
     }
   ],
   "bugs": [
     {
-      "title": "Duplicate test function TestExtractFixes in iFixit package",
-      "file": "cmd/scraper-sources/ifixit/scraper_coverage_test.go",
-      "line": 168,
-      "detail": "TestExtractFixes is declared in both scraper_test.go:28 and scraper_coverage_test.go:168, causing build failure for the entire test package.",
-      "fix": "Rename the coverage test version to TestExtractFixes_Coverage or merge the test cases into one function."
-    },
-    {
-      "title": "NHTSA test uses stale Complaint struct fields",
-      "file": "cmd/scraper-sources/nhtsa/scraper_test.go",
-      "line": 17,
-      "detail": "Test references MakeName, ModelName, ModelYear, Component fields that no longer exist on the Complaint struct (likely renamed during refactor).",
-      "fix": "Check nhtsa/types.go for current Complaint field names and update test literals at lines 17-20 and 27-30."
-    },
-    {
-      "title": "Graph enricher not creating relationships",
+      "title": "Graph enricher not creating any relationships",
       "file": "engine/graph/enricher.go",
       "line": 0,
-      "detail": "0 relationships in Neo4j despite 1,584 Component nodes and 19,967 ingested docs. The enricher is either not running, not being called from ingest, or failing silently.",
-      "fix": "Trace the call path from ingest/ingest.go → graph enricher. Check if relationship creation Cypher queries are executing. Add logging around MERGE/CREATE relationship calls."
+      "detail": "4,065 nodes, 0 relationships. Persists across two analysis cycles. The enricher is either not invoked from the ingest pipeline or its Cypher queries are silently failing.",
+      "fix": "Add debug logging to enricher. Check if ingest/ingest.go calls the enricher after document processing. Test enricher in isolation with a known document."
     },
     {
-      "title": "Vector embedding not keeping pace with document ingestion",
+      "title": "Embedding stops after initial batch — new docs not embedded",
       "file": "engine/ingest/transform.go",
       "line": 0,
-      "detail": "19,967 docs but only 2,360 vectors. History shows 403 new docs with 0 new vectors in the latest period. The embedding step is either skipping documents or failing.",
-      "fix": "Check if transform.go has a batch size limit or error that causes it to skip embedding. Verify the Ollama embed endpoint is being called for each chunk. Add error logging around the embed+upsert path."
+      "detail": "History shows 932 new docs added today (13:28-13:38) but 0 new vectors in any subsequent snapshot. The embed step runs on first ingest but doesn't pick up new documents on subsequent intervals.",
+      "fix": "Check if transform.go marks documents as 'embedded' and skips them, or if it only processes the initial batch. The 30s interval ingest should embed incrementally."
+    },
+    {
+      "title": "Metrics docs_by_source not populated",
+      "file": "cmd/snapshot-collector/main.go",
+      "line": 0,
+      "detail": "metrics-latest.json shows docs_by_source:{} despite active ingestion from multiple sources. The snapshot collector isn't querying per-source counts.",
+      "fix": "Add a Neo4j or metadata query to count documents by source label in the snapshot collector."
+    },
+    {
+      "title": "Manuals metrics always zero despite 2,360 ManualEntry nodes",
+      "file": "cmd/snapshot-collector/main.go",
+      "line": 0,
+      "detail": "scrapers.manuals shows discovered=0, downloaded=0, ingested=0 but Neo4j has 2,360 ManualEntry nodes. Metrics collector doesn't count ManualEntry labels.",
+      "fix": "Query Neo4j for ManualEntry count and populate the manuals metrics fields."
     }
   ],
   "metrics": {
-    "total_docs": 19967,
-    "total_nodes": 1584,
-    "total_vectors": 2360,
+    "total_docs": 4065,
+    "total_nodes": 4065,
+    "total_vectors": 2527,
     "total_relationships": 0,
-    "error_rate": 0.0012,
+    "error_rate": 0.0057,
     "sources_active": 3,
     "sources_dead": 2,
-    "embedding_ratio": 0.118,
-    "nhtsa_pct": 0.969,
-    "docs_last_5min": 403,
-    "vectors_last_5min": 0
+    "embedding_ratio": 0.622,
+    "docs_last_period": 0,
+    "vectors_last_period": 0
   },
   "strategy": [
-    "IMMEDIATE: Fix the embedding pipeline. Having 88% of documents unembedded means the RAG chatbot is working with ~12% of available knowledge. This is the #1 blocker for product quality.",
-    "IMMEDIATE: Fix the graph. Zero relationships = zero structured reasoning. The chatbot can't answer 'what systems does a 2024 Camry have?' or traverse vehicle hierarchies. This cripples the UX.",
-    "THIS WEEK: Fix both failing test suites. Broken tests erode confidence and block CI. Both fixes are trivial (<30min).",
-    "THIS WEEK: Debug Reddit scraper (likely an auth/config issue). Free source diversity.",
-    "NEXT SPRINT: Activate manuals scraper. This is the strategic differentiator — structured OEM content with proper vehicle tagging would transform the knowledge base from 'NHTSA complaints search' to 'automotive intelligence platform'.",
-    "ARCHITECTURE: The pipeline has a doc-to-vector ratio problem. Either chunking is too aggressive (few chunks per doc) or most docs aren't reaching the embed stage. Profile this path.",
-    "PRODUCT: Consider a data quality score per vehicle. Show users 'we have 45 docs and 120 components for 2024 Camry' vs '2 docs for 2024 Genesis GV70'. Transparency builds trust.",
-    "COST: Ollama at 78% CPU is fine for MVP. At scale, consider batched embedding with GPU scheduling or switching to a faster model. nomic-embed-text is good but check if mxbai-embed-large gives better retrieval quality."
+    "IMMEDIATE: Fix the embedding pipeline for incremental docs. 37.8% of knowledge is invisible to RAG. The ingest process runs every 30s but isn't embedding new arrivals.",
+    "IMMEDIATE: Fix the graph enricher. Two analysis cycles with 0 relationships. This is the difference between 'search engine' and 'knowledge graph'. Without edges, the graph is just expensive storage.",
+    "THIS WEEK: Fix metrics accuracy — docs_by_source empty, manuals showing 0 despite 2,360 nodes. The dashboard is lying about system health. Bad metrics = bad decisions.",
+    "THIS WEEK: Re-add YouTube scraper, debug Reddit auth. Two free data sources sitting idle.",
+    "POSITIVE: Test suite fully green now (was 2 failures). Dashboard redesign shipped. ManualEntry pipeline producing data. Disk cleaned up 40%. The codebase is healthier than 24h ago.",
+    "ARCHITECTURE: The doc count reset (19,967→1,584→4,065) suggests data model instability. Nail down what 'total_docs' means — is it Neo4j nodes? Files on disk? Qdrant points? Conflating these causes confusion.",
+    "PRODUCT: With 8 makes and top vehicles having 30-45 docs each, the coverage is thin but real. Focus depth over breadth — make the 2024 Camry experience excellent before adding more vehicles.",
+    "NEXT: Once embedding + graph relationships work, build a vehicle detail page showing all known issues, components, and related content. That's the MVP demo moment."
+  ],
+  "changes_since_last": [
+    "FIXED: All test suites now passing (ifixit duplicate function + nhtsa stale struct fields resolved)",
+    "NEW: 2,360 ManualEntry nodes appeared in Neo4j — manuals pipeline is producing data",
+    "CHANGED: Total docs dropped from 19,967 to 4,065 (data reset on Feb 26 17:24, then gradual rebuild)",
+    "IMPROVED: Disk usage down from 722MB to 429MB (cleanup of stale build assets)",
+    "SHIPPED: Dashboard complete redesign with Vercel/Linear aesthetic + framer-motion animations",
+    "IMPROVED: Vectors up slightly 2,360→2,527 (+167)",
+    "UNCHANGED: Graph relationships still 0 — no progress on enricher",
+    "UNCHANGED: Reddit scraper still producing 0 posts",
+    "REGRESSION: YouTube scraper removed from active scraper config",
+    "REGRESSION: docs_by_source no longer populated in metrics",
+    "NEW: Bug fixer agent ran 3 times, all reported clean (but missed the metrics bugs)"
   ]
 }
