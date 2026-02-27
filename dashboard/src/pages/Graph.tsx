@@ -1,114 +1,100 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { AlertTriangle } from 'lucide-react';
+import { PageTransition } from '@/components/shared/PageTransition';
+import { InsightCard } from '@/components/shared/InsightCard';
+import { AnimatedCounter } from '@/components/shared/AnimatedCounter';
+import { motion } from 'framer-motion';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Network, AlertCircle } from 'lucide-react';
 import type { DashboardData } from '@/lib/types';
 
-const GRID = 'rgba(255,255,255,0.05)';
-const TICK = '#6b7280';
-
 export function Graph({ data }: { data: DashboardData }) {
-  const { metrics: m, history } = data;
+  const { metrics: m } = data;
   if (!m) return null;
 
   const kg = m.knowledge_graph;
-  const nodeTypeData = Object.entries(kg.nodes_by_type).map(([name, count]) => ({ name, count }));
-  const growthData = history.slice(-20).map(h => ({
-    ts: new Date(h.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    nodes: h.total_nodes,
-    rels: h.new_relations,
-  }));
+  const nodeTypes = Object.entries(kg.nodes_by_type).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
+  const completeness = kg.total_relationships > 0 ? Math.min(100, Math.round((kg.total_relationships / Math.max(1, kg.total_nodes)) * 100)) : 0;
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold">Knowledge Graph</h2>
-      {kg.total_relationships === 0 && (
-        <div className="flex items-center gap-2 p-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-          <AlertTriangle className="h-4 w-4" />
-          <span>CRITICAL: Graph has 0 relationships — completely flat. Enricher needs debugging.</span>
+    <PageTransition>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-100">Knowledge Graph</h1>
+          <p className="text-sm text-zinc-500 mt-1">Graph structure and entity coverage</p>
         </div>
-      )}
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="topology">Topology</TabsTrigger>
-          <TabsTrigger value="growth">Growth</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4 mt-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold">{kg.total_nodes.toLocaleString()}</div><div className="text-xs text-muted-foreground">Nodes</div></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold">{kg.total_relationships}</div><div className="text-xs text-muted-foreground">Relationships</div></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold">{Object.keys(kg.nodes_by_type).length}</div><div className="text-xs text-muted-foreground">Node Types</div></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold">{kg.top_makes.length}</div><div className="text-xs text-muted-foreground">Makes</div></CardContent></Card>
+
+        {/* Critical alert for zero relationships */}
+        {kg.total_relationships === 0 && (
+          <InsightCard severity="critical" title="Graph has ZERO relationships — completely flat"
+            detail="All nodes exist but no edges connect them. The enricher needs debugging. Structured queries are impossible." />
+        )}
+
+        {/* KPI row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: 'Total Nodes', value: kg.total_nodes, color: 'text-zinc-100' },
+            { label: 'Relationships', value: kg.total_relationships, color: kg.total_relationships === 0 ? 'text-red-400' : 'text-zinc-100' },
+            { label: 'Node Types', value: Object.keys(kg.nodes_by_type).length, color: 'text-zinc-100' },
+            { label: 'Completeness', value: completeness, color: completeness < 30 ? 'text-red-400' : 'text-zinc-100' },
+          ].map((kpi, i) => (
+            <motion.div key={kpi.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+              className="rounded-xl border border-white/5 bg-zinc-900/50 p-4">
+              <p className="text-xs text-zinc-500 uppercase tracking-wider">{kpi.label}</p>
+              <p className={`text-2xl font-bold mt-1 ${kpi.color}`}>
+                <AnimatedCounter value={kpi.value} suffix={kpi.label === 'Completeness' ? '%' : ''} />
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Node type breakdown */}
+        {nodeTypes.length > 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+            className="rounded-xl border border-white/5 bg-zinc-900/50 p-5">
+            <h3 className="text-xs text-zinc-500 uppercase tracking-wider mb-4">Nodes by Type</h3>
+            <ResponsiveContainer width="100%" height={Math.max(100, nodeTypes.length * 40)}>
+              <BarChart data={nodeTypes} layout="vertical" margin={{ left: 80 }}>
+                <XAxis type="number" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" tick={{ fill: '#a1a1aa', fontSize: 12 }} axisLine={false} tickLine={false} width={75} />
+                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '12px', color: '#a1a1aa' }} />
+                <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={16} />
+              </BarChart>
+            </ResponsiveContainer>
+          </motion.div>
+        )}
+
+        {/* Top Makes */}
+        <div>
+          <h3 className="text-xs text-zinc-500 uppercase tracking-wider mb-3">Top Makes</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {kg.top_makes.map((make, i) => (
+              <motion.div key={make.name} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.03 }}
+                whileHover={{ y: -2 }}
+                className="rounded-xl border border-white/5 bg-zinc-900/50 p-4">
+                <p className="text-sm font-medium text-zinc-200">{make.name}</p>
+                <p className="text-xl font-bold text-zinc-100 mt-1">{make.documents}</p>
+                <p className="text-xs text-zinc-500">{make.models} models</p>
+              </motion.div>
+            ))}
           </div>
-          {nodeTypeData.length > 0 && (
-            <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm">Node Types</CardTitle></CardHeader>
-              <CardContent>
-                <div className="h-[220px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={nodeTypeData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
-                      <XAxis dataKey="name" tick={{ fill: TICK, fontSize: 12 }} />
-                      <YAxis tick={{ fill: TICK, fontSize: 12 }} />
-                      <Tooltip contentStyle={{ background: '#1f2937', border: 'none', borderRadius: 8, fontSize: 12 }} />
-                      <Bar dataKey="count" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
+        </div>
+
+        {/* Top Vehicles */}
+        <div>
+          <h3 className="text-xs text-zinc-500 uppercase tracking-wider mb-3">Top Vehicles</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {kg.top_vehicles.map((v, i) => (
+              <motion.div key={v.vehicle} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
+                className="rounded-xl border border-white/5 bg-zinc-900/50 p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-zinc-200">{v.vehicle}</p>
+                  <p className="text-xs text-zinc-500">{v.components} components</p>
                 </div>
-              </CardContent>
-            </Card>
-          )}
-          <Card>
-            <CardHeader className="pb-2"><CardTitle className="text-sm">Top Makes</CardTitle></CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader><TableRow><TableHead>Make</TableHead><TableHead className="text-right">Models</TableHead><TableHead className="text-right">Documents</TableHead></TableRow></TableHeader>
-                <TableBody>
-                  {kg.top_makes.map(mk => (
-                    <TableRow key={mk.name}><TableCell>{mk.name}</TableCell><TableCell className="text-right">{mk.models}</TableCell><TableCell className="text-right">{mk.documents.toLocaleString()}</TableCell></TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="topology" className="mt-4">
-          <Card>
-            <CardHeader className="pb-2"><CardTitle className="text-sm">Expected Graph Topology</CardTitle></CardHeader>
-            <CardContent>
-              <div className="flex flex-col items-center gap-2 py-8 text-sm">
-                {['Make', 'Model', 'Year', 'System', 'Component'].map((n, i) => (
-                  <div key={n} className="flex flex-col items-center">
-                    <div className="px-6 py-3 bg-accent rounded-lg font-medium">{n}</div>
-                    {i < 4 && <div className="text-muted-foreground text-lg">↓</div>}
-                  </div>
-                ))}
-              </div>
-              {kg.total_relationships === 0 && <p className="text-center text-xs text-red-400">Currently flat — all nodes are Component with no edges.</p>}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="growth" className="mt-4">
-          <Card>
-            <CardHeader className="pb-2"><CardTitle className="text-sm">Node Growth</CardTitle></CardHeader>
-            <CardContent>
-              <div className="h-[220px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={growthData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
-                    <XAxis dataKey="ts" tick={{ fill: TICK, fontSize: 10 }} />
-                    <YAxis tick={{ fill: TICK, fontSize: 10 }} />
-                    <Tooltip contentStyle={{ background: '#1f2937', border: 'none', borderRadius: 8, fontSize: 12 }} />
-                    <Bar dataKey="nodes" fill="#10b981" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+                <span className="text-lg font-bold text-zinc-100">{v.documents}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </PageTransition>
   );
 }

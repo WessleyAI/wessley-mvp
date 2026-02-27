@@ -1,111 +1,154 @@
-import { Database, Cpu, FileText, Layers } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageTransition } from '@/components/shared/PageTransition';
 import { KPICard } from '@/components/shared/KPICard';
+import { HealthRing } from '@/components/shared/HealthRing';
+import { StatusPill } from '@/components/shared/StatusPill';
+import { InsightCard } from '@/components/shared/InsightCard';
+import { motion } from 'framer-motion';
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { Database, Layers, FileText, AlertTriangle, Radio } from 'lucide-react';
 import type { DashboardData } from '@/lib/types';
-import { formatCompact, formatPercent } from '@/lib/format';
+import { timeAgo } from '@/lib/format';
 import { generateInsights } from '@/lib/insights';
 
-const CHART_GRID = 'rgba(255,255,255,0.05)';
-const CHART_TICK = '#6b7280';
+const SOURCE_COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ef4444'];
 
 export function Overview({ data }: { data: DashboardData }) {
-  const { metrics: m, analysis } = data;
+  const { metrics: m, analysis, history } = data;
   if (!m) return null;
 
   const insights = generateInsights(m);
-  const embRatio = m.vector_store.total_vectors / Math.max(1, m.ingestion.total_docs_ingested);
   const errRate = m.ingestion.total_errors / Math.max(1, m.ingestion.total_docs_ingested);
+  const criticals = analysis?.critical.length ?? 0;
+  const warnings = analysis?.warnings.length ?? 0;
+  const healthScore = Math.max(0, 100 - criticals * 10 - warnings * 5);
 
-  const healthItems = [
-    { label: 'Neo4j', ok: m.infrastructure.neo4j.status === 'connected' },
-    { label: 'Qdrant', ok: m.infrastructure.qdrant.status === 'connected' },
-    { label: 'Ollama', ok: m.infrastructure.ollama.status === 'connected' },
-    { label: 'Relationships', ok: m.knowledge_graph.total_relationships > 0 },
+  const scraperSources = [
+    { name: 'NHTSA', value: m.scrapers.nhtsa.total_docs ?? 0 },
+    { name: 'iFixit', value: m.scrapers.ifixit.total_docs ?? 0 },
+    { name: 'Reddit', value: m.scrapers.reddit.total_posts ?? 0 },
+    { name: 'YouTube', value: m.scrapers.youtube.total_docs ?? 0 },
+    { name: 'Manuals', value: m.scrapers.manuals.ingested },
+  ].filter(s => s.value > 0);
+
+  // If no scraper data, use analysis metrics
+  if (scraperSources.length === 0 && analysis) {
+    scraperSources.push(
+      { name: 'NHTSA', value: Math.round(analysis.metrics.total_docs * analysis.metrics.nhtsa_pct) },
+      { name: 'Other', value: Math.round(analysis.metrics.total_docs * (1 - analysis.metrics.nhtsa_pct)) },
+    );
+  }
+
+  const topMakes = m.knowledge_graph.top_makes.slice(0, 6);
+  const docsHistory = history.map(h => h.total_docs);
+  const vectorsHistory = history.map(h => h.total_vectors);
+  const nodesHistory = history.map(h => h.total_nodes);
+
+  const infra = [
+    { label: 'Neo4j', status: m.infrastructure.neo4j.status },
+    { label: 'Qdrant', status: m.infrastructure.qdrant.status },
+    { label: 'Ollama', status: m.infrastructure.ollama.status },
   ];
 
-  const sourceData = Object.entries(m.scrapers)
-    .filter(([k]) => k !== 'manuals')
-    .map(([k, v]) => ({
-      name: k,
-      docs: 'total_docs' in v ? (v.total_docs ?? 0) : ('total_posts' in v ? (v.total_posts ?? 0) : 0),
-    }));
-
-  const makeData = m.knowledge_graph.top_makes.slice(0, 8).map(mk => ({ name: mk.name, docs: mk.documents }));
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold mb-1">Dashboard Overview</h2>
-        <p className="text-sm text-muted-foreground">
-          {formatCompact(m.ingestion.total_docs_ingested)} docs ingested across {Object.keys(m.scrapers).length - 1} sources •
-          {' '}{formatCompact(m.knowledge_graph.total_nodes)} graph nodes •
-          {' '}{formatCompact(m.vector_store.total_vectors)} vectors
-        </p>
-      </div>
+    <PageTransition>
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-100">Dashboard</h1>
+          <p className="text-sm text-zinc-500 mt-1">Last updated {timeAgo(m.timestamp)}</p>
+        </div>
 
-      <div className="flex flex-wrap gap-2">
-        {healthItems.map(h => (
-          <Badge key={h.label} variant={h.ok ? 'default' : 'destructive'}>{h.label}: {h.ok ? '✓' : '✗'}</Badge>
-        ))}
-      </div>
+        {/* KPIs */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          <KPICard title="Total Nodes" value={m.knowledge_graph.total_nodes} icon={<Database className="h-4 w-4" />} sparkData={nodesHistory} />
+          <KPICard title="Vectors" value={m.vector_store.total_vectors} icon={<Layers className="h-4 w-4" />} sparkData={vectorsHistory} sparkColor="#3b82f6" />
+          <KPICard title="Docs Ingested" value={m.ingestion.total_docs_ingested} icon={<FileText className="h-4 w-4" />} sparkData={docsHistory} sparkColor="#8b5cf6" />
+          <KPICard title="Error Rate" value={errRate * 100} suffix="%" decimals={2} icon={<AlertTriangle className="h-4 w-4" />} sparkColor={errRate > 0.01 ? '#ef4444' : '#10b981'} />
+          <KPICard title="Active Sources" value={analysis?.metrics.sources_active ?? 0} icon={<Radio className="h-4 w-4" />} />
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <KPICard title="Documents" value={formatCompact(m.ingestion.total_docs_ingested)} icon={FileText} subtitle={`${m.ingestion.total_errors} errors`} trend={formatPercent(1 - errRate) + ' success'} trendUp />
-        <KPICard title="Graph Nodes" value={formatCompact(m.knowledge_graph.total_nodes)} icon={Share2Icon} subtitle={`${m.knowledge_graph.total_relationships} relationships`} trend={m.knowledge_graph.total_relationships === 0 ? '⚠ Flat' : undefined} trendUp={false} />
-        <KPICard title="Vectors" value={formatCompact(m.vector_store.total_vectors)} icon={Database} subtitle={m.vector_store.collection} trend={formatPercent(embRatio) + ' embedded'} trendUp={embRatio > 0.5} />
-        <KPICard title="Makes Tracked" value={String(m.knowledge_graph.top_makes.length)} icon={Layers} subtitle={`${m.knowledge_graph.top_vehicles.length} top vehicles`} />
-      </div>
+        {/* Health + Source Diversity + Infra */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Health Ring */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+            className="rounded-xl border border-white/5 bg-zinc-900/50 p-5 flex flex-col items-center justify-center">
+            <HealthRing score={healthScore} size={140} />
+            <p className="text-xs text-zinc-500 mt-3">{criticals} critical · {warnings} warnings</p>
+          </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="lg:col-span-1">
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Insights</CardTitle></CardHeader>
-          <CardContent className="space-y-2">
-            {insights.map((ins, i) => (
-              <div key={i} className={`text-xs p-2 rounded ${ins.level === 'critical' ? 'bg-red-500/10 text-red-400' : ins.level === 'warning' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
-                {ins.message}
+          {/* Source Diversity */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+            className="rounded-xl border border-white/5 bg-zinc-900/50 p-5">
+            <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-3">Source Diversity</h3>
+            {scraperSources.length > 0 ? (
+              <ResponsiveContainer width="100%" height={160}>
+                <PieChart>
+                  <Pie data={scraperSources} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={65} paddingAngle={2}>
+                    {scraperSources.map((_, i) => <Cell key={i} fill={SOURCE_COLORS[i % SOURCE_COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '12px', color: '#a1a1aa' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-sm text-zinc-600 text-center py-10">No source data</p>
+            )}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {scraperSources.map((s, i) => (
+                <span key={s.name} className="text-[10px] text-zinc-500 flex items-center gap-1">
+                  <span className="h-2 w-2 rounded-full" style={{ background: SOURCE_COLORS[i % SOURCE_COLORS.length] }} />
+                  {s.name}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Infrastructure */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+            className="rounded-xl border border-white/5 bg-zinc-900/50 p-5">
+            <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-4">Infrastructure</h3>
+            <div className="space-y-3">
+              {infra.map(({ label, status }) => (
+                <div key={label} className="flex items-center justify-between">
+                  <span className="text-sm text-zinc-300">{label}</span>
+                  <StatusPill status={status} />
+                </div>
+              ))}
+              <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                <span className="text-sm text-zinc-300">Relationships</span>
+                <StatusPill status={m.knowledge_graph.total_relationships > 0 ? 'connected' : 'error'} />
               </div>
-            ))}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Sources</CardTitle></CardHeader>
-          <CardContent>
-            <div className="h-[220px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={sourceData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} />
-                  <XAxis dataKey="name" tick={{ fill: CHART_TICK, fontSize: 12 }} />
-                  <YAxis tick={{ fill: CHART_TICK, fontSize: 12 }} />
-                  <Tooltip contentStyle={{ background: '#1f2937', border: 'none', borderRadius: 8, fontSize: 12 }} />
-                  <Bar dataKey="docs" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm">Top Makes</CardTitle></CardHeader>
-          <CardContent>
-            <div className="h-[220px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={makeData} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} />
-                  <XAxis type="number" tick={{ fill: CHART_TICK, fontSize: 12 }} />
-                  <YAxis dataKey="name" type="category" width={70} tick={{ fill: CHART_TICK, fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: '#1f2937', border: 'none', borderRadius: 8, fontSize: 12 }} />
-                  <Bar dataKey="docs" fill="#10b981" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+          </motion.div>
+        </div>
 
-function Share2Icon(props: React.SVGProps<SVGSVGElement>) {
-  return <Cpu {...props} />;
+        {/* Top Makes Chart */}
+        {topMakes.length > 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+            className="rounded-xl border border-white/5 bg-zinc-900/50 p-5">
+            <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-4">Top Makes by Documents</h3>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={topMakes} layout="vertical" margin={{ left: 60 }}>
+                <XAxis type="number" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" tick={{ fill: '#a1a1aa', fontSize: 12 }} axisLine={false} tickLine={false} width={55} />
+                <Tooltip contentStyle={{ background: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '12px', color: '#a1a1aa' }} />
+                <Bar dataKey="documents" fill="#10b981" radius={[0, 4, 4, 0]} barSize={16} />
+              </BarChart>
+            </ResponsiveContainer>
+          </motion.div>
+        )}
+
+        {/* Insights */}
+        {insights.length > 0 && (
+          <div>
+            <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-3">Insights</h3>
+            <div className="space-y-2">
+              {insights.map((ins, i) => (
+                <InsightCard key={i} index={i} severity={ins.level === 'info' ? 'healthy' : ins.level} title={ins.message} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </PageTransition>
+  );
 }

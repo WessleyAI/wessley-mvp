@@ -147,33 +147,5 @@
     "total_docs": 1705,
     "total_vectors": 2527,
     "total_nodes": 1705
-  },
-  {
-    "timestamp": "2026-02-27T12:58:57Z",
-    "period": "5m",
-    "new_docs": 200,
-    "new_nodes": 200,
-    "new_relations": 0,
-    "new_vectors": 0,
-    "errors_delta": 0,
-    "docs_by_source": {},
-    "new_vehicles": [],
-    "total_docs": 1905,
-    "total_vectors": 2527,
-    "total_nodes": 1905
-  },
-  {
-    "timestamp": "2026-02-27T13:08:58Z",
-    "period": "5m",
-    "new_docs": 200,
-    "new_nodes": 200,
-    "new_relations": 0,
-    "new_vectors": 0,
-    "errors_delta": 0,
-    "docs_by_source": {},
-    "new_vehicles": [],
-    "total_docs": 2105,
-    "total_vectors": 2527,
-    "total_nodes": 2105
   }
 ]

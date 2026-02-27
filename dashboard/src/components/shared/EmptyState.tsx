@@ -1,19 +1,10 @@
-import type { LucideIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Inbox } from 'lucide-react';
 
-interface Props {
-  icon: LucideIcon;
-  message: string;
-  action?: string;
-  onAction?: () => void;
-}
-
-export function EmptyState({ icon: Icon, message, action, onAction }: Props) {
+export function EmptyState({ message = 'No data available' }: { message?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
-      <Icon className="h-12 w-12 mb-4 opacity-40" />
-      <p className="text-sm mb-4">{message}</p>
-      {action && onAction && <Button variant="outline" size="sm" onClick={onAction}>{action}</Button>}
+    <div className="flex flex-col items-center justify-center py-16 text-zinc-600">
+      <Inbox className="h-10 w-10 mb-3" />
+      <p className="text-sm">{message}</p>
     </div>
   );
 }

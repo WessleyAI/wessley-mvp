@@ -1,31 +1,47 @@
-import { Card, CardContent } from '@/components/ui/card';
-import type { LucideIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { AnimatedCounter } from './AnimatedCounter';
+import { SparklineChart } from './SparklineChart';
+import type { ReactNode } from 'react';
 
-interface Props {
+export function KPICard({ title, value, suffix, prefix, decimals, delta, deltaLabel, sparkData, sparkColor, icon }: {
   title: string;
-  value: string;
-  subtitle?: string;
-  icon: LucideIcon;
-  trend?: string;
-  trendUp?: boolean;
-}
-
-export function KPICard({ title, value, subtitle, icon: Icon, trend, trendUp }: Props) {
+  value: number;
+  suffix?: string;
+  prefix?: string;
+  decimals?: number;
+  delta?: number;
+  deltaLabel?: string;
+  sparkData?: number[];
+  sparkColor?: string;
+  icon?: ReactNode;
+}) {
   return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-muted-foreground">{title}</span>
-          <Icon className="h-4 w-4 text-muted-foreground" />
-        </div>
-        <div className="text-2xl font-bold">{value}</div>
-        {(subtitle || trend) && (
-          <div className="flex items-center gap-2 mt-1">
-            {trend && <span className={`text-xs ${trendUp ? 'text-emerald-500' : 'text-red-400'}`}>{trend}</span>}
-            {subtitle && <span className="text-xs text-muted-foreground">{subtitle}</span>}
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.3 }}
+      className="rounded-xl border border-white/5 bg-zinc-900/50 p-4 backdrop-blur-sm"
+    >
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">{title}</span>
+        {icon && <span className="text-zinc-600">{icon}</span>}
+      </div>
+      <div className="text-2xl font-bold text-zinc-100">
+        <AnimatedCounter value={value} suffix={suffix} prefix={prefix} decimals={decimals} />
+      </div>
+      <div className="flex items-center justify-between mt-2">
+        {delta !== undefined ? (
+          <span className={`text-xs font-medium ${delta >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+            {delta >= 0 ? '↑' : '↓'} {Math.abs(delta).toLocaleString()} {deltaLabel ?? ''}
+          </span>
+        ) : <span />}
+        {sparkData && sparkData.length > 1 && (
+          <div className="w-20">
+            <SparklineChart data={sparkData} color={sparkColor} height={24} />
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </motion.div>
   );
 }

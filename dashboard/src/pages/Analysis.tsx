@@ -1,97 +1,111 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, AlertCircle, CheckCircle, Lightbulb, Bug, Target } from 'lucide-react';
-import type { DashboardData } from '@/lib/types';
+import { PageTransition } from '@/components/shared/PageTransition';
+import { InsightCard } from '@/components/shared/InsightCard';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { motion } from 'framer-motion';
+import { Clock, CheckCircle, Lightbulb, Target } from 'lucide-react';
+import type { DashboardData } from '@/lib/types';
+import { timeAgo } from '@/lib/format';
+
+const effortColors: Record<string, string> = { low: 'text-emerald-400 bg-emerald-500/10', med: 'text-amber-400 bg-amber-500/10', high: 'text-red-400 bg-red-500/10' };
+const impactLabels: Record<string, string> = { low: 'Low Impact', med: 'Med Impact', high: 'High Impact' };
 
 export function Analysis({ data }: { data: DashboardData }) {
   const { analysis: a } = data;
-  if (!a) return <EmptyState icon={AlertCircle} message="No analysis data available." />;
+  if (!a) return <EmptyState message="No analysis data available" />;
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-bold">Analysis</h2>
+    <PageTransition>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-100">Analysis</h1>
+          <div className="flex items-center gap-2 mt-1">
+            <Clock className="h-3.5 w-3.5 text-zinc-500" />
+            <p className="text-sm text-zinc-500">Updated {timeAgo(a.timestamp)}</p>
+          </div>
+        </div>
 
-      {a.critical.length > 0 && (
-        <Card className="border-red-500/20">
-          <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-red-400" /> Critical ({a.critical.length})</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {a.critical.map((c, i) => (
-              <div key={i} className="p-3 rounded-md bg-red-500/5 space-y-1">
-                <div className="text-sm font-medium text-red-400">{c.title}</div>
-                <div className="text-xs text-muted-foreground">{c.detail}</div>
-                <div className="text-xs text-emerald-400">Fix: {c.fix}</div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+        {/* Critical */}
+        {a.critical.length > 0 && (
+          <div>
+            <h2 className="text-xs font-medium text-red-400 uppercase tracking-wider mb-3">Critical ({a.critical.length})</h2>
+            <div className="space-y-2">
+              {a.critical.map((item, i) => (
+                <InsightCard key={i} index={i} severity="critical" title={item.title} detail={item.detail} />
+              ))}
+            </div>
+          </div>
+        )}
 
-      {a.warnings.length > 0 && (
-        <Card className="border-yellow-500/20">
-          <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><AlertCircle className="h-4 w-4 text-yellow-400" /> Warnings ({a.warnings.length})</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {a.warnings.map((w, i) => (
-              <div key={i} className="p-3 rounded-md bg-yellow-500/5 space-y-1">
-                <div className="text-sm font-medium text-yellow-400">{w.title}</div>
-                <div className="text-xs text-muted-foreground">{w.detail}</div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+        {/* Warnings */}
+        {a.warnings.length > 0 && (
+          <div>
+            <h2 className="text-xs font-medium text-amber-400 uppercase tracking-wider mb-3">Warnings ({a.warnings.length})</h2>
+            <div className="space-y-2">
+              {a.warnings.map((item, i) => (
+                <InsightCard key={i} index={i} severity="warning" title={item.title} detail={item.detail} />
+              ))}
+            </div>
+          </div>
+        )}
 
-      {a.healthy.length > 0 && (
-        <Card className="border-emerald-500/20">
-          <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><CheckCircle className="h-4 w-4 text-emerald-400" /> Healthy ({a.healthy.length})</CardTitle></CardHeader>
-          <CardContent>
-            <ul className="space-y-1">
-              {a.healthy.map((h, i) => <li key={i} className="text-xs text-emerald-400">✓ {h}</li>)}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
+        {/* Healthy */}
+        {a.healthy.length > 0 && (
+          <div>
+            <h2 className="text-xs font-medium text-emerald-400 uppercase tracking-wider mb-3">Healthy ({a.healthy.length})</h2>
+            <div className="space-y-1.5">
+              {a.healthy.map((item, i) => (
+                <motion.div key={i} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
+                  className="flex items-center gap-2 text-sm text-zinc-300">
+                  <CheckCircle className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                  <span>{item}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
 
-      {a.suggestions.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Lightbulb className="h-4 w-4 text-blue-400" /> Suggestions</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {a.suggestions.map((s, i) => (
-              <div key={i} className="p-3 rounded-md bg-blue-500/5 space-y-1">
-                <div className="flex items-center gap-2"><span className="text-sm font-medium">{s.title}</span><Badge variant="secondary">{s.effort}</Badge></div>
-                <div className="text-xs text-muted-foreground">{s.impact}</div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+        {/* Suggestions */}
+        {a.suggestions.length > 0 && (
+          <div>
+            <h2 className="text-xs font-medium text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Lightbulb className="h-3.5 w-3.5" /> Suggestions ({a.suggestions.length})
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {a.suggestions.map((s, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                  whileHover={{ y: -2 }}
+                  className="rounded-xl border border-white/5 bg-zinc-900/50 p-4">
+                  <p className="text-sm font-medium text-zinc-200 mb-2">{s.title}</p>
+                  <p className="text-xs text-zinc-500 mb-3 line-clamp-2">{s.impact}</p>
+                  <div className="flex gap-2">
+                    <span className={`text-[10px] font-medium rounded px-2 py-0.5 ${effortColors[s.effort] ?? effortColors.med}`}>
+                      {s.effort.toUpperCase()} effort
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
 
-      {a.bugs.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Bug className="h-4 w-4 text-orange-400" /> Bugs ({a.bugs.length})</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {a.bugs.map((b, i) => (
-              <div key={i} className="p-3 rounded-md bg-orange-500/5 space-y-1">
-                <div className="text-sm font-medium">{b.title}</div>
-                <div className="text-xs font-mono text-muted-foreground">{b.file}:{b.line}</div>
-                <div className="text-xs text-muted-foreground">{b.detail}</div>
-                <div className="text-xs text-emerald-400">Fix: {b.fix}</div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
-      {a.strategy.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Target className="h-4 w-4 text-purple-400" /> Strategy</CardTitle></CardHeader>
-          <CardContent>
-            <ol className="space-y-2 list-decimal list-inside">
-              {a.strategy.map((s, i) => <li key={i} className="text-xs text-muted-foreground">{s}</li>)}
-            </ol>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+        {/* Strategy */}
+        {a.strategy.length > 0 && (
+          <div>
+            <h2 className="text-xs font-medium text-zinc-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Target className="h-3.5 w-3.5" /> Strategy
+            </h2>
+            <div className="rounded-xl border border-white/5 bg-zinc-900/50 p-5 space-y-3">
+              {a.strategy.map((s, i) => (
+                <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
+                  className="flex gap-3">
+                  <span className="text-xs font-bold text-zinc-600 mt-0.5 shrink-0 w-5 text-right">{i + 1}</span>
+                  <p className="text-sm text-zinc-300">{s}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </PageTransition>
   );
 }
