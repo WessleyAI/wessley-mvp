@@ -1,32 +1,42 @@
 [
   {
-    "time": "2026-02-27T18:08:57Z",
+    "time": "2026-02-27T18:18:57Z",
     "category": "system",
-    "message": "scraper-reddit: running"
+    "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-27T18:08:57Z",
+    "time": "2026-02-27T18:18:57Z",
     "category": "system",
     "message": "scraper-sources: STOPPED"
   },
   {
-    "time": "2026-02-27T18:08:57Z",
+    "time": "2026-02-27T18:18:57Z",
     "category": "system",
-    "message": "ingest: running"
+    "message": "ingest: STOPPED"
   },
   {
-    "time": "2026-02-27T18:08:57Z",
+    "time": "2026-02-27T18:18:57Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 8 hours"
   },
   {
-    "time": "2026-02-27T18:08:57Z",
+    "time": "2026-02-27T18:18:57Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 8 hours"
   },
   {
-    "time": "2026-02-27T18:08:57Z",
+    "time": "2026-02-27T18:18:57Z",
     "category": "system",
-    "message": "Data directory: 0B\t/tmp/wessley-data"
+    "message": "Data directory: 12K\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-02-27T18:18:17Z",
+    "category": "ingestion",
+    "message": "File test-nhtsa-002.json (0KB) processed"
+  },
+  {
+    "time": "2026-02-27T18:18:17Z",
+    "category": "ingestion",
+    "message": "File test-nhtsa-001.json (0KB) processed"
   }
 ]

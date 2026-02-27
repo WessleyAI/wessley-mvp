@@ -1,13 +1,24 @@
 {
-  "timestamp": "2026-02-27T18:08:57Z",
+  "timestamp": "2026-02-27T18:18:57Z",
   "knowledge_graph": {
-    "total_nodes": 4065,
-    "total_relationships": 0,
+    "total_nodes": 4076,
+    "total_relationships": 9,
     "nodes_by_type": {
-      "Component": 1705,
-      "ManualEntry": 2360
+      "Component": 1707,
+      "ManualEntry": 2360,
+      "Make": 2,
+      "VehicleModel": 2,
+      "ModelYear": 2,
+      "System": 2,
+      "Subsystem": 1
     },
-    "relationships_by_type": {},
+    "relationships_by_type": {
+      "HAS_MODEL": 2,
+      "OF_MODEL": 2,
+      "HAS_SYSTEM": 2,
+      "HAS_SUBSYSTEM": 1,
+      "DOCUMENTED_IN": 2
+    },
     "top_makes": [
       {
         "name": "Toyota",
@@ -80,37 +91,39 @@
     "recent_vehicles": []
   },
   "vector_store": {
-    "total_vectors": 2527,
+    "total_vectors": 2529,
     "collection": "wessley",
     "dimensions": 768,
     "status": "green"
   },
   "ingestion": {
-    "total_docs_ingested": 4065,
+    "total_docs_ingested": 4076,
     "total_errors": 23,
-    "docs_by_source": {},
-    "last_ingestion": "2026-02-27T18:08:57Z",
-    "files_processed": 0
+    "docs_by_source": {
+      "nhtsa": 2
+    },
+    "last_ingestion": "2026-02-27T18:18:57Z",
+    "files_processed": 2
   },
   "scrapers": {
     "reddit": {
-      "status": "running",
-      "last_scrape": "2026-02-27T18:08:57Z",
+      "status": "stopped",
+      "last_scrape": "2026-02-27T18:18:57Z",
       "total_posts": 0
     },
     "nhtsa": {
       "status": "stopped",
-      "last_scrape": "2026-02-27T18:08:57Z",
-      "total_docs": 0
+      "last_scrape": "2026-02-27T18:18:57Z",
+      "total_docs": 2
     },
     "ifixit": {
       "status": "stopped",
-      "last_scrape": "2026-02-27T18:08:57Z",
+      "last_scrape": "2026-02-27T18:18:57Z",
       "total_docs": 0
     },
     "youtube": {
       "status": "stopped",
-      "last_scrape": "2026-02-27T18:08:57Z",
+      "last_scrape": "2026-02-27T18:18:57Z",
       "total_docs": 0
     },
     "manuals": {
@@ -127,7 +140,7 @@
     },
     "qdrant": {
       "status": "connected",
-      "vectors": 2527
+      "vectors": 2529
     },
     "ollama": {
       "status": "connected",
