@@ -59,37 +59,45 @@
     "summary": "Fixed all 3 test suite build failures: iFixit duplicate function, NHTSA stale struct fields, graph flaky test. All packages now compile and pass."
   },
   {
-    "timestamp": "2026-02-27T13:19:53Z",
+    "timestamp": "2026-02-27T13:21:57Z",
     "analysis_timestamp": "2026-02-26T19:10:00+02:00",
     "fixed": [],
     "skipped": [
       {
-        "title": "Graph enricher not creating relationships",
-        "reason": "Architecture/runtime issue \u2014 enricher logic needs manual debugging with Neo4j, not a code fix"
+        "title": "Knowledge graph has ZERO relationships",
+        "reason": "Architectural/runtime issue \u2014 enricher needs debugging against live Neo4j, not a code fix"
       },
       {
-        "title": "Embedding pipeline stalled (88.2% unembedded)",
-        "reason": "Runtime issue \u2014 Ollama/Qdrant pipeline debugging needed, no obvious code bug to fix"
+        "title": "Embedding pipeline stalled at 11.8%",
+        "reason": "Runtime pipeline issue \u2014 requires live debugging of Ollama embed calls and Qdrant upserts"
       },
       {
         "title": "Reddit scraper producing zero posts",
-        "reason": "Likely auth/config issue, not a code bug"
+        "reason": "Runtime/auth config issue, not a code bug"
       },
       {
         "title": "Manuals scraper inactive",
-        "reason": "Needs configuration/activation, not a code fix"
+        "reason": "Config/activation issue, not a code bug"
+      },
+      {
+        "title": "Graph enricher not creating relationships",
+        "reason": "Same as zero-relationships critical \u2014 needs live infrastructure debugging"
+      },
+      {
+        "title": "Vector embedding not keeping pace",
+        "reason": "Same as embedding pipeline stalled \u2014 runtime issue"
       }
     ],
     "tests_before": {
-      "passed": 17,
+      "passed": 18,
       "failed": 0
     },
     "tests_after": {
-      "passed": 17,
+      "passed": 18,
       "failed": 0
     },
     "build_status": "pass",
-    "commit": "none \u2014 no code changes needed",
-    "summary": "All clear: build passes, all 17 test suites green. Previously reported test bugs (ifixit duplicate, nhtsa stale fields) were already fixed in prior run. Remaining issues are runtime/config (graph enricher, embedding pipeline, Reddit/manuals scrapers)."
+    "commit": null,
+    "summary": "No code fixes needed \u2014 all tests pass, build clean. Previously flagged test issues (ifixit duplicate, nhtsa stale fields) already resolved. Remaining issues are runtime/infrastructure (enricher, embeddings, scrapers)."
   }
 ]
