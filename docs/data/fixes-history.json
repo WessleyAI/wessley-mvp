@@ -83,5 +83,48 @@
     "build_status": "pass",
     "commit": "c3986e0",
     "summary": "Fixed 4 bugs: NHTSA VehicleInfo propagation for graph relationships, embedding retry on failure, Reddit rate limiting compliance, dashboard metrics accuracy"
+  },
+  {
+    "timestamp": "2026-02-27T17:21:52Z",
+    "analysis_timestamp": "2026-02-26T19:10:00+02:00",
+    "fixed": [
+      {
+        "title": "Reddit scraper test uses stale user agent string",
+        "category": "test",
+        "detail": "TestHttpGet_UserAgent expected \"wessley-scraper\" but actual UA was updated to \"wessley-ai:v1.0\". Updated test assertion to match.",
+        "files_changed": [
+          "cmd/scraper-reddit/reddit/scraper_coverage_test.go"
+        ]
+      }
+    ],
+    "skipped": [
+      {
+        "title": "Knowledge graph has ZERO relationships",
+        "reason": "Runtime/config issue, not a code bug. Enricher code exists but needs runtime debugging of Neo4j query execution."
+      },
+      {
+        "title": "Embedding pipeline stalled (11.8%)",
+        "reason": "Runtime issue \u2014 code compiles and previous run already added retry logic. Needs monitoring."
+      },
+      {
+        "title": "Reddit scraper producing zero posts",
+        "reason": "Getting HTTP 500/429 from Reddit API. Auth/rate-limit issue, not a code bug."
+      },
+      {
+        "title": "Manuals scraper inactive",
+        "reason": "Needs activation/configuration, not a code fix."
+      }
+    ],
+    "tests_before": {
+      "passed": 15,
+      "failed": 1
+    },
+    "tests_after": {
+      "passed": 16,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": "833ca32",
+    "summary": "Fixed Reddit scraper test (stale UA assertion). All test suites now pass. Previously reported ifixit/nhtsa bugs already fixed in prior run."
   }
 ]
