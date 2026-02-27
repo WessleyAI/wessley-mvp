@@ -262,16 +262,27 @@ func (c *Crawler) Ingest(ctx context.Context, outputDir string, limit int) (int,
 			}
 		}
 
+		// Clean up PDF to save disk — we keep the Archive.org URL in Neo4j
+		pdfPath := entry.LocalPath
 		now := time.Now()
 		entry.IngestedAt = &now
 		entry.Status = "ingested"
 		entry.PageCount = len(sections)
+		entry.LocalPath = "" // clear local path — PDF will be deleted
 		if err := c.graph.SaveManualEntry(ctx, entry); err != nil {
 			log.Printf("manuals: save ingested entry error: %v", err)
 			continue
 		}
+		// Delete PDF after successful ingestion + graph save
+		if pdfPath != "" {
+			if err := os.Remove(pdfPath); err != nil && !os.IsNotExist(err) {
+				log.Printf("manuals: cleanup pdf %s: %v", pdfPath, err)
+			} else {
+				log.Printf("manuals: deleted pdf %s (kept URL: %s)", pdfPath, entry.URL)
+			}
+		}
 		ingested++
-		log.Printf("manuals: ingested %s → %d sections", entry.LocalPath, len(sections))
+		log.Printf("manuals: ingested %s → %d sections", entry.URL, len(sections))
 	}
 	return ingested, nil
 }
