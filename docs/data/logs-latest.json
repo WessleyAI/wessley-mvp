@@ -1,33 +1,33 @@
 [
   {
-    "time": "2026-02-27T21:08:57Z",
+    "time": "2026-02-27T21:18:58Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-27T21:08:57Z",
+    "time": "2026-02-27T21:18:58Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-27T21:08:57Z",
+    "time": "2026-02-27T21:18:58Z",
     "category": "system",
     "message": "ingest: STOPPED"
   },
   {
-    "time": "2026-02-27T21:08:57Z",
+    "time": "2026-02-27T21:18:58Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 11 hours"
   },
   {
-    "time": "2026-02-27T21:08:57Z",
+    "time": "2026-02-27T21:18:58Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 11 hours"
   },
   {
-    "time": "2026-02-27T21:08:57Z",
+    "time": "2026-02-27T21:18:58Z",
     "category": "system",
-    "message": "Data directory: 4.7M\t/tmp/wessley-data"
+    "message": "Data directory: 93M\t/tmp/wessley-data"
   },
   {
     "time": "2026-02-27T21:03:28Z",
