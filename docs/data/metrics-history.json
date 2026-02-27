@@ -149,17 +149,17 @@
     "total_nodes": 1705
   },
   {
-    "timestamp": "2026-02-27T13:18:57Z",
+    "timestamp": "2026-02-27T13:28:58Z",
     "period": "5m",
-    "new_docs": 1028,
-    "new_nodes": 1028,
+    "new_docs": 752,
+    "new_nodes": 752,
     "new_relations": 0,
     "new_vectors": 0,
     "errors_delta": 0,
     "docs_by_source": {},
     "new_vehicles": [],
-    "total_docs": 3133,
+    "total_docs": 3885,
     "total_vectors": 2527,
-    "total_nodes": 3133
+    "total_nodes": 3885
   }
 ]
