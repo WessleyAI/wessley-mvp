@@ -20,6 +20,7 @@ import (
 	"github.com/WessleyAI/wessley-mvp/engine/scraper"
 	"github.com/WessleyAI/wessley-mvp/engine/semantic"
 	"github.com/WessleyAI/wessley-mvp/pkg/fn"
+	"github.com/WessleyAI/wessley-mvp/pkg/vehiclenlp"
 	"github.com/WessleyAI/wessley-mvp/pkg/metrics"
 	"github.com/WessleyAI/wessley-mvp/pkg/ollama"
 	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
@@ -341,6 +342,20 @@ func processFile(ctx context.Context, path string, pipeline fn.Stage[scraper.Scr
 			post := raw.toScrapedPost()
 			if post.SourceID != "" && post.Content != "" {
 				posts = append(posts, post)
+			}
+		}
+	}
+
+	// NLP vehicle extraction for posts without structured vehicle info
+	for i := range posts {
+		if posts[i].Metadata.VehicleInfo == nil {
+			text := posts[i].Title + " " + posts[i].Content
+			if match := vehiclenlp.ExtractBest(text); match != nil {
+				posts[i].Metadata.VehicleInfo = &scraper.VehicleInfo{
+					Make:  match.Make,
+					Model: match.Model,
+					Year:  match.Year,
+				}
 			}
 		}
 	}
