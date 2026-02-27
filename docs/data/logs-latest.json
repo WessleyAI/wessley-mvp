@@ -1,82 +1,82 @@
 [
   {
-    "time": "2026-02-27T21:18:58Z",
+    "time": "2026-02-27T21:28:57Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-27T21:18:58Z",
+    "time": "2026-02-27T21:28:57Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-27T21:18:58Z",
+    "time": "2026-02-27T21:28:57Z",
     "category": "system",
     "message": "ingest: STOPPED"
   },
   {
-    "time": "2026-02-27T21:18:58Z",
+    "time": "2026-02-27T21:28:57Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 11 hours"
   },
   {
-    "time": "2026-02-27T21:18:58Z",
+    "time": "2026-02-27T21:28:57Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 11 hours"
   },
   {
-    "time": "2026-02-27T21:18:58Z",
+    "time": "2026-02-27T21:28:57Z",
     "category": "system",
     "message": "Data directory: 93M\t/tmp/wessley-data"
   },
   {
-    "time": "2026-02-27T21:03:28Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File ifixit-1772226208638623000.json (4KB) processed"
+    "message": "File manual-honda-civic-1996-s011-f60f5b04.json (2KB) processed"
   },
   {
-    "time": "2026-02-27T21:03:27Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File ifixit-1772226207701585000.json (4KB) processed"
+    "message": "File manual-honda-civic-1996-s010-ebdf8fc6.json (1KB) processed"
   },
   {
-    "time": "2026-02-27T21:03:21Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File nhtsa-1772226201557407000.json (378KB) processed"
+    "message": "File manual-honda-civic-1996-s009-b9744084.json (1KB) processed"
   },
   {
-    "time": "2026-02-27T21:03:20Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File nhtsa-1772226200621580000.json (392KB) processed"
+    "message": "File manual-honda-civic-1996-s008-ab37a404.json (2KB) processed"
   },
   {
-    "time": "2026-02-27T20:33:38Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File ifixit-1772224418576445000.json (4KB) processed"
+    "message": "File manual-honda-civic-1996-s007-f655acb6.json (13KB) processed"
   },
   {
-    "time": "2026-02-27T20:33:31Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File nhtsa-1772224411492233000.json (378KB) processed"
+    "message": "File manual-honda-civic-1996-s006-a57ef858.json (11KB) processed"
   },
   {
-    "time": "2026-02-27T20:33:28Z",
+    "time": "2026-02-27T21:20:23Z",
     "category": "ingestion",
-    "message": "File ifixit-1772224408101556000.json (4KB) processed"
+    "message": "File manual-honda-civic-1996-s005-c11640ff.json (11KB) processed"
   },
   {
-    "time": "2026-02-27T20:33:20Z",
+    "time": "2026-02-27T21:20:22Z",
     "category": "ingestion",
-    "message": "File nhtsa-1772224400753085000.json (392KB) processed"
+    "message": "File manual-honda-civic-1996-s004-c7b030d4.json (2KB) processed"
   },
   {
-    "time": "2026-02-27T20:03:27Z",
+    "time": "2026-02-27T21:20:22Z",
     "category": "ingestion",
-    "message": "File ifixit-1772222607715410000.json (4KB) processed"
+    "message": "File manual-honda-civic-1996-s003-93c3f879.json (3KB) processed"
   },
   {
-    "time": "2026-02-27T20:03:22Z",
+    "time": "2026-02-27T21:20:22Z",
     "category": "ingestion",
-    "message": "File ifixit-1772222602909232000.json (4KB) processed"
+    "message": "File manual-honda-civic-1996-s002-54b79fc7.json (11KB) processed"
   }
 ]
