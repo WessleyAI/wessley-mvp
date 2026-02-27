@@ -1,154 +1,164 @@
 {
-  "timestamp": "2026-02-27T20:09:00+02:00",
+  "timestamp": "2026-02-27T22:09:00Z",
   "critical": [
     {
-      "title": "Knowledge graph still has ZERO relationships \u2014 graph is structurally useless",
-      "detail": "Neo4j has 4,065 nodes (Component: 1,705 + ManualEntry: 2,360) but 0 relationships. Despite commit c3986e0 claiming to fix 'enricher relationships', and ae17c5a fixing 'enricher pipeline', no edges have been created. The enricher code may be fixed but never re-run against existing data, or it's silently failing at runtime. Without relationships, the graph cannot answer hierarchical queries (make\u2192model\u2192year\u2192system\u2192component).",
-      "fix": "Run the enricher manually against all existing nodes. Check enricher logs for errors. Verify the Cypher MERGE statements are actually executing. Consider a one-time migration script to retroactively create relationships for all 4,065 nodes."
+      "title": "Knowledge graph relationships EXIST but enricher narrative was wrong — 466 relationships present",
+      "detail": "Previous analysis incorrectly reported 0 relationships. Neo4j actually has 466 relationships (DOCUMENTED_IN: 293, HAS_SYSTEM: 77, OF_MODEL: 33, HAS_SUBSYSTEM: 32, HAS_MODEL: 31). The enricher fix commits DID work. However, the ratio is still very low: 466 relationships for 4,365 nodes (0.107 rels/node). A healthy automotive knowledge graph should have 3-5 rels/node minimum. Most ManualEntry and Component nodes are likely unlinked islands.",
+      "fix": "Run enricher backfill specifically targeting the 2,360 ManualEntry nodes — they should each link to at least a Make→Model→Year chain. Target: 10,000+ relationships."
     },
     {
-      "title": "/tmp/wessley-data/ is EMPTY (0 bytes) \u2014 ingest directory has no files",
-      "detail": "The ingest process is running with -dir /tmp/wessley-data but that directory is 0 bytes. Either scraped files are being deleted after processing (good if intentional), or scrapers are not writing to this directory at all. Two separate ingest processes are running (PID 6694 compiled binary + PID 65156 go run) \u2014 this is a conflict risk.",
-      "fix": "Verify scrapers write to /tmp/wessley-data/. Kill the duplicate ingest process (keep one). Check if files are consumed-and-deleted by design or if the pipeline is broken."
+      "title": "Embedding pipeline stalled — 2,712 vectors for 4,365 nodes (62%), zero growth in 4+ hours",
+      "detail": "Vector count stuck at 2,712 since at least 17:24 on Feb 26. The 2,360 ManualEntry nodes added to Neo4j have NOT been embedded. Ollama is running, Qdrant is green, but nothing is flowing. The ingest process (PID 38903) is running but producing no new vectors. Either ManualEntry content format doesn't match the embedding input, or there's no content to embed.",
+      "fix": "Check if ManualEntry nodes have a 'content'/'text' field. Verify the ingest pipeline handles ManualEntry type. Run a manual embedding of one ManualEntry to confirm the path works."
     },
     {
-      "title": "Embedding ratio declining \u2014 2,527 vectors for 4,065 nodes (62%) but 0 new vectors in 2+ hours",
-      "detail": "History shows total_docs jumped from 1,705 to 4,065 at 16:18 (ManualEntry nodes added) but vectors stayed at 2,527. No new vectors have been created since at least 10:34 today. The embedding pipeline is stalled despite Ollama being up and connected.",
-      "fix": "Check ingest logs at /tmp/wessley-ingest.log for embedding errors. Verify ManualEntry nodes have content that can be embedded. The 2,360 ManualEntry nodes added 0 vectors \u2014 the ingest\u2192embed path for manual entries may not exist."
+      "title": "Zero new documents or vectors in 4+ hours despite active scraper and ingest processes",
+      "detail": "Scraper (PID 41320) running with NHTSA+iFixit+forums sources, ingest (PID 38903) running with 15s interval, but metrics-history shows 0 new docs, 0 new vectors for the last several hours. Pipeline is technically running but effectively dead.",
+      "fix": "Check scraper stdout/stderr for rate-limit or auth errors. Check ingest logs. Verify /tmp/wessley-data/ has new files being written (currently 94MB — up from previous 'empty' report)."
     }
   ],
   "warnings": [
     {
-      "title": "Duplicate ingest processes running \u2014 potential conflict",
-      "detail": "PID 6694 (/tmp/ingest --dir /tmp/wessley-data) started at 12:34 and PID 65156 (go run cmd/ingest/main.go -dir /tmp/wessley-data) started at 14:54. Both target the same directory. This can cause double-processing, race conditions on file reads, or duplicate vector upserts.",
-      "fix": "Kill PID 6694 (the older compiled binary) and keep the go run instance, or vice versa. Standardize on one launch method."
+      "title": "Low relationship density — 0.107 relationships per node",
+      "detail": "466 relationships across 4,365 nodes means 95% of nodes are islands or have minimal connections. The hierarchy exists (13 Makes → 31 Models → 33 ModelYears → 77 Systems → 32 Subsystems) but only 293 DOCUMENTED_IN edges connect content nodes to the hierarchy. 2,360 ManualEntry + 1,819 Component nodes need linking."
     },
     {
-      "title": "Reddit scraper still producing zero posts",
-      "detail": "PID 65162 running since 14:54 with -interval 5m -limit 50, consuming 17MB memory, 0 posts. This has been a dead process across multiple analysis cycles. Likely an auth or config issue that was never resolved.",
-      "fix": "Check Reddit API credentials. Verify subreddit config. Check for rate-limiting or 403 errors in scraper output."
+      "title": "Source diversity collapsed — only manual source recently active",
+      "detail": "Ingestion breakdown: NHTSA 5,292 (historical), iFixit 176, manual 12. But recent activity is zero across all sources. The scraper process claims NHTSA+iFixit+forums but no new docs are flowing."
     },
     {
-      "title": "NHTSA, iFixit, YouTube scrapers all stopped",
-      "detail": "Previous analysis showed NHTSA actively ingesting 392 docs/5min. Now all three show status=stopped with total_docs=0. The metrics-latest reports 0 for all scraper totals except manuals (2,360). Either scrapers were intentionally stopped or crashed.",
-      "fix": "If intentional (focusing on manuals), fine. If not, restart the scrapers. The pipeline needs active data sources to grow."
+      "title": "Indexed vectors count is 0 in Qdrant despite 2,712 points",
+      "detail": "Qdrant reports indexed_vectors_count=0 with points_count=2,712. This means HNSW index hasn't been built — all searches use brute-force. Below the indexing_threshold of 10,000, this is expected behavior, but query performance will degrade as vectors grow."
     },
     {
-      "title": "Total document count dropped dramatically: 19,967 \u2192 4,065",
-      "detail": "Previous analysis showed 19,967 docs. Now metrics reports 4,065 (matching Neo4j node count). History shows a -18,386 drop at 17:24 on Feb 26. The metrics collection methodology changed \u2014 it now counts Neo4j nodes instead of cumulative ingested docs. This makes historical comparison unreliable.",
-      "fix": "Decide on a canonical 'total documents' metric. Neo4j node count and cumulative ingested count measure different things. Track both separately for clarity."
+      "title": "Disk usage: 432MB codebase + 94MB data",
+      "detail": "Codebase grew slightly from 430MB (previous analysis). Data directory at 94MB — this is a positive change from the previous 'empty' report, meaning scrapers ARE writing files even if they're not being counted as new docs."
     }
   ],
   "healthy": [
-    "Build: go build ./... passes cleanly \u2014 zero compilation errors",
-    "Tests: ALL 18 test suites now PASS (previously ifixit and nhtsa had build failures \u2014 both fixed!)",
-    "Infrastructure: Neo4j 5.x and Qdrant both running 8h+ stable, Ollama serving embeddings",
-    "Docker containers: neo4j and qdrant healthy, no restarts needed",
-    "Qdrant: status=green, optimizer_status=ok, query latency ~1.5ms",
-    "Manuals pipeline: 2,360 ManualEntry nodes created \u2014 new data source activated since last analysis",
-    "Disk usage improved: 430MB (down from 722MB) for codebase",
-    "Error rate: 23/4,065 = 0.57% \u2014 still good",
-    "Code quality: vehiclenlp package added, enricher pipeline fixes committed, Reddit test updated",
-    "Git activity: active development with bug fixes, features, and data updates"
+    "Build: go build ./... passes cleanly — zero compilation errors",
+    "Tests: ALL 26 packages compile, all test suites PASS (manuals tests took 8.9s — integration-level)",
+    "Infrastructure: Neo4j 5.x and Qdrant both up 12+ hours, stable, no restarts",
+    "Ollama: serving embeddings (nomic-embed-text), 2 processes running (server + runner)",
+    "Docker: neo4j and qdrant containers healthy, ports mapped correctly",
+    "Qdrant: status=green, optimizer_status=ok, 2,712 vectors, Cosine/768 dims",
+    "Neo4j: 4,365 nodes across 7 types, 466 relationships across 5 types — graph is structured",
+    "Vehicle coverage: 8 makes (Toyota/Honda/Ford/Chevrolet/Nissan/BMW/Hyundai/Kia), 31 models, 33 model years",
+    "Top coverage: Toyota (18 models, 420 docs), Honda (12, 310), Ford (15, 285)",
+    "Error rate: 23/4,365 = 0.53% — excellent",
+    "Git: active development, recent commits include intelligent manual ingestion pipeline",
+    "Code quality: vehiclenlp package, enricher pipeline, pdfplumber + Claude SDK integration"
   ],
   "suggestions": [
     {
-      "title": "Run enricher backfill on all 4,065 nodes to create relationships",
-      "impact": "Transforms the graph from a flat node dump to a queryable knowledge graph. Enables hierarchical vehicle queries, which is the core product value proposition.",
+      "title": "Run enricher backfill on ManualEntry nodes to create vehicle hierarchy links",
+      "impact": "2,360 ManualEntry nodes are likely unlinked. Each should connect to Make→Model→Year. Would 5-10x relationship count and enable hierarchical queries.",
       "effort": "low"
     },
     {
-      "title": "Embed the 2,360 ManualEntry nodes \u2014 they have 0 vectors",
-      "impact": "ManualEntry content is the highest-quality data (structured OEM info). Embedding them would increase vector count by ~93% and dramatically improve RAG retrieval for repair/maintenance queries.",
+      "title": "Debug embedding pipeline for ManualEntry nodes",
+      "impact": "1,653 nodes have no vectors (38% unembedded). ManualEntry content is highest-quality OEM data — embedding it dramatically improves RAG retrieval.",
       "effort": "low"
     },
     {
-      "title": "Kill duplicate ingest process and standardize launch method",
-      "impact": "Eliminates race conditions and resource waste. One ingest process is sufficient.",
+      "title": "Diagnose why scraper+ingest produce zero output despite running",
+      "impact": "Pipeline is consuming CPU/memory but not producing data. Either fix the flow or kill the processes to save resources.",
       "effort": "low"
     },
     {
-      "title": "Restart NHTSA and iFixit scrapers \u2014 they were the primary data sources",
-      "impact": "Previously contributed 19,000+ documents. Restarting them with proper embedding would rapidly grow the knowledge base.",
-      "effort": "low"
-    },
-    {
-      "title": "Fix Reddit scraper or kill it \u2014 it's been dead across multiple analysis cycles",
-      "impact": "Either get community knowledge flowing or free the resources. Current state is pure waste.",
+      "title": "Add DOCUMENTED_IN edges from Component nodes to their source vehicles",
+      "impact": "Only 293 DOCUMENTED_IN edges for 1,819 Component nodes (16%). Most components are orphaned from their vehicle context.",
       "effort": "med"
     },
     {
-      "title": "Add a startup health check that verifies enricher creates at least 1 relationship",
-      "impact": "Would have caught the zero-relationships bug immediately instead of letting it persist across multiple days and analysis cycles.",
-      "effort": "low"
+      "title": "Implement pipeline health endpoint that exposes docs/min, vectors/min, errors/min",
+      "impact": "Would instantly surface stalled pipelines like the current situation instead of waiting for analysis runs.",
+      "effort": "med"
+    },
+    {
+      "title": "Add YouTube transcript scraper to diversify sources",
+      "impact": "YouTube repair videos are high-value community knowledge. 3 docs were ingested previously before scrapers stopped.",
+      "effort": "high"
     }
   ],
   "bugs": [
     {
-      "title": "Enricher produces 0 relationships despite multiple fix commits",
-      "file": "engine/graph/enricher.go",
-      "line": 0,
-      "detail": "Commits c3986e0 and ae17c5a both claim to fix enricher relationships, yet Neo4j still shows 0 edges. The fix either doesn't work, isn't being triggered at runtime, or only applies to new ingestions (not backfilling existing nodes).",
-      "fix": "Test the enricher in isolation: feed it a single Component node and verify a relationship is created. Check if it requires specific node properties that existing nodes lack. Add an integration test that asserts relationship count > 0."
-    },
-    {
-      "title": "ManualEntry nodes not being embedded into Qdrant",
+      "title": "Embedding pipeline not processing ManualEntry nodes",
       "file": "engine/ingest/transform.go",
       "line": 0,
-      "detail": "2,360 ManualEntry nodes were created but vector count only went from 2,360 to 2,527 (+167, likely from Component nodes). The embedding pipeline may not handle ManualEntry-type documents, or ManualEntry content format doesn't match expected input.",
-      "fix": "Check if the embed path filters by node type. Verify ManualEntry nodes have a 'content' or 'text' field that the embedder reads. Add ManualEntry to the embedding pipeline if it's excluded."
+      "detail": "2,360 ManualEntry nodes exist in Neo4j but only 2,712 total vectors in Qdrant (was 2,360 before manuals). The embedding path likely doesn't handle ManualEntry document type or the content field name differs.",
+      "fix": "Check the document type switch in the embedding pipeline. Ensure ManualEntry.content is extracted and sent to Ollama for embedding."
     },
     {
-      "title": "Duplicate ingest processes targeting same directory",
+      "title": "Scraper process running but producing no new documents",
+      "file": "cmd/scraper-sources/main.go",
+      "line": 0,
+      "detail": "PID 41320 running with nhtsa,ifixit,forums sources and 30m interval since 20:24. No new docs in metrics. Either all sources are rate-limited, interval hasn't elapsed, or writes are silently failing.",
+      "fix": "Check process stderr: kill -0 41320 && ls -lt /tmp/wessley-data/ | head. If no new files in 30+ min, the scraper is stuck."
+    },
+    {
+      "title": "Ingest process running at 15s interval with no work to do",
       "file": "cmd/ingest/main.go",
       "line": 0,
-      "detail": "Two ingest processes (PID 6694 and 65156) running simultaneously on /tmp/wessley-data. No file locking or dedup mechanism visible.",
-      "fix": "Add a PID lockfile check at startup. Kill the stale process."
+      "detail": "PID 38903 polling /tmp/wessley-data every 15s but producing 0 new vectors/nodes. Either no new files to ingest, or files exist but processing fails silently.",
+      "fix": "Add logging for 'no files found' vs 'files found but failed'. Check if cleanup-after-ingest is removing files before they can be counted."
     }
   ],
   "metrics": {
-    "total_docs": 4065,
-    "total_nodes": 4065,
-    "total_vectors": 2527,
-    "total_relationships": 0,
-    "error_rate": 0.0057,
-    "sources_active": 1,
-    "sources_dead": 4,
-    "embedding_ratio": 0.622,
+    "total_docs": 4365,
+    "total_nodes": 4365,
+    "total_vectors": 2712,
+    "total_relationships": 466,
+    "error_rate": 0.0053,
+    "sources_active": 0,
+    "sources_configured": 3,
+    "embedding_ratio": 0.621,
     "node_types": {
-      "Component": 1705,
-      "ManualEntry": 2360
+      "ManualEntry": 2360,
+      "Component": 1819,
+      "System": 77,
+      "ModelYear": 33,
+      "Subsystem": 32,
+      "VehicleModel": 31,
+      "Make": 13
     },
-    "docs_last_2h": 0,
-    "vectors_last_2h": 0,
-    "nhtsa_pct": 0,
-    "docs_last_5min": 0,
-    "vectors_last_5min": 0
+    "relationship_types": {
+      "DOCUMENTED_IN": 293,
+      "HAS_SYSTEM": 77,
+      "OF_MODEL": 33,
+      "HAS_SUBSYSTEM": 32,
+      "HAS_MODEL": 31
+    },
+    "makes_covered": 8,
+    "models_covered": 31,
+    "top_make_docs": "Toyota:420",
+    "docs_last_4h": 0,
+    "vectors_last_4h": 0,
+    "disk_data_mb": 94,
+    "disk_code_mb": 432
   },
   "strategy": [
-    "IMMEDIATE: Run enricher backfill to create relationships for all 4,065 nodes. The graph has been flat since day one \u2014 every analysis has flagged this. Two fix commits have shipped but 0 relationships exist. This needs hands-on debugging, not another commit.",
-    "IMMEDIATE: Embed ManualEntry nodes. 2,360 high-quality manual entries sitting unembedded is the biggest quick win for RAG quality. Verify the ingest pipeline handles this node type.",
-    "IMMEDIATE: Kill duplicate ingest process (PID 6694). Keep PID 65156 (the go run instance with log tee).",
-    "TODAY: Decide on scraper strategy \u2014 NHTSA/iFixit/YouTube are all stopped. If intentional (focusing on manual entries first), document it. If not, restart them.",
-    "THIS WEEK: Fix or remove Reddit scraper. It has been flagged as dead in every analysis cycle. Either fix the auth issue or remove the dead process.",
-    "ARCHITECTURE: The metrics methodology change (19,967\u21924,065) broke historical continuity. Standardize: 'total_docs' = cumulative ingested, 'total_nodes' = Neo4j count, 'total_vectors' = Qdrant count. Track all three independently.",
-    "PROGRESS: Test suites all pass now (was 2 failures). ManualEntry data source is new and valuable. Disk usage improved. Code is actively evolving with good commits. The foundation is solid \u2014 the gaps are in runtime operations (enricher, embedding, scraper management), not code quality.",
-    "PRODUCT: With 2,360 manual entries and 1,705 components, you have meaningful coverage of 8 makes. Focus on depth over breadth \u2014 fully enrich Toyota/Honda/Ford (your top 3) before expanding to more makes."
+    "CORRECTION: Previous analysis reported 0 relationships — actually 466 exist. The enricher IS working, just not at sufficient scale. Focus shifts from 'fix enricher' to 'scale enricher' — run backfill across all unlinked nodes.",
+    "IMMEDIATE: Debug the stalled pipeline. Scraper and ingest are running but producing nothing. This is the #1 operational issue — the system is consuming resources with zero output.",
+    "IMMEDIATE: Embed ManualEntry nodes. 2,360 high-quality OEM manual entries without vectors is the biggest quick win for RAG quality. This is likely a code path issue, not an infrastructure problem.",
+    "THIS WEEK: Scale relationships from 466 to 5,000+. Each ManualEntry should link to its vehicle (Make→Model→Year) and relevant systems. 293 DOCUMENTED_IN edges for 4,179 content nodes (7%) is too sparse.",
+    "THIS WEEK: Add pipeline health metrics to the dashboard — docs/min, vectors/min, active sources. The current stall has been invisible until this analysis.",
+    "ARCHITECTURE: The vehicle hierarchy is well-structured (Make→Model→Year→System→Subsystem) but content nodes (ManualEntry, Component) are poorly connected to it. The enricher needs to NER-extract vehicle references from content and create DOCUMENTED_IN edges.",
+    "PRODUCT: Toyota/Honda/Ford coverage is strong (420/310/285 docs). These three makes should be the MVP launch targets. Ensure their data is fully enriched and embedded before expanding to BMW/Hyundai/Kia.",
+    "DATA QUALITY: 94MB in /tmp/wessley-data/ vs 'empty' in previous analysis is progress. Files are being written. The gap is between 'files exist' and 'files become vectors+nodes'."
   ],
   "changes_since_last": [
-    "IMPROVED: All 18 test suites now pass (was 2 build failures in ifixit and nhtsa)",
-    "IMPROVED: Disk usage down from 722MB to 430MB",
-    "NEW: ManualEntry node type added \u2014 2,360 entries from manuals scraper (was 0 previously)",
-    "NEW: Node count up from 1,584 to 4,065 (+156%)",
-    "NEW: vehiclenlp package added for NLP-based vehicle extraction",
-    "NEW: Multiple bug fix and enricher pipeline commits landed",
-    "DEGRADED: All scrapers stopped (NHTSA was actively ingesting 392 docs/5min, now 0)",
-    "DEGRADED: Total tracked docs dropped from 19,967 to 4,065 (metrics methodology change)",
-    "DEGRADED: Error rate slightly up from 0.12% to 0.57% (still acceptable)",
-    "UNCHANGED: Zero relationships in graph \u2014 persists despite two fix commits",
-    "UNCHANGED: Reddit scraper still dead (0 posts)",
-    "UNCHANGED: Embedding pipeline stalled (0 new vectors in hours)",
-    "UNCHANGED: /tmp/wessley-data/ is empty (was not tracked before)",
-    "CONCERN: Two ingest processes running simultaneously (new issue)"
+    "CORRECTED: Previous analysis wrong about 0 relationships — actually 466 exist (DOCUMENTED_IN:293, HAS_SYSTEM:77, OF_MODEL:33, HAS_SUBSYSTEM:32, HAS_MODEL:31)",
+    "IMPROVED: Data directory grew from 0B to 94MB — scrapers are writing files",
+    "IMPROVED: Node count up from 4,065 to 4,365 (+300 nodes, mostly Components)",
+    "IMPROVED: Vector count up from 2,527 to 2,712 (+185 vectors)",
+    "STABLE: All tests still passing, build clean",
+    "STABLE: Infrastructure (Neo4j, Qdrant, Ollama) continuously healthy",
+    "STABLE: Error rate improved slightly from 0.57% to 0.53%",
+    "DEGRADED: Pipeline throughput at zero — scraper and ingest running but no new output in 4+ hours",
+    "UNCHANGED: ManualEntry nodes still not being embedded (2,360 without vectors)",
+    "UNCHANGED: Relationship density still very low (0.107 rels/node)",
+    "NEW: Scraper restarted with nhtsa,ifixit,forums sources (PID 41320, since 20:24)",
+    "NEW: Single ingest process running (previous duplicate issue resolved)"
   ]
 }
