@@ -161,6 +161,13 @@ func main() {
 				log.Fatalf("download: %v", err)
 			}
 			fmt.Printf("Downloaded %d manuals\n", n)
+			// Auto-ingest downloaded PDFs into JSON
+			ni, err := crawler.Ingest(ctx, outputDir, 0)
+			if err != nil {
+				log.Printf("ingest: %v", err)
+			} else if ni > 0 {
+				fmt.Printf("Ingested %d manuals into JSON\n", ni)
+			}
 		case *manualsProcess:
 			if err := crawler.Process(ctx); err != nil {
 				log.Fatalf("process: %v", err)

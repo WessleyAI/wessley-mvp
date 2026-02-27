@@ -2,13 +2,18 @@ package manuals
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/WessleyAI/wessley-mvp/engine/graph"
+	"github.com/WessleyAI/wessley-mvp/engine/scraper"
 )
 
 // Crawler orchestrates discovery and downloading of vehicle manual PDFs.
@@ -165,6 +170,112 @@ func (c *Crawler) Download(ctx context.Context, limit int) (int, error) {
 	return downloaded, nil
 }
 
+// Ingest processes downloaded PDFs into JSON files for the ingest pipeline.
+func (c *Crawler) Ingest(ctx context.Context, outputDir string, limit int) (int, error) {
+	if limit <= 0 {
+		limit = 100
+	}
+	pending, err := c.graph.GetPendingIngestion(ctx, limit)
+	if err != nil {
+		return 0, fmt.Errorf("get pending ingestion: %w", err)
+	}
+
+	if outputDir == "" {
+		outputDir = c.cfg.OutputDir
+	}
+
+	var ingested int
+	for _, entry := range pending {
+		select {
+		case <-ctx.Done():
+			return ingested, ctx.Err()
+		default:
+		}
+
+		if entry.LocalPath == "" {
+			_ = c.graph.UpdateManualStatus(ctx, entry.ID, "failed", "no local path")
+			continue
+		}
+
+		content, err := ExtractTextFromPDF(entry.LocalPath)
+		if err != nil {
+			log.Printf("manuals: extract text from %s: %v", entry.LocalPath, err)
+			_ = c.graph.UpdateManualStatus(ctx, entry.ID, "failed", err.Error())
+			continue
+		}
+		if strings.TrimSpace(content) == "" {
+			_ = c.graph.UpdateManualStatus(ctx, entry.ID, "failed", "no text extracted")
+			continue
+		}
+
+		sections := ParseSections(content)
+
+		// Write JSON files for ingest pipeline
+		baseName := strings.TrimSuffix(filepath.Base(entry.LocalPath), ".pdf")
+		jsonDir := filepath.Join(outputDir, "json")
+		if err := os.MkdirAll(jsonDir, 0o755); err != nil {
+			log.Printf("manuals: mkdir %s: %v", jsonDir, err)
+			continue
+		}
+
+		vehicle := ""
+		if entry.Make != "" && entry.Year > 0 {
+			vehicle = fmt.Sprintf("%d-%s-%s", entry.Year, entry.Make, entry.Model)
+		}
+
+		for i, sec := range sections {
+			post := scraper.ScrapedPost{
+				Source:    "manual",
+				SourceID:  fmt.Sprintf("%s-sec-%d", baseName, i),
+				Title:     fmt.Sprintf("%s - %s", baseName, sec.Title),
+				Content:   sec.Content,
+				URL:       entry.URL,
+				ScrapedAt: time.Now(),
+				Metadata: scraper.Metadata{
+					Vehicle: vehicle,
+					Keywords: []string{"manual", "owner's manual"},
+				},
+			}
+			if entry.Make != "" {
+				post.Metadata.VehicleInfo = &scraper.VehicleInfo{
+					Make:  entry.Make,
+					Model: entry.Model,
+					Year:  entry.Year,
+				}
+			}
+			if sec.System != "" {
+				post.Metadata.Section = sec.System
+				if sec.Subsystem != "" {
+					post.Metadata.Section = sec.System + "/" + sec.Subsystem
+				}
+				post.Metadata.Keywords = append(post.Metadata.Keywords, strings.ToLower(sec.System))
+			}
+
+			jsonPath := filepath.Join(jsonDir, fmt.Sprintf("%s-sec-%d.json", baseName, i))
+			data, err := json.Marshal(post)
+			if err != nil {
+				continue
+			}
+			if err := os.WriteFile(jsonPath, data, 0o644); err != nil {
+				log.Printf("manuals: write json %s: %v", jsonPath, err)
+				continue
+			}
+		}
+
+		now := time.Now()
+		entry.IngestedAt = &now
+		entry.Status = "ingested"
+		entry.PageCount = len(sections)
+		if err := c.graph.SaveManualEntry(ctx, entry); err != nil {
+			log.Printf("manuals: save ingested entry error: %v", err)
+			continue
+		}
+		ingested++
+		log.Printf("manuals: ingested %s → %d sections", entry.LocalPath, len(sections))
+	}
+	return ingested, nil
+}
+
 // Process runs the full pipeline: discover → download → ingest.
 func (c *Crawler) Process(ctx context.Context) error {
 	discovered, err := c.Discover(ctx)
@@ -178,6 +289,12 @@ func (c *Crawler) Process(ctx context.Context) error {
 		return fmt.Errorf("download: %w", err)
 	}
 	log.Printf("manuals: downloaded %d", downloaded)
+
+	ingested, err := c.Ingest(ctx, "", 0)
+	if err != nil {
+		return fmt.Errorf("ingest: %w", err)
+	}
+	log.Printf("manuals: ingested %d", ingested)
 
 	return nil
 }
