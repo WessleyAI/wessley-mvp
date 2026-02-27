@@ -287,5 +287,19 @@
     "total_docs": 4065,
     "total_vectors": 2527,
     "total_nodes": 4065
+  },
+  {
+    "timestamp": "2026-02-27T15:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4065,
+    "total_vectors": 2527,
+    "total_nodes": 4065
   }
 ]
