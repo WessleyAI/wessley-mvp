@@ -135,11 +135,11 @@ func (s *ArchiveSource) searchArchive(ctx context.Context, query string, makes [
 		default:
 		}
 
-		// Fetch metadata to find actual PDF files in this item
+		// Fetch metadata to find actual PDF files in this item.
 		pdfURLs, err := s.findPDFsInItem(ctx, doc.Identifier)
 		if err != nil || len(pdfURLs) == 0 {
-			// Fallback: try the identifier-named PDF
-			pdfURLs = []string{fmt.Sprintf("https://archive.org/download/%s/%s.pdf", doc.Identifier, doc.Identifier)}
+			// No PDFs found in metadata — skip this item rather than guessing.
+			continue
 		}
 
 		make_, model, year := extractVehicleFromArchiveDoc(doc, makes)
@@ -197,11 +197,21 @@ func (s *ArchiveSource) findPDFsInItem(ctx context.Context, identifier string) (
 
 	var urls []string
 	for _, f := range metaResp.Result {
-		if strings.HasSuffix(strings.ToLower(f.Name), ".pdf") {
-			dlURL := fmt.Sprintf("https://archive.org/download/%s/%s",
-				identifier, url.PathEscape(f.Name))
-			urls = append(urls, dlURL)
+		lower := strings.ToLower(f.Name)
+		if !strings.HasSuffix(lower, ".pdf") {
+			continue
 		}
+		// Skip OCR-derived text PDFs — they're not the real manuals.
+		if strings.HasSuffix(lower, "_text.pdf") {
+			continue
+		}
+		// Skip huge files (>200MB)
+		if sz, err := strconv.ParseInt(f.Size, 10, 64); err == nil && sz > 200*1024*1024 {
+			continue
+		}
+		dlURL := fmt.Sprintf("https://archive.org/download/%s/%s",
+			identifier, url.PathEscape(f.Name))
+		urls = append(urls, dlURL)
 	}
 	return urls, nil
 }
