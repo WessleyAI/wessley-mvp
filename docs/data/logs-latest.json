@@ -1,46 +1,46 @@
 [
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "system",
     "message": "ingest: STOPPED"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "infrastructure",
     "message": "Container biddings-postgres Up 4 hours (healthy)"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "infrastructure",
     "message": "Container biddings-qdrant Up 13 hours"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "infrastructure",
     "message": "Container biddings-neo4j Up 13 hours (healthy)"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 24 hours"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 24 hours"
   },
   {
-    "time": "2026-02-28T10:48:58Z",
+    "time": "2026-02-28T10:58:58Z",
     "category": "system",
     "message": "Data directory: 107M\t/tmp/wessley-data"
   },
