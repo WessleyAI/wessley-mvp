@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-28T22:48:59Z",
+  "timestamp": "2026-02-28T22:58:59Z",
   "knowledge_graph": {
     "total_nodes": 5441,
     "total_relationships": 1764,
@@ -104,28 +104,28 @@
       "ifixit": 1903,
       "manual": 12
     },
-    "last_ingestion": "2026-02-28T22:48:59Z",
+    "last_ingestion": "2026-02-28T22:58:59Z",
     "files_processed": 368
   },
   "scrapers": {
     "reddit": {
       "status": "stopped",
-      "last_scrape": "2026-02-28T22:48:59Z",
+      "last_scrape": "2026-02-28T22:58:59Z",
       "total_posts": 0
     },
     "nhtsa": {
       "status": "running",
-      "last_scrape": "2026-02-28T22:48:59Z",
+      "last_scrape": "2026-02-28T22:58:59Z",
       "total_docs": 65404
     },
     "ifixit": {
       "status": "running",
-      "last_scrape": "2026-02-28T22:48:59Z",
+      "last_scrape": "2026-02-28T22:58:59Z",
       "total_docs": 1903
     },
     "youtube": {
       "status": "running",
-      "last_scrape": "2026-02-28T22:48:59Z",
+      "last_scrape": "2026-02-28T22:58:59Z",
       "total_docs": 0
     },
     "manuals": {
