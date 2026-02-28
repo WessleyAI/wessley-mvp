@@ -1,48 +1,53 @@
 [
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "system",
     "message": "ingest: running"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "infrastructure",
     "message": "Container biddings-postgres Up 8 hours (healthy)"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "infrastructure",
     "message": "Container biddings-qdrant Up 17 hours"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "infrastructure",
     "message": "Container biddings-neo4j Up 17 hours (healthy)"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 29 hours"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 29 hours"
   },
   {
-    "time": "2026-02-28T15:18:59Z",
+    "time": "2026-02-28T15:28:58Z",
     "category": "system",
     "message": "Data directory: 131M\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-02-28T15:22:08Z",
+    "category": "ingestion",
+    "message": "File sources-2026-02-28.json (6986KB) processed"
   },
   {
     "time": "2026-02-28T15:15:57Z",
@@ -73,11 +78,6 @@
     "time": "2026-02-28T15:03:21Z",
     "category": "ingestion",
     "message": "File nhtsa-1772291001460870000.json (392KB) processed"
-  },
-  {
-    "time": "2026-02-28T14:52:07Z",
-    "category": "ingestion",
-    "message": "File sources-2026-02-28.json (6287KB) processed"
   },
   {
     "time": "2026-02-28T14:45:57Z",
