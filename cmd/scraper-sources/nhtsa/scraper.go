@@ -42,40 +42,44 @@ func (s *Scraper) FetchAll(ctx context.Context) ([]scraper.ScrapedPost, error) {
 	limiter := time.NewTicker(s.cfg.RateLimit)
 	defer limiter.Stop()
 
-	for _, make_ := range s.cfg.Makes {
-		select {
-		case <-ctx.Done():
-			return allPosts, ctx.Err()
-		default:
-		}
+	years := s.cfg.Years()
 
-		// First, fetch available models for this make+year
-		models, err := s.fetchModels(ctx, make_, limiter)
-		if err != nil {
-			log.Printf("warning: failed to fetch NHTSA models for %s: %v", make_, err)
-			continue
-		}
+	for _, year := range years {
+		for _, make_ := range s.cfg.Makes {
+			select {
+			case <-ctx.Done():
+				return allPosts, ctx.Err()
+			default:
+			}
 
-		if len(models) == 0 {
-			log.Printf("warning: no models found for %s year %d", make_, s.cfg.ModelYear)
-			continue
-		}
-
-		// Limit to top 5 popular models to avoid too many requests
-		if len(models) > 5 {
-			models = models[:5]
-		}
-
-		for _, model := range models {
-			posts, err := s.fetchMakeModel(ctx, make_, model, limiter)
+			// First, fetch available models for this make+year
+			models, err := s.fetchModels(ctx, make_, year, limiter)
 			if err != nil {
-				log.Printf("warning: failed to fetch NHTSA complaints for %s %s: %v", make_, model, err)
+				log.Printf("warning: failed to fetch NHTSA models for %s %d: %v", make_, year, err)
 				continue
 			}
-			allPosts = append(allPosts, posts...)
 
-			if s.cfg.MaxPerMake > 0 && len(allPosts) >= s.cfg.MaxPerMake {
-				break
+			if len(models) == 0 {
+				log.Printf("warning: no models found for %s year %d", make_, year)
+				continue
+			}
+
+			// Limit to top 5 popular models to avoid too many requests
+			if len(models) > 5 {
+				models = models[:5]
+			}
+
+			for _, model := range models {
+				posts, err := s.fetchMakeModel(ctx, make_, model, year, limiter)
+				if err != nil {
+					log.Printf("warning: failed to fetch NHTSA complaints for %s %s %d: %v", make_, model, year, err)
+					continue
+				}
+				allPosts = append(allPosts, posts...)
+
+				if s.cfg.MaxPerMake > 0 && len(allPosts) >= s.cfg.MaxPerMake {
+					break
+				}
 			}
 		}
 	}
@@ -91,8 +95,8 @@ type modelEntry struct {
 	Model string `json:"model"`
 }
 
-func (s *Scraper) fetchModels(ctx context.Context, make_ string, limiter *time.Ticker) ([]string, error) {
-	url := fmt.Sprintf("%s?modelYear=%d&make=%s&issueType=c", modelsURL, s.cfg.ModelYear, make_)
+func (s *Scraper) fetchModels(ctx context.Context, make_ string, year int, limiter *time.Ticker) ([]string, error) {
+	url := fmt.Sprintf("%s?modelYear=%d&make=%s&issueType=c", modelsURL, year, make_)
 
 	<-limiter.C
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
@@ -128,8 +132,8 @@ func (s *Scraper) fetchModels(ctx context.Context, make_ string, limiter *time.T
 	return models, nil
 }
 
-func (s *Scraper) fetchMakeModel(ctx context.Context, make_, model string, limiter *time.Ticker) ([]scraper.ScrapedPost, error) {
-	url := fmt.Sprintf("%s?make=%s&model=%s&modelYear=%d", complaintsURL, neturl.QueryEscape(make_), neturl.QueryEscape(model), s.cfg.ModelYear)
+func (s *Scraper) fetchMakeModel(ctx context.Context, make_, model string, year int, limiter *time.Ticker) ([]scraper.ScrapedPost, error) {
+	url := fmt.Sprintf("%s?make=%s&model=%s&modelYear=%d", complaintsURL, neturl.QueryEscape(make_), neturl.QueryEscape(model), year)
 
 	result := fn.Retry(ctx, fn.RetryOpts{
 		MaxAttempts: 3,
@@ -162,7 +166,7 @@ func (s *Scraper) fetchMakeModel(ctx context.Context, make_, model string, limit
 		// Extract vehicle info from products array
 		vehicleMake := make_
 		vehicleModel := model
-		vehicleYear := s.cfg.ModelYear
+		vehicleYear := year
 		if vp := c.VehicleProduct(); vp != nil {
 			vehicleMake = vp.ProductMake
 			vehicleModel = vp.ProductModel

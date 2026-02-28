@@ -35,7 +35,9 @@ func main() {
 	interval := flag.Duration("interval", 30*time.Minute, "polling interval (0 = one-shot)")
 	sources := flag.String("sources", "nhtsa,ifixit,forums", "comma-separated sources to scrape")
 	nhtsaMakes := flag.String("nhtsa-makes", "TOYOTA,HONDA,FORD,CHEVROLET,BMW,NISSAN", "comma-separated vehicle makes for NHTSA")
-	nhtsaYear := flag.Int("nhtsa-year", 2024, "model year for NHTSA queries")
+	nhtsaYear := flag.Int("nhtsa-year", 2024, "model year for NHTSA queries (single year; overridden by -nhtsa-year-start/-nhtsa-year-end)")
+	nhtsaYearStart := flag.Int("nhtsa-year-start", 0, "start of model year range for NHTSA (inclusive)")
+	nhtsaYearEnd := flag.Int("nhtsa-year-end", 0, "end of model year range for NHTSA (inclusive)")
 	manualsDir := flag.String("manuals-dir", "", "directory containing PDF vehicle manuals (legacy) / output dir for crawler")
 	manualsMax := flag.Int("manuals-max", 0, "max manual files to process (0 = unlimited)")
 	manualsDiscover := flag.Bool("manuals-discover", false, "crawl sources and build manual index only")
@@ -186,12 +188,20 @@ func main() {
 	var nhtsaScraper *nhtsa.Scraper
 	if enabledSources["nhtsa"] {
 		makes := strings.Split(*nhtsaMakes, ",")
-		nhtsaScraper = nhtsa.NewScraper(nhtsa.Config{
+		cfg := nhtsa.Config{
 			Makes:      makes,
 			ModelYear:  *nhtsaYear,
 			MaxPerMake: 50,
 			RateLimit:  2 * time.Second,
-		})
+		}
+		// If year range flags are set, build ModelYears list
+		if *nhtsaYearStart > 0 && *nhtsaYearEnd > 0 {
+			for y := *nhtsaYearStart; y <= *nhtsaYearEnd; y++ {
+				cfg.ModelYears = append(cfg.ModelYears, y)
+			}
+			log.Printf("NHTSA year range: %d-%d (%d years)", *nhtsaYearStart, *nhtsaYearEnd, len(cfg.ModelYears))
+		}
+		nhtsaScraper = nhtsa.NewScraper(cfg)
 	}
 
 	var ifixitScraper *ifixit.Scraper

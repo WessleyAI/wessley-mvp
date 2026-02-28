@@ -41,7 +41,16 @@ func (c *Complaint) VehicleProduct() *Product {
 // Config controls NHTSA scraper behavior.
 type Config struct {
 	Makes      []string
-	ModelYear  int
+	ModelYear  int      // single year (legacy); ignored if ModelYears is set
+	ModelYears []int    // year list to iterate; takes precedence over ModelYear
 	MaxPerMake int
 	RateLimit  time.Duration
+}
+
+// Years returns the list of model years to scrape.
+func (c Config) Years() []int {
+	if len(c.ModelYears) > 0 {
+		return c.ModelYears
+	}
+	return []int{c.ModelYear}
 }
