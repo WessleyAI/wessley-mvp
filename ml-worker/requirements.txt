@@ -5,3 +5,6 @@ grpcio-reflection==1.68.1
 protobuf==5.29.2
 httpx==0.28.1
 sentence-transformers==3.3.1
+pytest==8.3.4
+pytest-asyncio==0.25.0
+pytest-mock==3.14.0
