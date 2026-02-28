@@ -1,171 +1,165 @@
 {
-  "timestamp": "2026-02-28T10:09:00Z",
+  "timestamp": "2026-02-28T14:09:00Z",
   "critical": [
     {
-      "title": "Embedding ratio still at 62% — 2,007 nodes invisible to RAG",
-      "detail": "3,322 vectors for 5,329 nodes (62.3%). Improved from 55.7% at last analysis thanks to ingest restart, but 2,007 nodes remain unembedded. ManualEntry (2,360 nodes — the OEM gold data) likely still has poor vector coverage. At current embedding rate (~610 vectors in 4 hours), full coverage would take ~13 more hours IF ingest keeps running.",
-      "fix": "Run dedicated backfill: go run cmd/backfill/main.go to embed all existing nodes. Verify it handles ManualEntry type. Monitor until embedding_ratio > 0.95."
+      "title": "Embedding pipeline STALLED — 0 new vectors in 4 hours, ratio dropping",
+      "detail": "Vectors stuck at 3,322 since 10:09 while nodes grew to 5,440. Embedding ratio DROPPED from 62.3% to 61.1% (was improving last analysis). 2,118 nodes now invisible to RAG — worse than 4 hours ago (2,007). The ingest process (PID 59635) is running but not producing embeddings. Either Ollama is overloaded or the embedding path is silently failing.",
+      "fix": "Check ingest logs for embedding errors. Verify Ollama is responsive: curl http://localhost:11434/api/embeddings. If stalled, restart ingest. Run backfill for existing unembedded nodes."
     }
   ],
   "warnings": [
     {
-      "title": "Scraper downgraded to single year (2020) — should cover full range",
-      "detail": "Scraper PID 12336 now running with -nhtsa-year 2020 (previously was 2024-only and exhausted). Good that it changed, but only one year at a time is slow. Should run 2020-2025 for maximum coverage.",
-      "fix": "Restart scraper with: -nhtsa-year 2020,2021,2022,2023,2024,2025 to parallelize year coverage."
+      "title": "Scraper still locked to single year (2020) — 5 years of data untouched",
+      "detail": "Scraper PID 81608 running with -nhtsa-year 2020 only. Same as last analysis. At 36,908 NHTSA docs total, 2020 may be nearing exhaustion. Years 2021-2025 remain unscraped.",
+      "fix": "Restart scraper with: -nhtsa-year 2020,2021,2022,2023,2024,2025"
     },
     {
-      "title": "No process supervision — ingest died silently for 6+ hours last night",
-      "detail": "Ingest was dead from ~sometime before 06:09 until manual restart at 08:11. No alerts, no auto-restart. This will happen again.",
-      "fix": "Wrap ingest in a restart loop: while true; do /tmp/wessley-ingest ...; sleep 5; done. Or use launchd plist for proper supervision."
+      "title": "Reddit scraper still stopped — 0 community knowledge after 2+ days",
+      "detail": "Reddit is the #1 source of real-world mechanic Q&A (r/MechanicAdvice has 1M+ members). Zero posts scraped. This is a major gap in data diversity.",
+      "fix": "Enable Reddit scraper targeting r/MechanicAdvice, r/CarTalk, r/AskMechanics, r/cartalk"
     },
     {
-      "title": "HNSW index not built — brute-force search on all queries",
-      "detail": "indexed_vectors_count=0 with 3,322 points. Qdrant threshold is 10,000. Fine for now, but plan for latency spike when crossing threshold."
+      "title": "YouTube scraper reports 'running' but 0 documents — phantom scraper",
+      "detail": "metrics-latest shows youtube status='running', total_docs=0. Either no API key configured, search terms missing, or silently erroring.",
+      "fix": "Check YouTube scraper config and logs. Verify YOUTUBE_API_KEY is set."
     },
     {
-      "title": "Biddings containers multiplying — now 3 (was 2), adding postgres",
-      "detail": "biddings-neo4j:7475, biddings-qdrant:6335, biddings-postgres:15432 all running. Postgres is new (3h old). Not used by Wessley. Consuming RAM and ports.",
-      "fix": "docker stop biddings-neo4j biddings-qdrant biddings-postgres"
+      "title": "3 biddings containers consuming resources — not used by Wessley",
+      "detail": "biddings-neo4j:7475, biddings-qdrant:6335, biddings-postgres:15432 (now 7h old). All unused by Wessley pipeline. Consuming RAM on a machine that needs it for Ollama embeddings.",
+      "fix": "docker stop biddings-neo4j biddings-qdrant biddings-postgres && docker rm biddings-neo4j biddings-qdrant biddings-postgres"
     },
     {
-      "title": "Reddit scraper still stopped — 0 community repair knowledge",
-      "detail": "Reddit is the largest source of real-world mechanic Q&A. Zero posts scraped. YouTube also at 0 docs despite 'running' status in metrics.",
-      "fix": "Enable Reddit scraper targeting r/MechanicAdvice, r/CarTalk, r/AskMechanics."
+      "title": "HNSW index not built — all queries are brute-force",
+      "detail": "indexed_vectors_count=0 with 3,322 points. Qdrant threshold is 10,000. Acceptable now but will cause latency spike at scale."
     },
     {
-      "title": "Relationship density improving but still low — 0.264 rels/node (target 3-5)",
-      "detail": "1,409 relationships for 5,329 nodes. Up from 0.222 last time. DOCUMENTED_IN jumped from 429 to 676 (+57%), which is great progress, but overall graph is still sparse."
+      "title": "Relationship density still low — 0.324 rels/node (target 3-5)",
+      "detail": "1,761 relationships for 5,440 nodes. Improved from 0.264 (+22.7%), but still far from target. Graph traversal queries return shallow results."
     }
   ],
   "healthy": [
-    "RECOVERY: Ingest process back online (PID 12335 since 08:11) — pipeline actively processing again",
-    "RECOVERY: Embedding pipeline resumed — 610 new vectors in ~4 hours (was stalled 12+ hours)",
-    "GROWTH: Nodes 4,865→5,329 (+464), Components 1,819→2,203 (+384 new complaint/repair docs)",
-    "GROWTH: Relationships 1,082→1,409 (+327, +30%), DOCUMENTED_IN 429→676 (+57%)",
-    "GROWTH: Vectors 2,712→3,322 (+610, +22.5%)",
+    "GROWTH: Nodes 5,329→5,440 (+111, +2.1%) — steady organic growth from scrapers",
+    "GROWTH: Relationships 1,409→1,761 (+352, +25%) — significant relationship enrichment happening",
+    "GROWTH: DOCUMENTED_IN 429→676→917 (+241 since last, +35.7%) — best relationship growth metric",
+    "GROWTH: Systems 210→265 (+26%), Subsystems 91→147 (+62%) — vehicle hierarchy filling out nicely",
+    "GROWTH: Disk data 105MB→124MB (+18%) — scraper actively producing",
     "Build: go build ./... — zero errors, clean compilation",
-    "Tests: ALL 17 test suites PASS, 27 packages total, zero failures",
-    "Infrastructure: Neo4j 5.x + Qdrant green + Ollama serving — all stable 24+ hours",
-    "Vehicle hierarchy: 33 Makes, 200 Models, 232 ModelYears, 210 Systems, 91 Subsystems",
-    "Top coverage: Toyota (18 models/420 docs), Honda (12/310), Ford (15/285)",
-    "Qdrant: status=green, optimizer_status=ok, 3,322 vectors, Cosine/768d",
-    "Error rate: 23/5329 = 0.43% — excellent, improved from 0.47%",
-    "Data dir growing again: 96MB→105MB (+9MB, scraper producing output)",
-    "First non-metrics commit in 20+: 'fixes: bug fixer run report' — development activity resumed",
-    "Scraper expanded to 2020 year range (was stuck on exhausted 2024)"
+    "Tests: ALL 17 test suites PASS across 27 packages, zero failures",
+    "Infrastructure: Neo4j 5.x + Qdrant green + Ollama — all stable",
+    "Code quality: New commits include panic recovery for ingest (9515ec9) and bug fixer report (1604613)",
+    "Vehicle coverage: 33 Makes, 200 Models, 232 ModelYears — Toyota leads with 420 docs",
+    "Error rate: 23/5440 = 0.42% — excellent, continuing to improve",
+    "Qdrant: status=green, optimizer_status=ok, Cosine/768d"
   ],
   "suggestions": [
     {
-      "title": "Run backfill to embed all 2,007 unvectorized nodes NOW",
-      "impact": "Single action improves RAG recall by ~60%. ManualEntry (OEM data) is the highest-quality content and likely mostly unembedded.",
+      "title": "URGENT: Debug and fix embedding pipeline — vectors stalled 4+ hours",
+      "impact": "Embedding ratio is actively degrading (62.3%→61.1%). Every hour without embeddings means more nodes invisible to RAG. This is the #1 priority.",
       "effort": "low"
     },
     {
-      "title": "Add process supervision for ingest — prevent silent 6-hour outages",
-      "impact": "Last night's outage was invisible until analysis caught it. Simple restart loop prevents this entirely.",
+      "title": "Run backfill to embed all 2,118 unvectorized nodes",
+      "impact": "Single action would improve RAG recall by ~64%. ManualEntry (2,360 nodes of OEM gold data) likely has worst vector coverage.",
       "effort": "low"
     },
     {
-      "title": "Expand scraper to multi-year range (2020-2025)",
-      "impact": "Currently only scraping 2020. Running all years simultaneously unlocks 5x more NHTSA data. Flag change only.",
+      "title": "Kill biddings containers to free RAM for Ollama",
+      "impact": "3 unnecessary containers consuming memory. Freeing RAM may help Ollama embedding throughput — could be why embeddings stalled.",
       "effort": "low"
     },
     {
-      "title": "Kill biddings-* containers to reclaim memory",
-      "impact": "3 containers not used by Wessley consuming RAM. Instant cleanup.",
+      "title": "Expand scraper to multi-year (2020-2025)",
+      "impact": "5x more NHTSA complaint data available. Single flag change.",
       "effort": "low"
     },
     {
-      "title": "Enable Reddit + YouTube scrapers for source diversity",
-      "impact": "Currently 2 active sources (NHTSA + iFixit). Reddit adds community repair knowledge, YouTube adds video repair guides. Target: 4+ active sources.",
+      "title": "Enable Reddit scraper for community repair knowledge",
+      "impact": "Adds real-world mechanic Q&A — the most valuable data for end users asking 'what's wrong with my car?'",
       "effort": "med"
     },
     {
-      "title": "Add enrichment pass to boost relationship density",
-      "impact": "0.264 rels/node is far below 3-5 target. Run enricher to link Components to Systems, cross-reference similar complaints across vehicles.",
+      "title": "Add enrichment pass to boost relationship density toward 3+ rels/node",
+      "impact": "Current 0.324 rels/node limits graph traversal quality. Cross-linking Components to Systems and similar complaints across vehicles would dramatically improve RAG context.",
       "effort": "med"
     }
   ],
   "bugs": [
     {
-      "title": "Ingest process lacks crash recovery / supervision",
+      "title": "Embedding pipeline stalled — ingest running but not embedding",
       "file": "cmd/ingest/main.go",
       "line": 0,
-      "detail": "Ingest died silently between 02:09-06:09 analysis window. No crash log, no restart. Was manually restarted at 08:11. Needs defer/recover and external supervision.",
-      "fix": "Add panic recovery in main loop. Wrap in shell restart loop or launchd plist. Log crash reason to file."
+      "detail": "PID 59635 running since 13:03 but 0 new vectors in 4+ hours (since 10:09). Process appears healthy but embedding output is zero. May be an Ollama connection issue, rate limit, or error swallowed silently.",
+      "fix": "Add embedding-specific logging/metrics. Check if Ollama port 11434 is responding. Verify ingest is actually calling embedding endpoint, not just scanning files."
     },
     {
-      "title": "Backfill may not cover ManualEntry nodes",
-      "file": "cmd/backfill/main.go",
-      "line": 0,
-      "detail": "2,360 ManualEntry nodes are the largest node type. If backfill only processes Component type, the highest-quality OEM data stays invisible to vector search.",
-      "fix": "Verify backfill queries all node types. Test with: go run cmd/backfill/main.go -dry-run"
-    },
-    {
-      "title": "YouTube scraper reports 'running' but has 0 documents",
+      "title": "YouTube scraper silently producing nothing",
       "file": "cmd/scraper-youtube/main.go",
       "line": 0,
-      "detail": "metrics-latest.json shows youtube status='running' with total_docs=0. Either it's silently failing or misconfigured.",
-      "fix": "Check scraper-youtube logs. Verify API key / search terms configured."
+      "detail": "Status 'running' with 0 total_docs across 2+ days. No error surfaced in metrics.",
+      "fix": "Check logs. Add error reporting to metrics when API calls fail. Verify configuration."
+    },
+    {
+      "title": "ManualEntry nodes likely unembedded — backfill may skip them",
+      "file": "cmd/backfill/main.go",
+      "line": 0,
+      "detail": "2,360 ManualEntry nodes are the single largest node type and highest quality (OEM data). If backfill only processes Component nodes, the best data stays invisible.",
+      "fix": "Verify backfill queries all node labels. Test with dry-run."
     }
   ],
   "metrics": {
-    "total_docs": 5329,
-    "total_nodes": 5329,
+    "total_docs": 5440,
+    "total_nodes": 5440,
     "total_vectors": 3322,
-    "total_relationships": 1409,
-    "error_rate": 0.0043,
+    "total_relationships": 1761,
+    "error_rate": 0.0042,
     "sources_active": 2,
     "sources_configured": 4,
-    "embedding_ratio": 0.623,
+    "embedding_ratio": 0.611,
     "node_types": {
       "ManualEntry": 2360,
       "Component": 2203,
+      "System": 265,
       "ModelYear": 232,
-      "System": 210,
       "VehicleModel": 200,
-      "Subsystem": 91,
+      "Subsystem": 147,
       "Make": 33
     },
     "relationship_types": {
-      "DOCUMENTED_IN": 676,
+      "DOCUMENTED_IN": 917,
+      "HAS_SYSTEM": 265,
       "OF_MODEL": 232,
-      "HAS_SYSTEM": 210,
       "HAS_MODEL": 200,
-      "HAS_SUBSYSTEM": 91
+      "HAS_SUBSYSTEM": 147
     },
     "makes_covered": 33,
     "models_covered": 200,
     "top_make_docs": "Toyota:420",
-    "docs_last_6h": 464,
-    "vectors_last_6h": 610,
-    "rels_last_6h": 327,
-    "disk_data_mb": 105,
-    "disk_code_mb": 448
+    "docs_last_6h": 111,
+    "vectors_last_6h": 0,
+    "rels_last_6h": 352,
+    "disk_data_mb": 124,
+    "disk_code_mb": 455
   },
   "strategy": [
-    "PIPELINE RECOVERED: Ingest back online since 08:11. Embedding and graph growth resumed. The 6-hour outage overnight is the wake-up call — add supervision before it happens again.",
-    "IMMEDIATE WIN: Run backfill to close the 38% embedding gap. This is the single highest-impact action for RAG quality. ManualEntry nodes (OEM data) are the crown jewels.",
-    "DATA EXPANSION: Scraper now on 2020 (was exhausted 2024). Good progress but should cover 2020-2025 simultaneously. Each year adds thousands of complaints.",
-    "SOURCE DIVERSITY: 2 sources active (NHTSA + iFixit). Reddit and YouTube would bring community knowledge and video guides. Target 4+ sources for robust coverage.",
-    "MILESTONE TRACKING: At current rate (~150 vectors/hour), full embedding coverage (~5,300 vectors) achievable in ~13 hours. Push for 95%+ embedding ratio by tomorrow.",
-    "NEXT MILESTONE: 5,000+ vectors (backfill), 4+ active sources (enable Reddit), 10,000+ nodes (multi-year scraping). This makes the RAG pipeline genuinely demo-ready."
+    "CRITICAL: Embedding pipeline stalled. Vectors frozen at 3,322 while nodes keep growing. This is actively degrading RAG quality. Fix before anything else.",
+    "HYPOTHESIS: biddings containers (especially postgres, 7h old) may be memory-starving Ollama. Kill them and see if embeddings resume.",
+    "BRIGHT SPOT: Relationship growth is excellent — 25% increase in 4 hours. DOCUMENTED_IN at 917 (was 676). The graph enrichment pipeline is working well even if embeddings aren't.",
+    "HIERARCHY FILLING: Systems 210→265 (+26%), Subsystems 91→147 (+62%). The vehicle taxonomy is getting meaningfully deeper. This improves query routing.",
+    "NEXT MILESTONES: (1) Fix embedding → get to 95%+ ratio, (2) Backfill ManualEntry nodes, (3) Multi-year scraping, (4) Enable Reddit. Achievable in 24 hours with focus.",
+    "DEMO READINESS: Graph structure is solid (5,440 nodes, 1,761 rels, 33 makes). The blocker is embedding coverage — fix that and the RAG pipeline is genuinely usable for vehicle diagnostics queries."
   ],
   "changes_since_last": [
-    "RECOVERED: Ingest process restarted (PID 12335 since 08:11) — was dead at 06:09 analysis",
-    "RECOVERED: Embedding pipeline active — 610 new vectors (2,712→3,322, +22.5%)",
-    "IMPROVED: Nodes grew 4,865→5,329 (+464, +9.5%)",
-    "IMPROVED: Relationships grew 1,082→1,409 (+327, +30.2%)",
-    "IMPROVED: DOCUMENTED_IN 429→676 (+57%) — best relationship growth yet",
-    "IMPROVED: Components 1,819→2,203 (+384 new repair/complaint docs)",
-    "IMPROVED: Embedding ratio 55.7%→62.3% (+6.6pp)",
-    "IMPROVED: Error rate 0.47%→0.43%",
-    "IMPROVED: Data dir growing again 96MB→105MB",
-    "CHANGED: Scraper reconfigured from 2024-only to 2020 year",
-    "CHANGED: Models 196→200, ModelYears 222→232, Systems 161→210, Subsystems 74→91",
-    "NEW: biddings-postgres container appeared (3h old)",
-    "NEW: 'fixes: bug fixer run report' commit — first non-metrics commit in 20+",
-    "STABLE: Build clean, all 17 test suites passing",
-    "STABLE: All infrastructure healthy (Neo4j, Qdrant, Ollama)"
+    "DEGRADED: Embedding ratio 62.3%→61.1% — vectors stalled at 3,322 while nodes grew",
+    "DEGRADED: 0 new vectors in 4 hours (previous analysis saw 610 new vectors)",
+    "IMPROVED: Nodes 5,329→5,440 (+111)",
+    "IMPROVED: Relationships 1,409→1,761 (+352, +25%) — major graph enrichment",
+    "IMPROVED: DOCUMENTED_IN 676→917 (+241, +35.7%)",
+    "IMPROVED: Systems 210→265 (+26%), Subsystems 91→147 (+62%)",
+    "IMPROVED: Disk data 105MB→124MB (+18%)",
+    "IMPROVED: Error rate 0.43%→0.42%",
+    "NEW COMMITS: panic recovery for ingest (9515ec9), bug fixer report (1604613)",
+    "STABLE: Scraper still on 2020-only, Reddit still stopped, YouTube still phantom",
+    "STABLE: Build clean, all tests passing, infrastructure healthy",
+    "UNCHANGED: biddings containers still running (postgres now 7h old)"
   ]
 }
