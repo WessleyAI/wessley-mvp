@@ -1910,5 +1910,19 @@
     "total_docs": 5423,
     "total_vectors": 3322,
     "total_nodes": 5423
+  },
+  {
+    "timestamp": "2026-02-28T11:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5423,
+    "total_vectors": 3322,
+    "total_nodes": 5423
   }
 ]
