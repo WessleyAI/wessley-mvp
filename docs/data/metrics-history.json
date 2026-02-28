@@ -1780,5 +1780,22 @@
     "total_docs": 5328,
     "total_vectors": 3320,
     "total_nodes": 5328
+  },
+  {
+    "timestamp": "2026-02-28T10:08:59Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 0,
+    "new_vectors": 2,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
   }
 ]
