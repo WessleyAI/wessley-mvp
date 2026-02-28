@@ -337,5 +337,43 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (stalled processes, config). Ollama is responsive; ingest process may need restart."
+  },
+  {
+    "timestamp": "2026-02-28T21:20:42Z",
+    "analysis_timestamp": "2026-02-28T18:09:00Z",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "YouTube scraper silently producing nothing for 3 days",
+        "reason": "Operational issue \u2014 needs YOUTUBE_API_KEY verification and log inspection, not a code bug. Cannot fix without API credentials."
+      },
+      {
+        "title": "Repo size growing ~100MB/hour from metrics auto-commits",
+        "reason": "Git history bloat (822MB in .git objects). metrics-history.json itself is only 61KB. Fix requires git filter-branch or BFG which is destructive \u2014 skipping to avoid data loss. Recommend moving metrics to a data branch or reducing commit frequency."
+      },
+      {
+        "title": "Scraper locked to single year (2020)",
+        "reason": "Operational config change, not a code bug. Requires restarting scraper with different flags."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational \u2014 needs to be started, not a code fix."
+      },
+      {
+        "title": "Biddings containers consuming resources",
+        "reason": "Infrastructure cleanup \u2014 not a code fix. Requires docker stop/rm."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": "none \u2014 no code changes needed",
+    "summary": "No code fixes needed. Build clean, all 17 test suites pass. All issues are operational (scraper config, container cleanup, git history bloat)."
   }
 ]
