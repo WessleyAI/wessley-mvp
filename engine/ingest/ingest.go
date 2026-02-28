@@ -157,6 +157,7 @@ func NewStore(vs *semantic.VectorStore, gs *graph.GraphStore) fn.Stage[EmbeddedD
 		}
 
 		// Store vectors in Qdrant.
+		slog.Info("store: preparing vectors", "doc_id", doc.ID, "chunks", len(doc.Chunks), "embeddings", len(doc.Embeddings))
 		records := make([]semantic.VectorRecord, len(doc.Chunks))
 		for i, chunk := range doc.Chunks {
 			// Generate deterministic UUID from doc ID and chunk index

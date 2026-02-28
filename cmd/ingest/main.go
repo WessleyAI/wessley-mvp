@@ -145,6 +145,12 @@ func main() {
 	log.Info("watching for scraped data", "dir", *dataDir, "interval", *interval)
 
 	scan := func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Error("scan panic recovered", "panic", fmt.Sprintf("%v", r))
+				mErrorsTotal("panic").Inc()
+			}
+		}()
 		mLastScan.Set(time.Now().Unix())
 		entries, err := os.ReadDir(*dataDir)
 		if err != nil {
