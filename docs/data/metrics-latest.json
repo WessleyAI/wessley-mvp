@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-28T14:48:59Z",
+  "timestamp": "2026-02-28T14:58:58Z",
   "knowledge_graph": {
     "total_nodes": 5440,
     "total_relationships": 1762,
@@ -91,7 +91,7 @@
     "recent_vehicles": []
   },
   "vector_store": {
-    "total_vectors": 6147,
+    "total_vectors": 6325,
     "collection": "wessley",
     "dimensions": 768,
     "status": "green"
@@ -100,32 +100,32 @@
     "total_docs_ingested": 5440,
     "total_errors": 23,
     "docs_by_source": {
-      "nhtsa": 38908,
+      "nhtsa": 39484,
       "manual": 12,
-      "ifixit": 1188
+      "ifixit": 1199
     },
-    "last_ingestion": "2026-02-28T14:48:59Z",
-    "files_processed": 238
+    "last_ingestion": "2026-02-28T14:58:58Z",
+    "files_processed": 240
   },
   "scrapers": {
     "reddit": {
       "status": "stopped",
-      "last_scrape": "2026-02-28T14:48:59Z",
+      "last_scrape": "2026-02-28T14:58:58Z",
       "total_posts": 0
     },
     "nhtsa": {
       "status": "running",
-      "last_scrape": "2026-02-28T14:48:59Z",
-      "total_docs": 38908
+      "last_scrape": "2026-02-28T14:58:58Z",
+      "total_docs": 39484
     },
     "ifixit": {
       "status": "running",
-      "last_scrape": "2026-02-28T14:48:59Z",
-      "total_docs": 1188
+      "last_scrape": "2026-02-28T14:58:58Z",
+      "total_docs": 1199
     },
     "youtube": {
       "status": "running",
-      "last_scrape": "2026-02-28T14:48:59Z",
+      "last_scrape": "2026-02-28T14:58:58Z",
       "total_docs": 0
     },
     "manuals": {
@@ -142,7 +142,7 @@
     },
     "qdrant": {
       "status": "connected",
-      "vectors": 6147
+      "vectors": 6325
     },
     "ollama": {
       "status": "connected",

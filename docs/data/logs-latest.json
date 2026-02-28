@@ -1,48 +1,53 @@
 [
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "system",
     "message": "ingest: running"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "infrastructure",
     "message": "Container biddings-postgres Up 8 hours (healthy)"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "infrastructure",
     "message": "Container biddings-qdrant Up 17 hours"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "infrastructure",
     "message": "Container biddings-neo4j Up 17 hours (healthy)"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 28 hours"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 28 hours"
   },
   {
-    "time": "2026-02-28T14:48:59Z",
+    "time": "2026-02-28T14:58:58Z",
     "category": "system",
-    "message": "Data directory: 128M\t/tmp/wessley-data"
+    "message": "Data directory: 129M\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-02-28T14:52:07Z",
+    "category": "ingestion",
+    "message": "File sources-2026-02-28.json (6287KB) processed"
   },
   {
     "time": "2026-02-28T14:45:57Z",
@@ -73,11 +78,6 @@
     "time": "2026-02-28T14:33:16Z",
     "category": "ingestion",
     "message": "File nhtsa-1772289196436525000.json (379KB) processed"
-  },
-  {
-    "time": "2026-02-28T14:22:07Z",
-    "category": "ingestion",
-    "message": "File sources-2026-02-28.json (5589KB) processed"
   },
   {
     "time": "2026-02-28T14:15:57Z",
