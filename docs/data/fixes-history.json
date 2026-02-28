@@ -206,5 +206,43 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed. Build clean, all 26 test packages pass. All critical issues are operational (stalled pipelines, missing embeddings) not code bugs. Scrapers have recovered and are writing fresh files as of 03:03 AM. Key finding: ManualEntry and ScrapedPost use completely separate pipelines \u2014 embedding ManualEntry content requires bridging these two paths."
+  },
+  {
+    "timestamp": "2026-02-28T09:20:38Z",
+    "analysis_timestamp": "2026-02-28T06:09:00Z",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Ingest process dead",
+        "reason": "Already restarted \u2014 PID 12335 running with correct flags"
+      },
+      {
+        "title": "Scraper exhausted on 2024-only",
+        "reason": "Already reconfigured \u2014 PID 12336 running with 2020 year range"
+      },
+      {
+        "title": "Backfill ManualEntry nodes",
+        "reason": "Operational task, not a code bug. Ingest process is running and will handle new data."
+      },
+      {
+        "title": "Biddings containers consuming resources",
+        "reason": "Infrastructure cleanup, not a code fix"
+      },
+      {
+        "title": "Add process supervision",
+        "reason": "Architecture decision \u2014 not an auto-fix candidate"
+      }
+    ],
+    "tests_before": {
+      "passed": 21,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 21,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed. Build clean, 21/26 test suites pass (5 have no test files). All critical issues are operational and already addressed \u2014 ingest restarted (PID 12335), scraper running with expanded config (PID 12336)."
   }
 ]
