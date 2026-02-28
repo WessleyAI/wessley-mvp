@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-02-28T08:38:58Z",
+  "timestamp": "2026-02-28T08:48:59Z",
   "knowledge_graph": {
-    "total_nodes": 5326,
-    "total_relationships": 1400,
+    "total_nodes": 5327,
+    "total_relationships": 1404,
     "nodes_by_type": {
       "Component": 2202,
       "ManualEntry": 2360,
       "Make": 33,
       "VehicleModel": 200,
       "ModelYear": 232,
-      "System": 209,
+      "System": 210,
       "Subsystem": 90
     },
     "relationships_by_type": {
       "HAS_MODEL": 200,
       "OF_MODEL": 232,
-      "HAS_SYSTEM": 209,
+      "HAS_SYSTEM": 210,
       "HAS_SUBSYSTEM": 90,
-      "DOCUMENTED_IN": 669
+      "DOCUMENTED_IN": 672
     },
     "top_makes": [
       {
@@ -97,35 +97,35 @@
     "status": "green"
   },
   "ingestion": {
-    "total_docs_ingested": 5326,
+    "total_docs_ingested": 5327,
     "total_errors": 23,
     "docs_by_source": {
-      "nhtsa": 21313,
+      "nhtsa": 21696,
       "manual": 12,
-      "ifixit": 693
+      "ifixit": 704
     },
-    "last_ingestion": "2026-02-28T08:38:58Z",
-    "files_processed": 138
+    "last_ingestion": "2026-02-28T08:48:59Z",
+    "files_processed": 140
   },
   "scrapers": {
     "reddit": {
       "status": "stopped",
-      "last_scrape": "2026-02-28T08:38:58Z",
+      "last_scrape": "2026-02-28T08:48:59Z",
       "total_posts": 0
     },
     "nhtsa": {
       "status": "running",
-      "last_scrape": "2026-02-28T08:38:58Z",
-      "total_docs": 21313
+      "last_scrape": "2026-02-28T08:48:59Z",
+      "total_docs": 21696
     },
     "ifixit": {
       "status": "running",
-      "last_scrape": "2026-02-28T08:38:58Z",
-      "total_docs": 693
+      "last_scrape": "2026-02-28T08:48:59Z",
+      "total_docs": 704
     },
     "youtube": {
       "status": "running",
-      "last_scrape": "2026-02-28T08:38:58Z",
+      "last_scrape": "2026-02-28T08:48:59Z",
       "total_docs": 0
     },
     "manuals": {
