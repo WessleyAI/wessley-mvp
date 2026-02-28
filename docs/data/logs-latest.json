@@ -1,48 +1,68 @@
 [
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "system",
     "message": "ingest: running"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "infrastructure",
     "message": "Container biddings-postgres Up 5 hours (healthy)"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "infrastructure",
     "message": "Container biddings-qdrant Up 14 hours"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "infrastructure",
     "message": "Container biddings-neo4j Up 14 hours (healthy)"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 26 hours"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 26 hours"
   },
   {
-    "time": "2026-02-28T12:29:00Z",
+    "time": "2026-02-28T12:38:59Z",
     "category": "system",
-    "message": "Data directory: 116M\t/tmp/wessley-data"
+    "message": "Data directory: 117M\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-02-28T12:33:28Z",
+    "category": "ingestion",
+    "message": "File ifixit-1772282008475701000.json (4KB) processed"
+  },
+  {
+    "time": "2026-02-28T12:33:21Z",
+    "category": "ingestion",
+    "message": "File nhtsa-1772282001355722000.json (392KB) processed"
+  },
+  {
+    "time": "2026-02-28T12:31:03Z",
+    "category": "ingestion",
+    "message": "File ifixit-1772281863370525000.json (4KB) processed"
+  },
+  {
+    "time": "2026-02-28T12:30:56Z",
+    "category": "ingestion",
+    "message": "File nhtsa-1772281856257807000.json (392KB) processed"
   },
   {
     "time": "2026-02-28T12:22:07Z",
@@ -73,25 +93,5 @@
     "time": "2026-02-28T12:03:21Z",
     "category": "ingestion",
     "message": "File nhtsa-1772280201299571000.json (392KB) processed"
-  },
-  {
-    "time": "2026-02-28T12:03:14Z",
-    "category": "ingestion",
-    "message": "File nhtsa-1772280194214322000.json (379KB) processed"
-  },
-  {
-    "time": "2026-02-28T11:45:57Z",
-    "category": "ingestion",
-    "message": "File ifixit-1772279157616465000.json (4KB) processed"
-  },
-  {
-    "time": "2026-02-28T11:45:50Z",
-    "category": "ingestion",
-    "message": "File nhtsa-1772279150406812000.json (409KB) processed"
-  },
-  {
-    "time": "2026-02-28T11:33:35Z",
-    "category": "ingestion",
-    "message": "File ifixit-1772278415285097000.json (4KB) processed"
   }
 ]
