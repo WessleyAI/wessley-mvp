@@ -244,5 +244,56 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed. Build clean, 21/26 test suites pass (5 have no test files). All critical issues are operational and already addressed \u2014 ingest restarted (PID 12335), scraper running with expanded config (PID 12336)."
+  },
+  {
+    "timestamp": "2026-02-28T13:20:00Z",
+    "analysis_timestamp": "2026-02-28T10:09:00Z",
+    "fixed": [
+      {
+        "title": "Ingest scan loop lacks panic recovery",
+        "category": "bug",
+        "detail": "Added defer/recover around scan() to catch panics, log them, and increment error counter instead of crashing the process silently",
+        "files_changed": [
+          "cmd/ingest/main.go"
+        ]
+      }
+    ],
+    "skipped": [
+      {
+        "title": "Embedding ratio at 62% \u2014 2,007 nodes unembedded",
+        "reason": "Operational: requires running backfill or waiting for ingest pipeline to process. Not a code bug."
+      },
+      {
+        "title": "Backfill only covers Component nodes, not ManualEntry",
+        "reason": "ManualEntry uses separate pipeline (manual_registry.go). Bridging requires architecture work, not a bug fix."
+      },
+      {
+        "title": "YouTube scraper reports running but 0 documents",
+        "reason": "Likely config/API key issue. No scraper-youtube code to debug (no test files, needs runtime investigation)."
+      },
+      {
+        "title": "Scraper only covers 2020 year",
+        "reason": "Operational: restart with multi-year flag. Not a code bug."
+      },
+      {
+        "title": "Biddings containers consuming resources",
+        "reason": "Infrastructure cleanup, not a code fix."
+      },
+      {
+        "title": "No external process supervision for ingest",
+        "reason": "Architecture decision. Panic recovery added in-process as partial mitigation."
+      }
+    ],
+    "tests_before": {
+      "passed": 21,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 21,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": "9515ec9",
+    "summary": "Added panic recovery to ingest scan loop to prevent silent crashes. Build clean, all tests pass. Remaining issues are operational (embedding backfill, scraper config, supervision)."
   }
 ]
