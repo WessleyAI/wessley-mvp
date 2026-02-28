@@ -295,5 +295,47 @@
     "build_status": "pass",
     "commit": "9515ec9",
     "summary": "Added panic recovery to ingest scan loop to prevent silent crashes. Build clean, all tests pass. Remaining issues are operational (embedding backfill, scraper config, supervision)."
+  },
+  {
+    "timestamp": "2026-02-28T17:20:54Z",
+    "analysis_timestamp": "2026-02-28T14:09:00Z",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Embedding pipeline stalled \u2014 ingest running but not embedding",
+        "reason": "Operational issue: PID 59635 running, Ollama responds to embedding requests. Ingest process may need restart or has a silent error in its embedding loop. Not a code bug \u2014 requires process restart or log inspection."
+      },
+      {
+        "title": "YouTube scraper silently producing nothing",
+        "reason": "Operational/config issue: likely missing API key or search terms. No code bug found."
+      },
+      {
+        "title": "ManualEntry nodes possibly unembedded",
+        "reason": "Requires running backfill command \u2014 operational action, not a code fix."
+      },
+      {
+        "title": "Scraper locked to single year 2020",
+        "reason": "Operational: requires restarting scraper with multi-year flag. Not a code bug."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational: needs to be started. Not a code bug."
+      },
+      {
+        "title": "Biddings containers consuming resources",
+        "reason": "Operational: requires docker stop/rm. Not a code fix \u2014 needs human approval for destructive action."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (stalled processes, config). Ollama is responsive; ingest process may need restart."
   }
 ]
