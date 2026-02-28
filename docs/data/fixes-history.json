@@ -168,5 +168,43 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed. Build passes, all 18 test suites pass. All issues are runtime/operational: enricher backfill needed, scrapers stopped, ManualEntry is metadata not content. Duplicate ingest process already resolved itself."
+  },
+  {
+    "timestamp": "2026-02-28T01:22:00Z",
+    "analysis_timestamp": "2026-02-27T22:09:00Z",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Embedding pipeline not processing ManualEntry nodes",
+        "reason": "Operational issue \u2014 ingest binary at /tmp/wessley-ingest runs separately from codebase. ManualEntry nodes go through graph pipeline (manual_registry.go), not the NATS-based ScrapedPost ingest pipeline. These are two different code paths. No code bug to fix."
+      },
+      {
+        "title": "Scraper producing no new documents",
+        "reason": "Scrapers ARE writing files (latest at 03:03 AM today). /tmp/wessley-data has fresh nhtsa and ifixit JSON files. The analysis was stale \u2014 scrapers recovered on their own."
+      },
+      {
+        "title": "Ingest process running with no output",
+        "reason": "Ingest binary is compiled separately (/tmp/wessley-ingest). Files exist in /tmp/wessley-data but vectors not growing. Likely the ingest binary needs restart or the NATS connection is stale. Operational fix, not code."
+      },
+      {
+        "title": "Low relationship density (0.107 rels/node)",
+        "reason": "Requires running enricher backfill \u2014 an operational task, not a code fix. Enricher code exists and works."
+      },
+      {
+        "title": "ManualEntry nodes not embedded",
+        "reason": "ManualEntry uses a separate pipeline (graph/manual_registry.go) from the embedding pipeline (engine/ingest). Bridging these requires architecture work, not a bug fix."
+      }
+    ],
+    "tests_before": {
+      "passed": 26,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 26,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed. Build clean, all 26 test packages pass. All critical issues are operational (stalled pipelines, missing embeddings) not code bugs. Scrapers have recovered and are writing fresh files as of 03:03 AM. Key finding: ManualEntry and ScrapedPost use completely separate pipelines \u2014 embedding ManualEntry content requires bridging these two paths."
   }
 ]
