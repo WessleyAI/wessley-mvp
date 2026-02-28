@@ -1,2 +1,5 @@
 __pycache__/
 api
+chat/node_modules/
+dashboard/node_modules/
+chat/.next/
