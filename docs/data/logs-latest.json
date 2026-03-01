@@ -1,48 +1,58 @@
 [
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "system",
     "message": "ingest: running"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "infrastructure",
-    "message": "Container biddings-postgres Up 28 hours (healthy)"
+    "message": "Container biddings-postgres Up 29 hours (healthy)"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "infrastructure",
-    "message": "Container biddings-qdrant Up 37 hours"
+    "message": "Container biddings-qdrant Up 38 hours"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "infrastructure",
-    "message": "Container biddings-neo4j Up 37 hours (healthy)"
+    "message": "Container biddings-neo4j Up 38 hours (healthy)"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 2 days"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 2 days"
   },
   {
-    "time": "2026-03-01T11:39:00Z",
+    "time": "2026-03-01T11:49:01Z",
     "category": "system",
-    "message": "Data directory: 237M\t/tmp/wessley-data"
+    "message": "Data directory: 239M\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-03-01T11:45:58Z",
+    "category": "ingestion",
+    "message": "File ifixit-1772365558637365000.json (4KB) processed"
+  },
+  {
+    "time": "2026-03-01T11:45:51Z",
+    "category": "ingestion",
+    "message": "File nhtsa-1772365551425979000.json (409KB) processed"
   },
   {
     "time": "2026-03-01T11:33:36Z",
@@ -83,15 +93,5 @@
     "time": "2026-03-01T11:05:18Z",
     "category": "ingestion",
     "message": "File ifixit-1772363118904815000.json (4KB) processed"
-  },
-  {
-    "time": "2026-03-01T11:05:11Z",
-    "category": "ingestion",
-    "message": "File nhtsa-1772363111810774000.json (392KB) processed"
-  },
-  {
-    "time": "2026-03-01T11:05:07Z",
-    "category": "ingestion",
-    "message": "File ifixit-1772363107075485000.json (4KB) processed"
   }
 ]
