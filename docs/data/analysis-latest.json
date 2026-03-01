@@ -1,89 +1,88 @@
 {
-  "timestamp": "2026-03-01T00:09:00+02:00",
+  "timestamp": "2026-03-01T04:09:00+02:00",
   "critical": [
     {
-      "title": "Repo size growing ~100MB/hour — will break CI/CD imminently",
-      "detail": "822MB repo, all growth from 'data: auto-update metrics' commits every 5-10 min. At this rate, hits GitHub's 2GB soft limit within 12 hours. Git log shows 20 straight metrics commits with no other work.",
-      "fix": "Truncate metrics-history.json to rolling 24h window. Run: cd /tmp/wessley-mvp && git filter-branch to clean history, or start fresh data branch. Add docs/data/*.json to .gitattributes for LFS."
+      "title": "Repo size at 823MB and still growing — GitHub push failure imminent",
+      "detail": "823MB repo (was 822MB 2h ago, 455MB 8h ago). Git log shows 20 consecutive 'data: auto-update metrics' commits. At ~100MB/hour growth rate, GitHub's 2GB soft limit will be hit within 12 hours. Every clone, every CI run, every contributor pays this cost.",
+      "fix": "1) Truncate metrics-history.json to 288 entries (24h rolling). 2) Squash metrics commits: git rebase -i and squash the 50+ data commits. 3) Consider git filter-branch or BFG to purge historical bloat. 4) Move data files to git-lfs or a separate data branch."
     }
   ],
   "warnings": [
     {
-      "title": "Pipeline growth has plateaued — zero new docs in 10+ hours",
-      "detail": "Last new document ingested at ~20:18 on Feb 28. The 2020 NHTSA dataset appears exhausted. Without multi-year expansion, the knowledge graph is static."
+      "title": "Pipeline completely stalled — zero new docs in 30+ hours",
+      "detail": "Last meaningful ingestion was Feb 28 ~11:18 (94 docs burst). Since then only 3 trickle docs. The 2020 NHTSA dataset is fully exhausted. Knowledge graph is static."
     },
     {
-      "title": "Scraper locked to single year (2020) — 5 years of data untouched",
-      "detail": "Scraper PID 81608 running with --nhtsa-year 2020 only. Years 2021-2025 completely unscraped. Current 62,812 NHTSA docs all from one year.",
+      "title": "Scraper locked to single year (2020) — 5 years of NHTSA data untouched",
+      "detail": "PID 14902 running with --nhtsa-year 2020 only. Current 75,860 NHTSA complaints all from one year. Years 2021-2025 represent ~5x more data sitting unused.",
       "fix": "Restart scraper with: --nhtsa-year 2020,2021,2022,2023,2024,2025"
     },
     {
-      "title": "Reddit scraper stopped — zero community knowledge after 3+ days",
-      "detail": "Reddit (r/MechanicAdvice, r/CarTalk) is the #1 source of real-world mechanic Q&A. Zero posts scraped. Major gap for diagnostic AI."
+      "title": "Reddit scraper stopped — zero community knowledge",
+      "detail": "Reddit (r/MechanicAdvice, r/CarTalk) is the #1 source of real-world diagnostic Q&A. Zero posts after 3+ days. This is the biggest gap for a diagnostic AI product."
     },
     {
-      "title": "YouTube scraper phantom — 'running' status, 0 documents for 3+ days",
-      "detail": "metrics-latest shows youtube status='running', total_docs=0. Silent failure — no errors surfaced. Either missing API key or misconfigured search terms."
+      "title": "YouTube scraper phantom — 'running' with 0 docs for 3+ days",
+      "detail": "Metrics show youtube status='running', total_docs=0. Classic silent failure — no errors surfaced. Likely missing API key or broken config."
     },
     {
-      "title": "3 biddings containers consuming resources unnecessarily",
-      "detail": "biddings-neo4j, biddings-qdrant, biddings-postgres all running (11-24h). Unused by Wessley, competing for RAM with Ollama embeddings."
+      "title": "3 biddings containers wasting resources",
+      "detail": "biddings-neo4j, biddings-qdrant, biddings-postgres all running (19-28h). Unused by Wessley, competing for RAM with Ollama embeddings."
     },
     {
-      "title": "Relationship density very low — 0.324 rels/node (target 3-5)",
-      "detail": "1,764 relationships for 5,441 nodes. Graph traversal quality suffers. Enrichment appears stalled — only +2 rels since last analysis 6h ago."
+      "title": "Relationship density critically low — 0.324 rels/node",
+      "detail": "1,765 relationships for 5,441 nodes. Only +1 relationship since last analysis 2h ago. Graph traversal for RAG is severely limited. Target is 3-5 rels/node."
     },
     {
-      "title": "HNSW index not built — brute-force search on 6,325 vectors",
-      "detail": "indexed_vectors_count=0. Qdrant auto-indexes at 10,000 threshold. Acceptable now but approaching the limit where query latency increases."
+      "title": "HNSW index not built — brute-force vector search",
+      "detail": "indexed_vectors_count=0. Qdrant auto-indexes at 10,000 threshold (currently 6,325). Search works but slower than indexed. Will auto-resolve when vectors exceed 10K."
     }
   ],
   "healthy": [
-    "EMBEDDING PIPELINE FULLY RECOVERED — vectors 3,322→6,325 (+90.4%) since previous analysis. Previous #1 critical issue is RESOLVED.",
-    "Embedding ratio 116.3% (6,325 vectors / 5,441 nodes) — vectors exceed nodes due to chunking. RAG coverage is COMPLETE.",
-    "Build: go build ./... — zero errors, clean compilation across all packages",
+    "Embedding pipeline stable — 6,325 vectors for 5,441 nodes (116.3% ratio). RAG coverage complete.",
+    "Build: go build ./... — zero errors, clean compilation",
     "Tests: ALL 17 test suites PASS, zero failures across 29 packages",
-    "Infrastructure: Neo4j 5.x ✓ | Qdrant green (6,325 pts, Cosine/768d) ✓ | Ollama serving (nomic-embed-text) ✓",
+    "Infrastructure: Neo4j 5.x ✓ | Qdrant green (6,325 pts, Cosine/768d) ✓ | Ollama serving nomic-embed-text ✓",
     "Knowledge graph: 5,441 nodes — ManualEntry 2,360 + Component 2,203 + System 265 + ModelYear 232 + VehicleModel 200 + Subsystem 148 + Make 33",
-    "Vehicle coverage: 33 Makes, 200 Models, 232 ModelYears — Toyota 420 docs, Honda 310, Ford 285",
+    "Vehicle coverage: 33 Makes, 200 Models, 232 ModelYears — Toyota 420 docs leads",
     "Error rate: 23/5,441 = 0.42% — excellent data quality",
-    "Scraper-sources + ingest processes running continuously (PIDs 81608, 59635)",
-    "Qdrant: status=green, optimizer_status=ok, 2 segments, zero queued updates"
+    "Ingest process (PID 59635) and scraper (PID 14902) both running continuously",
+    "Qdrant: optimizer_status=ok, 2 segments, zero queued updates"
   ],
   "suggestions": [
     {
-      "title": "Fix repo bloat NOW — truncate metrics-history.json to 24h rolling window",
-      "impact": "Prevents repo from hitting GitHub limits. 822MB→~50MB potential reduction. Unblocks clean CI/CD.",
+      "title": "Fix repo bloat NOW — this is blocking everything",
+      "impact": "Prevents GitHub push failures. 823MB→~50MB achievable. Unblocks CI/CD and contributor onboarding.",
       "effort": "low"
     },
     {
       "title": "Expand scraper to 2020-2025 multi-year",
-      "impact": "~5x more NHTSA data. Single flag change. Biggest data growth lever available.",
+      "impact": "~5x more NHTSA data with a single flag change. Only growth lever without new code.",
       "effort": "low"
     },
     {
-      "title": "Kill biddings containers",
-      "impact": "Free RAM for Ollama and ingestion. No downside — containers are unused by Wessley.",
+      "title": "Kill biddings containers — docker stop biddings-neo4j biddings-qdrant biddings-postgres",
+      "impact": "Free RAM for Ollama and ingestion. Zero downside.",
       "effort": "low"
     },
     {
-      "title": "Enable Reddit scraper for real-world repair knowledge",
-      "impact": "Adds community Q&A — most valuable for diagnostic queries. Currently 0% community data.",
+      "title": "Enable Reddit scraper for community repair knowledge",
+      "impact": "Adds the most valuable data type for diagnostic AI — real mechanic Q&A from actual car owners.",
       "effort": "med"
     },
     {
-      "title": "Debug YouTube scraper — check API key and logs",
-      "impact": "YouTube repair videos (ChrisFix, South Main Auto) are extremely popular. Transcripts are high-value RAG content.",
+      "title": "Debug YouTube scraper — check API key, review logs",
+      "impact": "Repair video transcripts (ChrisFix, South Main Auto) are high-value RAG content. Currently 100% missing.",
       "effort": "med"
     },
     {
-      "title": "Run graph enrichment pass — cross-link components to complaints across vehicles",
-      "impact": "Boost relationship density from 0.324 toward 3+ rels/node. Improves graph-based RAG context significantly.",
+      "title": "Run graph enrichment — cross-link components to complaints across vehicles",
+      "impact": "Boost from 0.324 to 3+ rels/node. Critical for graph-based RAG quality.",
       "effort": "med"
     },
     {
-      "title": "Add test coverage to untested commands (8 packages with [no test files])",
-      "impact": "cmd/ingest, cmd/chat, cmd/backfill, cmd/embed-backfill, cmd/scraper-sources, cmd/scraper-youtube, cmd/snapshot-collector, pkg/ollama all lack tests.",
+      "title": "Add tests to 8 untested packages (cmd/ingest, cmd/chat, etc.)",
+      "impact": "Prevents regressions in critical paths. Currently zero test coverage on ingest, chat, and scraper entry points.",
       "effort": "high"
     }
   ],
@@ -92,22 +91,22 @@
       "title": "YouTube scraper silently failing for 3+ days",
       "file": "cmd/scraper-youtube/main.go",
       "line": 0,
-      "detail": "Status='running' with 0 documents. No error surfaced in metrics. Classic silent failure pattern.",
-      "fix": "Add error reporting to metrics pipeline. Check YOUTUBE_API_KEY env var. Add startup validation that logs clearly when API key is missing."
+      "detail": "Status='running' with 0 documents. No error surfaced. Silent failure — needs error propagation to metrics.",
+      "fix": "Add startup validation for YOUTUBE_API_KEY. Add error count to metrics output. Log clearly on missing credentials."
     },
     {
-      "title": "Metrics auto-commit inflating repo by ~100MB/hour",
+      "title": "Metrics auto-commit inflating repo ~100MB/hour",
       "file": "docs/data/metrics-history.json",
       "line": 0,
-      "detail": "822MB repo, 20+ consecutive 'data: auto-update metrics' commits. Each commit adds the full JSON delta to git objects. Will hit GitHub push limits soon.",
-      "fix": "Truncate metrics-history.json to last 288 entries (24h at 5min intervals). Add pre-commit hook to enforce max file size. Consider git-lfs for data files."
+      "detail": "823MB repo from continuous 5-min metric commits. Git log is 20+ consecutive 'data: auto-update metrics' with zero other work mixed in.",
+      "fix": "Truncate to 24h rolling window (288 entries). Add pre-commit hook for max file size. Consider external metrics store."
     }
   ],
   "metrics": {
     "total_docs": 5441,
     "total_nodes": 5441,
     "total_vectors": 6325,
-    "total_relationships": 1764,
+    "total_relationships": 1765,
     "error_rate": 0.0042,
     "sources_active": 2,
     "sources_configured": 4,
@@ -115,30 +114,29 @@
     "makes_covered": 33,
     "models_covered": 200,
     "model_years_covered": 232,
-    "docs_last_6h": 1,
+    "docs_last_6h": 0,
     "vectors_last_6h": 0,
-    "rels_last_6h": 2,
-    "disk_data_mb": 164,
-    "disk_code_mb": 822
+    "rels_last_6h": 1,
+    "disk_data_mb": 184,
+    "disk_code_mb": 823
   },
   "strategy": [
-    "EMBEDDING CRISIS FULLY RESOLVED: The massive vector backfill (3,003 new vectors in one burst) brought RAG coverage to 116%. System is now query-ready.",
-    "SYSTEM IS DEMO-READY: 5,441 nodes, 6,325 vectors, 33 makes, 200 models. All infra green. Build+tests clean. This is a viable automotive knowledge graph for investor demos.",
-    "GROWTH HAS PLATEAUED: Zero meaningful new docs in 10+ hours. The 2020 NHTSA dataset is exhausted. Multi-year expansion is the only path to growth without new sources.",
-    "REPO BLOAT IS THE NEW CRITICAL: 822MB and growing. This is now the #1 operational risk — will break pushes, slow CI, and bloat clones. Fix before anything else.",
-    "DATA DIVERSITY REMAINS THE STRATEGIC GAP: 97%+ of data is NHTSA complaints + OEM manuals. No community knowledge (Reddit=0), no video content (YouTube=0). For diagnostic AI, real-world user experiences are crucial differentiators.",
-    "NEXT 3 MOVES: (1) Fix repo bloat, (2) Multi-year scraper expansion, (3) Enable Reddit. All achievable in one work session."
+    "SYSTEM IS DEMO-READY BUT STATIC: 5,441 nodes, 6,325 vectors, 33 makes, 200 models. Infra green, tests pass. Could demo today — but the data isn't growing.",
+    "REPO BLOAT IS THE #1 OPERATIONAL RISK: 823MB and climbing. This blocks pushes, slows CI, and makes the project unprofessional. Fix before any feature work.",
+    "GROWTH IS DEAD WITHOUT ACTION: Zero new docs in 30+ hours. The 2020 NHTSA dataset is exhausted. Three paths to growth: (1) multi-year expansion, (2) Reddit activation, (3) YouTube fix.",
+    "DATA MONOCULTURE IS A PRODUCT RISK: 97%+ of data is NHTSA complaints + OEM manuals. No community knowledge, no video content. A diagnostic AI without real-world mechanic wisdom is just a complaint database.",
+    "RELATIONSHIP POVERTY LIMITS RAG QUALITY: 0.324 rels/node means the graph is barely connected. Queries can't traverse effectively. Enrichment pipeline needs attention.",
+    "NEXT 3 MOVES: (1) Fix repo bloat — truncate + squash, (2) Restart scraper with multi-year, (3) Enable Reddit. All achievable in one work session. All unblock further growth."
   ],
   "changes_since_last": [
-    "RESOLVED: Previous #1 critical (stalled embeddings) is now healthy — vectors stable at 6,325",
-    "NEW CRITICAL: Repo bloat escalated to critical — 822MB and growing, was 455MB 6h ago",
-    "STABLE: Nodes 5,440→5,441 (+1) — growth effectively stopped",
-    "STABLE: Relationships 1,762→1,764 (+2) — enrichment stalled",
-    "STABLE: Vectors unchanged at 6,325 — no new embeddings needed (backfill complete)",
-    "STABLE: Error rate unchanged at 0.42%",
-    "DEGRADED: Disk code 455→822MB (+81%) from metrics auto-commits",
-    "IMPROVED: Disk data 124→164MB (+32%) — scraper still writing files even if not ingesting new nodes",
+    "UNCHANGED: Repo bloat still critical — 822→823MB (+1MB in 2h), growth rate sustained",
+    "UNCHANGED: Nodes stable at 5,441 — zero new documents ingested",
+    "UNCHANGED: Vectors stable at 6,325 — embedding backfill remains complete",
+    "MARGINAL: Relationships 1,764→1,765 (+1) — enrichment effectively stalled",
+    "UNCHANGED: Error rate 0.42%, build clean, all 17 test suites pass",
     "UNCHANGED: Reddit stopped, YouTube phantom, biddings containers still running",
-    "UNCHANGED: All 17 test suites pass, build clean, no code changes"
+    "INCREASED: Data disk 164→184MB (+12%) — scraper writing files but nothing new to ingest",
+    "STABLE: All infrastructure green — Neo4j, Qdrant, Ollama all connected and healthy",
+    "NO CODE CHANGES: Git log shows only metrics auto-commits and one bug-fixer no-op report"
   ]
 }
