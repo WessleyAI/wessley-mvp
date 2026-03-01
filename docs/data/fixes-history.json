@@ -513,5 +513,51 @@
     "build_status": "pass",
     "commit": "none \u2014 no code changes needed",
     "summary": "No code bugs found. Build clean, all 17 test suites pass. All issues are operational (repo bloat in git history, scraper restarts, container cleanup) requiring human intervention."
+  },
+  {
+    "timestamp": "2026-03-01T13:20:45Z",
+    "analysis_timestamp": "2026-03-01T12:09:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Repo size at 825MB",
+        "reason": "Requires BFG Repo-Cleaner and force-push \u2014 destructive operation, needs human approval"
+      },
+      {
+        "title": "Pipeline stalled \u2014 NHTSA year expansion",
+        "reason": "Operational change (restart scraper with new flags), not a code fix. Needs human to restart process."
+      },
+      {
+        "title": "YouTube scraper silently failing",
+        "reason": "Code already validates YOUTUBE_API_KEY and exits with clear error. Issue is missing env var / API key, not a code bug."
+      },
+      {
+        "title": "Scraper re-downloading already-ingested data",
+        "reason": "Requires new dedup logic with hash tracking \u2014 architectural change, not a bug fix"
+      },
+      {
+        "title": "Metrics auto-commit inflating repo",
+        "reason": "metrics-history.json has 235 entries (under 288 limit). Bloat is from git history, needs BFG cleanup."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational \u2014 needs process restart, not a code fix"
+      },
+      {
+        "title": "Biddings containers wasting resources",
+        "reason": "Operational \u2014 needs docker stop, not a code fix"
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (restart scrapers, expand NHTSA years, BFG repo cleanup)."
   }
 ]
