@@ -1,20 +1,20 @@
 {
-  "timestamp": "2026-03-01T02:58:59Z",
+  "timestamp": "2026-03-01T03:08:59Z",
   "knowledge_graph": {
-    "total_nodes": 5441,
-    "total_relationships": 1765,
+    "total_nodes": 5446,
+    "total_relationships": 1767,
     "nodes_by_type": {
-      "Component": 2203,
+      "Component": 2206,
       "ManualEntry": 2360,
       "Make": 33,
-      "VehicleModel": 200,
-      "ModelYear": 232,
+      "VehicleModel": 201,
+      "ModelYear": 233,
       "System": 265,
       "Subsystem": 148
     },
     "relationships_by_type": {
-      "HAS_MODEL": 200,
-      "OF_MODEL": 232,
+      "HAS_MODEL": 201,
+      "OF_MODEL": 233,
       "HAS_SYSTEM": 265,
       "HAS_SUBSYSTEM": 148,
       "DOCUMENTED_IN": 920
@@ -91,41 +91,41 @@
     "recent_vehicles": []
   },
   "vector_store": {
-    "total_vectors": 6325,
+    "total_vectors": 6331,
     "collection": "wessley",
     "dimensions": 768,
     "status": "green"
   },
   "ingestion": {
-    "total_docs_ingested": 5441,
+    "total_docs_ingested": 5446,
     "total_errors": 23,
     "docs_by_source": {
-      "nhtsa": 78452,
-      "ifixit": 2255,
+      "nhtsa": 79080,
+      "ifixit": 2277,
       "manual": 12
     },
-    "last_ingestion": "2026-03-01T02:58:59Z",
-    "files_processed": 429
+    "last_ingestion": "2026-03-01T03:08:59Z",
+    "files_processed": 433
   },
   "scrapers": {
     "reddit": {
       "status": "stopped",
-      "last_scrape": "2026-03-01T02:58:59Z",
+      "last_scrape": "2026-03-01T03:08:59Z",
       "total_posts": 0
     },
     "nhtsa": {
       "status": "running",
-      "last_scrape": "2026-03-01T02:58:59Z",
-      "total_docs": 78452
+      "last_scrape": "2026-03-01T03:08:59Z",
+      "total_docs": 79080
     },
     "ifixit": {
       "status": "running",
-      "last_scrape": "2026-03-01T02:58:59Z",
-      "total_docs": 2255
+      "last_scrape": "2026-03-01T03:08:59Z",
+      "total_docs": 2277
     },
     "youtube": {
       "status": "running",
-      "last_scrape": "2026-03-01T02:58:59Z",
+      "last_scrape": "2026-03-01T03:08:59Z",
       "total_docs": 0
     },
     "manuals": {
@@ -142,7 +142,7 @@
     },
     "qdrant": {
       "status": "connected",
-      "vectors": 6325
+      "vectors": 6331
     },
     "ollama": {
       "status": "connected",
