@@ -1,122 +1,114 @@
 {
-  "timestamp": "2026-03-01T20:09:00+02:00",
+  "timestamp": "2026-03-02T00:09:00+02:00",
   "critical": [
     {
-      "title": "Scraper→Ingest pipeline completely stalled — disk growing, zero ingestion",
-      "detail": "Data disk grew from 262MB→315MB (+53MB/+20%) in just 4 hours, but ZERO new docs, vectors, or relationships ingested since last report. The pipeline gap identified 4h ago has widened dramatically. Scraper PID 787 is downloading aggressively (multi-year NHTSA 2020-2025) but ingest PID 59635 is not consuming any of it. This is now a complete pipeline disconnect.",
-      "fix": "1) Check ingest logs: look at /tmp/ingest stderr for path/format errors. 2) Verify scraper output directory matches ingest --dir /tmp/wessley-data. 3) Check if multi-year data creates subdirectory structure ingest doesn't traverse. 4) Consider restarting ingest process."
+      "title": "Ingest pipeline stalled for 8+ hours — zero knowledge growth",
+      "detail": "5,447 docs, 6,331 vectors, 1,770 relationships — ALL identical to previous two reports spanning 8+ hours. Scraper PID 787 continues downloading (data disk 315→345MB, +30MB this cycle) but ingest PID 59635 (running since Sat 1PM, now 36h) produces nothing. The pipeline disconnect first appeared ~12h ago and has not self-resolved. This is now the longest stall recorded.",
+      "fix": "1) Kill and restart ingest: kill 59635 && /tmp/ingest --dir /tmp/wessley-data --interval 30s & 2) Check ingest stderr for silent errors. 3) Verify scraper output file format matches what ingest expects. 4) Add file-skip logging to ingest."
     },
     {
-      "title": "Repo at 826MB — all 20 recent commits are metrics auto-updates",
-      "detail": "826MB unchanged from last report, but git log confirms ALL 20 recent commits are 'data: auto-update metrics' (plus one bug-fixer no-op). This has been flagged for 3+ consecutive reports with no action. GitHub's 2GB soft limit will cause push failures within weeks at current growth.",
-      "fix": "1) Truncate metrics-history.json to 288 entries (24h). 2) Run BFG Repo-Cleaner. 3) Force-push cleaned history. 15-minute fix."
+      "title": "Repo at 827MB — 4th consecutive report flagging this, zero action taken",
+      "detail": "827MB and growing. 19/20 recent commits are metrics auto-updates, 1 is a no-op bug-fixer. GitHub 2GB soft limit approaching. This is a 15-minute fix that has been deferred across 4 analysis cycles.",
+      "fix": "1) Truncate metrics-history.json to 288 entries. 2) BFG Repo-Cleaner on old blobs. 3) Force-push. Done."
     }
   ],
   "warnings": [
     {
-      "title": "Data disk accelerating: 262→315MB (+53MB) in 4h with zero ROI",
-      "detail": "Scraper downloading data that produces zero knowledge base growth. Pure waste — disk will fill with no value added. Rate increased from 38MB/4h to 53MB/4h."
+      "title": "Data disk at 345MB with zero ROI — scraper downloading into void",
+      "detail": "315→345MB (+30MB) this cycle. Total ~120MB accumulated since pipeline stalled. Scraper downloads NHTSA data that never reaches the knowledge graph. Pure waste."
     },
     {
-      "title": "Reddit scraper stopped — zero community knowledge for 5+ days",
-      "detail": "Reddit remains the richest source of real mechanic diagnostic Q&A. Still at 0 posts."
+      "title": "Reddit scraper stopped — 0 posts for 6+ days",
+      "detail": "Richest source of real mechanic Q&A remains untapped. Status: stopped."
     },
     {
-      "title": "YouTube scraper phantom — 'running' with 0 docs for 5+ days",
-      "detail": "Status='running', total_docs=0. No error surfacing. Silent failure persists."
+      "title": "YouTube scraper phantom — 'running' with 0 docs for 6+ days",
+      "detail": "Status='running', total_docs=0. Silent failure with no error surfacing."
     },
     {
-      "title": "3 biddings containers still running — wasting RAM since 35-44h ago",
-      "detail": "biddings-neo4j, biddings-qdrant, biddings-postgres consuming resources. Unrelated to Wessley."
+      "title": "3 biddings containers running 39-48h — wasting RAM",
+      "detail": "biddings-neo4j, biddings-qdrant, biddings-postgres. Unrelated to Wessley."
     },
     {
-      "title": "Relationship density critically low — 0.325 rels/node, unchanged",
-      "detail": "1,770 relationships for 5,447 nodes. Zero new relationships in 4h. Graph traversal quality remains severely limited for RAG."
+      "title": "Relationship density stuck at 0.325 rels/node",
+      "detail": "1,770 relationships for 5,447 nodes. Far too sparse for meaningful graph traversal in RAG."
     },
     {
-      "title": "HNSW index not built — brute-force vector search continues",
-      "detail": "indexed_vectors_count=0 at 6,331 points. Threshold is 10,000. Need ~3,700 more vectors to trigger auto-indexing."
+      "title": "HNSW index still not built — 6,331/10,000 threshold",
+      "detail": "Brute-force search continues. Need ~3,700 more vectors but embedding pipeline is stalled too."
     },
     {
-      "title": "Zero new embeddings in 16+ hours",
-      "detail": "Last vector addition was at 03:08 UTC (6 vectors). Ollama is running (PID 1048/4561) but no work is being sent to it."
+      "title": "Ingest process memory at 352MB RSS after 36h runtime",
+      "detail": "PID 59635 consuming 352MB. Possible memory leak or stale state accumulation over extended uptime."
     }
   ],
   "healthy": [
     "Build: go build ./... — zero errors, clean compilation",
-    "Tests: 17 test suites PASS (cached), zero failures across 29 packages",
+    "Tests: 17 suites PASS (cached), zero failures across 29 packages",
     "Infrastructure: Neo4j 5.x ✓ | Qdrant green (6,331 pts, Cosine/768d) ✓ | Ollama nomic-embed-text ✓",
-    "Scraper running with multi-year config: --nhtsa-year-start 2020 --nhtsa-year-end 2025, 17 makes",
-    "Ingest process running (PID 59635, 223MB RSS, 30s interval)",
-    "Knowledge graph: 5,447 nodes — ManualEntry 2,360 + Component 2,206 + System 265 + ModelYear 233 + VehicleModel 201 + Subsystem 149 + Make 33",
-    "Vehicle coverage: 33 Makes, 201 Models, 233 ModelYears",
+    "Scraper active: 17 makes, 2020-2025 range, 30m interval",
     "Error rate: 23/5,447 = 0.42% — excellent",
     "Qdrant: optimizer_status=ok, 2 segments, zero queued updates",
-    "All 5 Wessley containers healthy (neo4j, qdrant + 3 biddings)"
+    "All Docker containers healthy"
   ],
   "suggestions": [
     {
-      "title": "URGENT: Debug ingest pipeline — zero ingestion despite 53MB new data",
-      "impact": "This is THE bottleneck. Multi-year scraper expansion is working at download level but producing zero knowledge growth. Every hour of delay = wasted compute and disk.",
-      "effort": "med"
-    },
-    {
-      "title": "URGENT: Fix repo bloat — truncate metrics-history + BFG cleanup",
-      "impact": "826MB→~50MB. Prevents GitHub push failures. 15-minute fix deferred across 3+ reports.",
+      "title": "CRITICAL: Restart ingest process immediately",
+      "impact": "36h uptime with zero output. A restart is the fastest path to unblocking ~120MB of accumulated scraper data. This alone could add hundreds of docs to the knowledge graph.",
       "effort": "low"
     },
     {
-      "title": "Restart ingest process to force re-scan of new data",
-      "impact": "Ingest PID 59635 has been running since Saturday 1PM (31h+). May have stale directory handles or cached file lists.",
+      "title": "CRITICAL: Truncate metrics-history.json + BFG cleanup",
+      "impact": "827MB→~50MB repo. Prevents inevitable GitHub push failure. 4th report flagging this.",
       "effort": "low"
     },
     {
-      "title": "Kill biddings containers — docker stop biddings-neo4j biddings-qdrant biddings-postgres",
-      "impact": "Free RAM. Zero downside.",
+      "title": "Add ingest observability — log skipped files with reasons",
+      "impact": "Without this, we're flying blind on why the pipeline stalls. This is the root cause of the longest-running issue.",
       "effort": "low"
     },
     {
-      "title": "Enable Reddit scraper for diagnostic Q&A",
-      "impact": "Most valuable untapped data source for real-world repair knowledge.",
+      "title": "Kill biddings containers",
+      "impact": "Free RAM. docker stop biddings-neo4j biddings-qdrant biddings-postgres",
+      "effort": "low"
+    },
+    {
+      "title": "Enable Reddit scraper",
+      "impact": "Most valuable untapped source for diagnostic Q&A data.",
       "effort": "med"
     },
     {
-      "title": "Debug YouTube scraper",
-      "impact": "Video transcripts are unique high-value content.",
+      "title": "Debug YouTube scraper silent failure",
+      "impact": "Video transcripts are unique content no other source provides.",
       "effort": "med"
     },
     {
-      "title": "Run graph enrichment pass to increase relationship density",
-      "impact": "0.325→3+ rels/node. Critical for RAG quality.",
-      "effort": "med"
-    },
-    {
-      "title": "Add scraper-level deduplication",
-      "impact": "Stop re-downloading known content. Disk grew 53MB with zero new docs.",
+      "title": "Graph enrichment pass for relationship density",
+      "impact": "0.325→3+ rels/node needed for quality RAG traversal.",
       "effort": "med"
     }
   ],
   "bugs": [
     {
-      "title": "Ingest not consuming scraper output — complete pipeline disconnect",
+      "title": "Ingest pipeline complete disconnect — 36h running, 8h zero output",
       "file": "cmd/ingest/main.go",
       "line": 0,
-      "detail": "Ingest PID 59635 watching /tmp/wessley-data with 30s interval. Scraper PID 787 writing to same area. 53MB new data in 4h, zero ingestion. Either: (1) ingest directory walker doesn't recurse into new year subdirs, (2) file format changed with multi-year flag, (3) dedup hash matching on content that differs only by year metadata, or (4) ingest has hit an error loop it's swallowing silently.",
-      "fix": "Check ingest stderr/stdout. Add logging for skipped files with reason. Verify directory structure matches ingest expectations."
+      "detail": "PID 59635 watching /tmp/wessley-data at 30s intervals. 352MB RSS. Scraper writing 30MB/cycle to same directory. Zero docs ingested across 8+ hours. Either stale directory handles, format mismatch with multi-year scraper output, or silent error loop.",
+      "fix": "Restart ingest. Add file-level skip logging. Verify directory recursion handles year-based subdirectories."
     },
     {
-      "title": "YouTube scraper silent failure — 5+ days",
+      "title": "YouTube scraper silent failure — 6+ days",
       "file": "cmd/scraper-youtube/main.go",
       "line": 0,
-      "detail": "Status='running', total_docs=0. No error in metrics.",
-      "fix": "Add startup validation for API key. Surface errors in metrics output."
+      "detail": "Status='running', total_docs=0. No errors surfaced in metrics.",
+      "fix": "Add startup validation and error reporting to metrics output."
     },
     {
-      "title": "Metrics auto-commit inflating repo ~1MB/4h",
+      "title": "Metrics auto-commit repo inflation",
       "file": "docs/data/metrics-history.json",
       "line": 0,
-      "detail": "All 20 recent git commits are auto-updates. Repo at 826MB.",
-      "fix": "Truncate to 24h rolling window. Add pre-commit size guard."
+      "detail": "19/20 recent commits are auto-updates. File grows unbounded.",
+      "fix": "Rolling 24h window. Pre-commit size guard."
     }
   ],
   "metrics": {
@@ -134,26 +126,25 @@
     "docs_last_4h": 0,
     "vectors_last_4h": 0,
     "rels_last_4h": 0,
-    "disk_data_mb": 315,
-    "disk_code_mb": 826
+    "disk_data_mb": 345,
+    "disk_code_mb": 827
   },
   "strategy": [
-    "PIPELINE IS BROKEN: The critical finding this cycle is that the entire ingest pipeline has stalled. Scraper is doing its job (53MB new data), but not a single document made it into the knowledge graph in 4 hours. This wasn't visible in the last report because the gap was small (+1 doc). Now it's zero. Something broke between reports.",
-    "DISK GROWTH ACCELERATING WITH ZERO VALUE: Data disk went from 224→262→315MB across two reports. That's 91MB of scraper output producing exactly 1 new document. The ROI is catastrophic.",
-    "REPO BLOAT: THIRD CONSECUTIVE UNFIXED REPORT. 826MB. Every report flags this. It's a 15-minute fix. The risk is real — a failed git push breaks the entire metrics/analysis dashboard pipeline.",
-    "KNOWLEDGE BASE COMPLETELY STATIC: 5,447 docs, 6,331 vectors, 1,770 relationships — all identical to 4 hours ago. The system is running hot (scraper downloading, ingest polling, Ollama serving) but producing nothing.",
-    "STRATEGIC PIVOT NEEDED: Stop adding more data sources until the ingest pipeline is verified working. The multi-year expansion was the right call, but it exposed a downstream bottleneck that must be fixed before any other growth initiative matters.",
-    "INFRASTRUCTURE HEADROOM EXISTS: All systems green, Ollama loaded, Qdrant healthy. The capacity is there — the data flow is the sole constraint."
+    "PIPELINE STALL IS NOW CHRONIC: Three consecutive reports, 8+ hours, zero knowledge growth. The ingest process has been running for 36h with no output. This is the single blocking issue for the entire project.",
+    "SCRAPER IS DOING ITS JOB: Multi-year NHTSA config (2020-2025, 17 makes) is actively downloading. ~30MB/cycle reaching disk. The problem is exclusively downstream.",
+    "RESTART INGEST — SIMPLEST FIX: Before debugging code, just restart the process. A 36h-old process watching a rapidly changing directory is the most likely failure mode.",
+    "REPO BLOAT IS A TICKING BOMB: 827MB. 4th consecutive report. One day a git push will fail and break the entire dashboard pipeline. This needs 15 minutes of attention.",
+    "DATA QUALITY IS GOOD WHERE IT EXISTS: 0.42% error rate, clean builds, all tests passing. The system works — it just isn't processing new data.",
+    "STRATEGIC PRIORITY: (1) Restart ingest. (2) Fix repo bloat. (3) Add ingest observability. Everything else is noise until the pipeline flows again."
   ],
   "changes_since_last": [
-    "PIPELINE FULLY STALLED: Zero new docs, vectors, or relationships in 4h (was +1 doc last period)",
-    "DISK GROWTH ACCELERATED: 262→315MB (+53MB/+20%) — up from +38MB last period",
-    "ALL METRICS STATIC: 5,447 docs, 6,331 vectors, 1,770 rels — identical to previous report",
-    "REPO: 826MB unchanged (metrics commits continue but repo size plateaued this cycle)",
-    "PROCESSES: All same PIDs still running — scraper 787, ingest 59635, ollama 1048/4561",
-    "BIDDINGS: Still running (now 35-44h)",
-    "GIT: 19/20 recent commits are metrics auto-updates, 1 is a no-op bug-fixer report",
-    "NHTSA scraper throughput high: seeing 3,132 docs/cycle in source stats but none reaching knowledge graph",
-    "NO NEW VEHICLES DISCOVERED in any metrics-history entry since last report"
+    "PIPELINE STILL STALLED: 3rd consecutive report with zero new docs/vectors/relationships",
+    "DISK: data 315→345MB (+30MB), repo 826→827MB (+1MB)",
+    "ALL KNOWLEDGE METRICS UNCHANGED: 5,447 docs, 6,331 vectors, 1,770 rels — static for 8+ hours",
+    "INGEST UPTIME: Now 36h (was 31h) with 352MB RSS — potential memory leak",
+    "BIDDINGS CONTAINERS: Now 39-48h old (was 35-44h)",
+    "GIT: Same pattern — 19/20 commits are metrics auto-updates",
+    "NO NEW VEHICLES DISCOVERED across entire monitoring window",
+    "Scraper throughput consistent: ~3,100 docs/cycle in source stats, none reaching knowledge graph"
   ]
 }
