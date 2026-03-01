@@ -559,5 +559,43 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (restart scrapers, expand NHTSA years, BFG repo cleanup)."
+  },
+  {
+    "timestamp": "2026-03-01T17:20:55Z",
+    "analysis_timestamp": "2026-03-01T16:09:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Repo bloat (826MB from git history)",
+        "reason": "Requires BFG Repo-Cleaner + force push \u2014 destructive operation needs human approval. Current metrics-history.json already within 288-entry limit (259 entries)."
+      },
+      {
+        "title": "Scraper\u2192ingest pipeline gap",
+        "reason": "Operational/config issue \u2014 scraper downloads data ingest doesn't consume. Requires investigating ingest logs and path configuration. Not a code bug."
+      },
+      {
+        "title": "YouTube scraper silent failure",
+        "reason": "Code already validates API key and exits with error. Phantom \"running\" status is likely a process management issue, not a code bug."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational \u2014 needs credentials/config, not a code fix."
+      },
+      {
+        "title": "Biddings containers wasting resources",
+        "reason": "Requires docker stop \u2014 infrastructure action needs human approval."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (repo bloat from git history, scraper config, process management)."
   }
 ]
