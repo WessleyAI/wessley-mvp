@@ -471,5 +471,47 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed. Build clean, all 17 test suites pass. Corrected analysis: 823MB is working dir (641MB node_modules), actual git is 90MB. All issues operational."
+  },
+  {
+    "timestamp": "2026-03-01T09:20:49Z",
+    "analysis_timestamp": "2026-03-01T08:09:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Repo bloat (824MB from git history)",
+        "reason": "Requires BFG Repo-Cleaner + force push \u2014 destructive operation needs human approval. Current metrics-history.json is only 211 entries/70KB; bloat is in git object history."
+      },
+      {
+        "title": "YouTube scraper silent failure",
+        "reason": "Code already validates YOUTUBE_API_KEY and exits with error. The silent failure is operational (missing env var at launch), not a code bug."
+      },
+      {
+        "title": "Scraper locked to 2020 only",
+        "reason": "Operational \u2014 requires restarting PID 14902 with new flags. Not a code change."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational \u2014 needs restart, not a code fix."
+      },
+      {
+        "title": "Biddings containers wasting resources",
+        "reason": "Operational \u2014 docker stop command needed, not a code fix."
+      },
+      {
+        "title": "Low relationship density (0.324 rels/node)",
+        "reason": "Requires enrichment pipeline run or architecture change, not a bug fix."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": "none \u2014 no code changes needed",
+    "summary": "No code bugs found. Build clean, all 17 test suites pass. All issues are operational (repo bloat in git history, scraper restarts, container cleanup) requiring human intervention."
   }
 ]
