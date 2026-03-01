@@ -375,5 +375,51 @@
     "build_status": "pass",
     "commit": "none \u2014 no code changes needed",
     "summary": "No code fixes needed. Build clean, all 17 test suites pass. All issues are operational (scraper config, container cleanup, git history bloat)."
+  },
+  {
+    "timestamp": "2026-03-01T01:20:52Z",
+    "analysis_timestamp": "2026-03-01T00:09:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Repo bloat from metrics auto-commits (822MB reported)",
+        "reason": "Actual .git is 90MB, not 822MB. metrics-history.json already has only 163 entries (under 288 limit). Bloat is in git object history from repeated commits \u2014 requires git filter-branch or BFG which is destructive and risky to run unattended. Needs human approval."
+      },
+      {
+        "title": "YouTube scraper silently failing",
+        "reason": "Code already has proper error handling (exits with clear message if no API key). Issue is operational \u2014 YOUTUBE_API_KEY env var likely not set. Not a code bug."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational issue \u2014 scraper not started, not a code bug."
+      },
+      {
+        "title": "Scraper locked to single year 2020",
+        "reason": "Operational config change (restart with multi-year flag). Not a code fix."
+      },
+      {
+        "title": "Biddings containers consuming resources",
+        "reason": "Docker operational task, not a code fix. Needs human approval to stop containers."
+      },
+      {
+        "title": "Low relationship density",
+        "reason": "Enrichment pipeline stalled \u2014 operational, not a code bug."
+      },
+      {
+        "title": "HNSW index not built",
+        "reason": "Qdrant auto-indexes at 10k vectors. Currently at 6,325. Will self-resolve with more data."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (scraper configs, env vars, docker containers, git history). Flagged for human action."
   }
 ]
