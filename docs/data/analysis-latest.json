@@ -1,68 +1,69 @@
 {
-  "timestamp": "2026-03-01T12:09:00+02:00",
+  "timestamp": "2026-03-01T16:09:00+02:00",
   "critical": [
     {
-      "title": "Repo size at 825MB — approaching GitHub limits",
-      "detail": "825MB repo (was 824MB 4h ago, 823MB 8h ago). 20/20 recent git commits are 'data: auto-update metrics'. Growth rate ~1MB/4h from metrics commits alone. GitHub's 2GB soft limit is weeks away but every clone is painfully slow. This blocks contributors and CI.",
-      "fix": "1) Truncate metrics-history.json to 288 entries (24h rolling window). 2) Squash metrics commits via git rebase. 3) Run BFG Repo-Cleaner to purge historical blobs. 4) Move data files to git-lfs or external store."
+      "title": "Repo at 826MB — metrics auto-commits are the sole contributor",
+      "detail": "826MB (was 825MB 4h ago, 824MB 8h ago). All 20 recent git commits are 'data: auto-update metrics'. Growth rate ~1MB/4h. GitHub's 2GB soft limit approached within weeks. Every clone is painfully slow, blocking contributors and CI.",
+      "fix": "1) Truncate metrics-history.json to 288 entries (24h window). 2) Squash metrics commits via git rebase. 3) Run BFG Repo-Cleaner to purge historical blobs. 4) Move data files to git-lfs or external store."
     },
     {
-      "title": "Pipeline completely stalled — zero new docs in 9+ hours",
-      "detail": "Last ingestion burst was at 03:08 UTC (5 docs). Since then, zero new docs, zero new vectors. The 2020 NHTSA dataset is exhausted. Scraper is running but producing nothing new. Without year expansion, growth is dead.",
-      "fix": "Restart scraper with --nhtsa-year 2020,2021,2022,2023,2024,2025 to unlock ~5x more data."
+      "title": "Multi-year scraper running but pipeline growth near-zero",
+      "detail": "Scraper now has --nhtsa-year-start 2020 --nhtsa-year-end 2025 (fixed from single-year!). However, only +1 doc and +2 relationships in the last 4 hours. Data disk grew 224→262MB (+38MB) — scraper is downloading but ingest isn't picking up new unique content. The deduplication gap is now critical: disk grows, knowledge base doesn't.",
+      "fix": "1) Check ingest logs for why new scraper downloads aren't being ingested. 2) Verify scraper is writing to /tmp/wessley-data/ in the format ingest expects. 3) Add dedup at scraper level to stop re-downloading known content."
     }
   ],
   "warnings": [
     {
-      "title": "Scraper locked to single year (2020) — 5 years of NHTSA data untouched",
-      "detail": "PID 14902 running with --nhtsa-year 2020 only. 101,942 NHTSA docs all from one year. Years 2021-2025 represent ~5x more data sitting unused. This is the easiest growth lever."
+      "title": "Data disk growing 3x faster than knowledge base",
+      "detail": "Disk: 224→262MB (+38MB/+17%) in 4h while only +1 doc ingested. Scraper is actively writing files that ingest ignores or deduplicates. Wasted I/O and disk space."
     },
     {
-      "title": "Reddit scraper stopped — zero community knowledge",
-      "detail": "Reddit (r/MechanicAdvice, r/CarTalk) is the #1 source of real-world diagnostic Q&A. Zero posts after 3+ days of operation."
+      "title": "Reddit scraper still stopped — zero community knowledge",
+      "detail": "Reddit (r/MechanicAdvice, r/CarTalk) remains the #1 untapped source of real-world diagnostic Q&A. Zero posts after 4+ days."
     },
     {
-      "title": "YouTube scraper phantom — 'running' with 0 docs for 3+ days",
-      "detail": "Metrics show youtube status='running', total_docs=0. Silent failure — no errors surfaced. Likely missing API key or auth issue."
+      "title": "YouTube scraper phantom — 'running' with 0 docs for 4+ days",
+      "detail": "youtube status='running', total_docs=0. Silent failure persists. No error surfacing."
     },
     {
-      "title": "3 biddings containers wasting resources",
-      "detail": "biddings-neo4j (port 7475), biddings-qdrant (port 6335), biddings-postgres (port 15432) all running 27-36h. Unused by Wessley, competing for RAM/CPU."
+      "title": "3 biddings containers still wasting resources",
+      "detail": "biddings-neo4j (7475), biddings-qdrant (6335), biddings-postgres (15432) running 31-40h. Unused by Wessley."
     },
     {
-      "title": "Relationship density critically low — 0.325 rels/node",
-      "detail": "1,768 relationships for 5,446 nodes. Only +1 relationship since last analysis 4h ago. Graph traversal for RAG is severely limited. Target: 3-5 rels/node for meaningful traversal."
+      "title": "Relationship density still critically low — 0.325 rels/node",
+      "detail": "1,770 relationships for 5,447 nodes (+2 rels since last report). Graph traversal for RAG remains severely limited. Target: 3-5 rels/node."
     },
     {
       "title": "HNSW index not built — brute-force vector search",
-      "detail": "indexed_vectors_count=0. Qdrant auto-indexes at 10,000 threshold (currently 6,331). Queries use brute-force scan. Will auto-resolve once vectors reach 10K."
+      "detail": "indexed_vectors_count=0. Qdrant auto-indexes at 10,000 threshold (currently 6,331). Will auto-resolve at 10K vectors."
     },
     {
-      "title": "Data disk growing while pipeline stalled",
-      "detail": "Data dir grew 203→224MB (+10%) in 4h while zero new docs were ingested. Scraper writing duplicate/already-ingested files to disk."
+      "title": "Vector embedding backlog growing",
+      "detail": "6,331 vectors for 5,447 nodes (116.2%) looks healthy overall, but new docs aren't getting embedded. Last vector addition was at 03:08 UTC (6 vectors). 12+ hours with no new embeddings."
     }
   ],
   "healthy": [
     "Build: go build ./... — zero errors, clean compilation",
     "Tests: ALL 17 test suites PASS (cached), zero failures across 29 packages",
-    "Embedding ratio healthy — 6,331 vectors for 5,446 nodes (116.2%)",
     "Infrastructure: Neo4j 5.x ✓ | Qdrant green (6,331 pts, Cosine/768d) ✓ | Ollama nomic-embed-text ✓",
-    "Knowledge graph: 5,446 nodes — ManualEntry 2,360 + Component 2,206 + System 265 + ModelYear 233 + VehicleModel 201 + Subsystem 148 + Make 33",
-    "Vehicle coverage: 33 Makes, 201 Models, 233 ModelYears — Toyota leads (420 docs)",
-    "Error rate: 23/5,446 = 0.42% — excellent data quality",
-    "Ingest (PID 59635) and scraper (PID 14902) both running continuously",
-    "Qdrant: optimizer_status=ok, 2 segments, zero queued updates"
+    "Scraper upgraded to multi-year: --nhtsa-year-start 2020 --nhtsa-year-end 2025 (was single-year 2020 only — major fix!)",
+    "Knowledge graph: 5,447 nodes across 7 types — ManualEntry 2,360 + Component 2,206 + System 265 + ModelYear 233 + VehicleModel 201 + Subsystem 149 + Make 33",
+    "Vehicle coverage: 33 Makes, 201 Models, 233 ModelYears — Toyota leads (420 docs, 18 models)",
+    "Error rate: 23/5,447 = 0.42% — excellent data quality",
+    "Both ingest (PID 59635) and scraper (PID 787) running continuously",
+    "Qdrant: optimizer_status=ok, 2 segments, zero queued updates",
+    "Ollama serving embeddings (PID 15983, 287MB RSS)"
   ],
   "suggestions": [
     {
-      "title": "Fix repo bloat — truncate metrics-history.json + BFG cleanup",
-      "impact": "Prevents GitHub push failures. 825MB→~50MB achievable. Unblocks CI/CD and contributors.",
+      "title": "URGENT: Fix repo bloat — truncate metrics-history + BFG cleanup",
+      "impact": "826MB→~50MB achievable. Prevents GitHub push failures. Unblocks contributors.",
       "effort": "low"
     },
     {
-      "title": "Expand scraper to 2020-2025 multi-year NHTSA",
-      "impact": "~5x more data with a single flag change. Only growth lever without new code. Restarts the stalled pipeline immediately.",
-      "effort": "low"
+      "title": "Debug scraper→ingest pipeline gap — data downloaded but not ingested",
+      "impact": "38MB new data on disk but only +1 doc ingested. The multi-year expansion is working at the scraper level but ingest isn't consuming it. Fixing this is THE growth bottleneck now.",
+      "effort": "med"
     },
     {
       "title": "Kill biddings containers — docker stop biddings-neo4j biddings-qdrant biddings-postgres",
@@ -71,58 +72,58 @@
     },
     {
       "title": "Enable Reddit scraper for community repair knowledge",
-      "impact": "Adds the most valuable data type for diagnostic AI — real mechanic Q&A with vote-ranked answers.",
+      "impact": "Adds real mechanic Q&A — the most valuable diagnostic data type for RAG.",
       "effort": "med"
     },
     {
       "title": "Debug YouTube scraper — check API key and error logs",
-      "impact": "Repair video transcripts (ChrisFix, South Main Auto, Scanner Danner) are high-value unique RAG content.",
+      "impact": "Video transcripts are high-value unique content unavailable elsewhere.",
       "effort": "med"
     },
     {
       "title": "Run graph enrichment pass — cross-link components across vehicles",
-      "impact": "Boost from 0.325 to 3+ rels/node. Critical for graph-based RAG quality and cross-vehicle diagnostics.",
+      "impact": "0.325→3+ rels/node. Critical for graph-based RAG traversal quality.",
       "effort": "med"
     },
     {
-      "title": "Add deduplication to scraper disk writes",
-      "impact": "Data dir grew 21MB in 4h with zero new ingestions — scraper re-downloading known files. Wastes disk and bandwidth.",
+      "title": "Add scraper-level deduplication to stop disk waste",
+      "impact": "Data dir grew 38MB in 4h with only 1 new doc. Scraper re-downloading known files.",
       "effort": "med"
     },
     {
       "title": "Add tests to 8 untested packages (cmd/ingest, cmd/chat, cmd/scraper-youtube, etc.)",
-      "impact": "Prevents regressions in critical paths. Zero test coverage on ingest, chat, and scraper entry points.",
+      "impact": "Zero test coverage on critical entry points. Prevents regressions.",
       "effort": "high"
     }
   ],
   "bugs": [
     {
-      "title": "YouTube scraper silently failing for 3+ days",
+      "title": "Scraper downloading data that ingest doesn't consume",
+      "file": "cmd/scraper-sources/main.go",
+      "line": 0,
+      "detail": "Multi-year scraper is running and writing 38MB of new data to disk in 4h, but ingest only picked up 1 new doc. Either format mismatch, path mismatch, or ingest dedup is too aggressive.",
+      "fix": "Check ingest logs. Verify scraper output format matches ingest expectations. Check if ingest is scanning the right subdirectories for multi-year data."
+    },
+    {
+      "title": "YouTube scraper silently failing for 4+ days",
       "file": "cmd/scraper-youtube/main.go",
       "line": 0,
-      "detail": "Status='running' with 0 documents. No error surfaced in metrics. Needs error propagation.",
+      "detail": "Status='running' with 0 documents. No error surfaced in metrics.",
       "fix": "Add startup validation for YOUTUBE_API_KEY. Add error count to metrics. Log on missing credentials."
     },
     {
       "title": "Metrics auto-commit inflating repo ~1MB/4h",
       "file": "docs/data/metrics-history.json",
       "line": 0,
-      "detail": "825MB repo from continuous 5-min metric commits. All 20 recent git commits are metrics auto-updates. No code changes visible.",
-      "fix": "Truncate to 24h rolling window (288 entries). Add pre-commit size guard. Consider external metrics store."
-    },
-    {
-      "title": "Scraper re-downloading already-ingested data to disk",
-      "file": "cmd/scraper-sources/main.go",
-      "line": 0,
-      "detail": "Data dir grew 203→224MB (+21MB) while zero new docs were ingested. Scraper lacks dedup check before writing.",
-      "fix": "Check if file hash already exists in ingest log before writing to disk."
+      "detail": "826MB repo from continuous 5-min metric commits. All 20 recent commits are metrics auto-updates.",
+      "fix": "Truncate to 24h rolling window (288 entries). Add pre-commit size guard."
     }
   ],
   "metrics": {
-    "total_docs": 5446,
-    "total_nodes": 5446,
+    "total_docs": 5447,
+    "total_nodes": 5447,
     "total_vectors": 6331,
-    "total_relationships": 1768,
+    "total_relationships": 1770,
     "error_rate": 0.0042,
     "sources_active": 2,
     "sources_configured": 4,
@@ -130,28 +131,30 @@
     "makes_covered": 33,
     "models_covered": 201,
     "model_years_covered": 233,
-    "docs_last_6h": 0,
+    "docs_last_6h": 1,
     "vectors_last_6h": 0,
-    "rels_last_6h": 1,
-    "disk_data_mb": 224,
-    "disk_code_mb": 825
+    "rels_last_6h": 2,
+    "disk_data_mb": 262,
+    "disk_code_mb": 826
   },
   "strategy": [
-    "PIPELINE IS NOW FULLY STALLED: Zero new docs, vectors, or meaningful relationships in the last 9 hours. The 2020 NHTSA dataset is exhausted. Without action, this project is a static snapshot, not a growing knowledge base.",
-    "REPO BLOAT CONTINUES UNCHECKED: 825MB, +1MB since last analysis. Every commit is a metrics auto-update. No human or code commits in 20+ entries. This repo is becoming a metrics log, not a codebase.",
-    "ONE FLAG CHANGE RESTARTS EVERYTHING: --nhtsa-year 2020,2021,2022,2023,2024,2025 immediately unlocks ~500K more NHTSA complaints. This is the single highest-impact action available.",
-    "DATA MONOCULTURE IS THE STRATEGIC WEAKNESS: 97%+ is NHTSA complaints + OEM manuals. Zero community knowledge (Reddit), zero video content (YouTube). A diagnostic AI without real-world mechanic wisdom is just a complaint search engine.",
-    "GRAPH POVERTY LIMITS RAG QUALITY: 0.325 rels/node means queries can barely traverse. Cross-vehicle diagnostics impossible. This is the hidden quality bottleneck that won't show in doc counts.",
-    "INFRASTRUCTURE IS HEALTHY BUT UNDERUTILIZED: Neo4j, Qdrant, Ollama all green. Build clean, tests pass. The system works — it just has nothing new to process."
+    "THE BOTTLENECK SHIFTED: Multi-year scraper is live (year-start 2020 to year-end 2025) — the biggest recommendation from previous reports was implemented. But the pipeline gap moved downstream: scraper downloads data, ingest doesn't consume it. Debugging ingest is now priority #1.",
+    "SCRAPER→INGEST GAP IS THE NEW CRITICAL PATH: 38MB written to disk, 1 doc ingested. Either the multi-year data lands in unexpected paths, or ingest deduplication is blocking legitimate new content from different years.",
+    "REPO BLOAT UNCHANGED AND ACCELERATING: 826MB. No human action on this in 3+ reports. This will cause a GitHub push failure eventually. The fix is 15 minutes of work (truncate + BFG) but it keeps getting deferred.",
+    "DATA MONOCULTURE PERSISTS: 97%+ NHTSA + manuals. Reddit stopped, YouTube phantom. The knowledge base is a complaint database with OEM docs — not a diagnostic AI knowledge graph.",
+    "GRAPH POVERTY UNCHANGED: 0.325 rels/node. This is the hidden quality ceiling. Even if doc count doubles, RAG quality won't improve without richer relationships.",
+    "INFRASTRUCTURE IS SOLID AND UNDERUTILIZED: All green. Build clean, tests pass. The system can handle 10x the data — it just needs the ingest pipeline unblocked."
   ],
   "changes_since_last": [
-    "PIPELINE STALLED FURTHER: Zero new docs in last 4h (was 5 docs in prior 6h). Total ingestion has stopped.",
-    "REPO: 824→825MB (+1MB) — sustained growth from metrics commits only",
-    "RELATIONSHIPS: 1,767→1,768 (+1) — effectively zero graph enrichment",
-    "DATA DISK: 203→224MB (+21MB/+10%) — scraper writing but nothing new ingested (wasted I/O)",
-    "UNCHANGED: 5,446 nodes, 6,331 vectors, 23 errors, 0.42% error rate",
-    "UNCHANGED: Reddit stopped, YouTube phantom, biddings containers still running",
-    "UNCHANGED: All infrastructure green, build clean, all 17 test suites pass",
-    "NO CODE CHANGES: Git log is exclusively metrics auto-commits"
+    "SCRAPER UPGRADED: Now running --nhtsa-year-start 2020 --nhtsa-year-end 2025 (was --nhtsa-year 2020 only). Major improvement from prior recommendation.",
+    "BUT INGEST GAP EMERGED: Scraper downloading aggressively (disk +38MB) but only +1 doc ingested in 4h. New bottleneck identified.",
+    "DOCS: 5,446→5,447 (+1)",
+    "VECTORS: 6,331 (unchanged — no new embeddings in 12h)",
+    "RELATIONSHIPS: 1,768→1,770 (+2)",
+    "REPO: 825→826MB (+1MB) — still growing from metrics commits only",
+    "DATA DISK: 224→262MB (+38MB/+17%) — scraper active but ingest not consuming",
+    "PROCESSES: scraper PID changed (14902→787) confirming restart with new flags",
+    "UNCHANGED: Reddit stopped, YouTube phantom, biddings containers running",
+    "UNCHANGED: All infrastructure green, build clean, all 17 test suites pass"
   ]
 }
