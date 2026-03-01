@@ -421,5 +421,55 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed \u2014 build clean, all 17 test suites pass. All issues are operational (scraper configs, env vars, docker containers, git history). Flagged for human action."
+  },
+  {
+    "timestamp": "2026-03-01T05:20:00Z",
+    "analysis_timestamp": "2026-03-01T04:09:00+02:00",
+    "fixed": [],
+    "skipped": [
+      {
+        "title": "Repo size reported as 823MB",
+        "reason": "Actual .git is 90MB. The 823MB includes node_modules (641MB) which are gitignored and not tracked. Not a real git push risk."
+      },
+      {
+        "title": "YouTube scraper silently failing",
+        "reason": "Code has proper error handling and exits if no API key. Operational/config issue."
+      },
+      {
+        "title": "Metrics auto-commit repo inflation",
+        "reason": "metrics-history.json is only 187 entries (62KB). Git pack is 62MB. Historical bloat needs BFG/filter-branch \u2014 destructive, needs human approval."
+      },
+      {
+        "title": "Scraper locked to 2020",
+        "reason": "Operational config change, not a code bug."
+      },
+      {
+        "title": "Reddit scraper stopped",
+        "reason": "Operational \u2014 needs to be started."
+      },
+      {
+        "title": "Biddings containers consuming resources",
+        "reason": "Docker cleanup \u2014 needs human approval."
+      },
+      {
+        "title": "Low relationship density (0.324 rels/node)",
+        "reason": "Enrichment pipeline stalled \u2014 operational."
+      },
+      {
+        "title": "HNSW index not built",
+        "reason": "Auto-resolves at 10K vectors (currently 6,325)."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": null,
+    "summary": "No code fixes needed. Build clean, all 17 test suites pass. Corrected analysis: 823MB is working dir (641MB node_modules), actual git is 90MB. All issues operational."
   }
 ]
