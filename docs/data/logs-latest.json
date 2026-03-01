@@ -1,48 +1,53 @@
 [
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "system",
     "message": "scraper-reddit: STOPPED"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "system",
     "message": "scraper-sources: running"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "system",
     "message": "ingest: running"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "infrastructure",
     "message": "Container biddings-postgres Up 26 hours (healthy)"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "infrastructure",
     "message": "Container biddings-qdrant Up 35 hours"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "infrastructure",
     "message": "Container biddings-neo4j Up 35 hours (healthy)"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "infrastructure",
     "message": "Container qdrant Up 47 hours"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "infrastructure",
     "message": "Container neo4j Up 47 hours"
   },
   {
-    "time": "2026-03-01T09:19:00Z",
+    "time": "2026-03-01T09:29:00Z",
     "category": "system",
     "message": "Data directory: 220M\t/tmp/wessley-data"
+  },
+  {
+    "time": "2026-03-01T09:25:50Z",
+    "category": "ingestion",
+    "message": "File sources-2026-03-01.json (16069KB) processed"
   },
   {
     "time": "2026-03-01T09:15:58Z",
@@ -73,11 +78,6 @@
     "time": "2026-03-01T09:00:57Z",
     "category": "ingestion",
     "message": "File nhtsa-1772355657078243000.json (392KB) processed"
-  },
-  {
-    "time": "2026-03-01T08:48:14Z",
-    "category": "ingestion",
-    "message": "File sources-2026-03-01.json (15370KB) processed"
   },
   {
     "time": "2026-03-01T08:45:58Z",
