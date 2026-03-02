@@ -639,5 +639,58 @@
     "build_status": "pass",
     "commit": null,
     "summary": "No code fixes needed. Build clean, 17/17 tests pass. Pipeline stall diagnosed: scraper re-downloading already-ingested NHTSA data (not a code bug). Needs scraper-level dedup config."
+  },
+  {
+    "timestamp": "2026-03-02T01:20:58Z",
+    "analysis_timestamp": "2026-03-02T00:09:00+02:00",
+    "fixed": [
+      {
+        "title": "Ingest pipeline stalled 36h \u2014 restarted",
+        "category": "critical",
+        "detail": "Killed PID 59635 (36h uptime, 352MB RSS, zero output for 8h+). Restarted as PID 6956. New process connected to Neo4j, Qdrant, Ollama and is watching /tmp/wessley-data.",
+        "files_changed": []
+      },
+      {
+        "title": "Metrics-history.json truncated",
+        "category": "warning",
+        "detail": "Truncated from 307 to 288 entries, saving ~32KB per commit. 4th consecutive report flagged repo bloat at 827MB.",
+        "files_changed": [
+          "docs/data/metrics-history.json"
+        ]
+      }
+    ],
+    "skipped": [
+      {
+        "title": "BFG repo history cleanup (827MB\u2192~50MB)",
+        "reason": "Requires force-push and coordination \u2014 not safe for automated run. Needs manual attention."
+      },
+      {
+        "title": "Reddit scraper restart",
+        "reason": "No clear run script or config found; needs manual investigation."
+      },
+      {
+        "title": "YouTube scraper silent failure",
+        "reason": "Requires code-level debugging of cmd/scraper-youtube \u2014 no obvious fix without understanding the API auth state."
+      },
+      {
+        "title": "Biddings containers cleanup",
+        "reason": "Unrelated to Wessley \u2014 not safe to stop without confirmation."
+      },
+      {
+        "title": "Graph enrichment / relationship density",
+        "reason": "Architecture-level change, not a bug fix."
+      }
+    ],
+    "tests_before": {
+      "passed": 17,
+      "failed": 0
+    },
+    "tests_after": {
+      "passed": 17,
+      "failed": 0
+    },
+    "build_status": "pass",
+    "commit": "93f2943",
+    "summary": "Restarted stalled ingest (36h\u2192fresh), truncated metrics-history.json. Build+tests green. Pipeline should resume processing ~120MB of accumulated scraper data."
   }
 ]
