@@ -1,1 +1,4665 @@
-[{"timestamp":"2026-02-28T01:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T01:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T01:48:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T01:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T02:08:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T02:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T02:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T02:38:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T02:48:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T02:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T03:08:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T03:18:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T03:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T03:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":1,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T03:48:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T03:58:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T04:08:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T04:18:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T04:28:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T04:38:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T04:48:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T04:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T05:08:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T05:18:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T05:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T05:38:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T05:48:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T05:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T06:08:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T06:18:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T06:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T06:38:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T06:48:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T06:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T07:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T07:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T07:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T07:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":4865,"total_vectors":2712,"total_nodes":4865},{"timestamp":"2026-02-28T07:48:59Z","period":"5m","new_docs":461,"new_nodes":461,"new_relations":300,"new_vectors":608,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5326,"total_vectors":3320,"total_nodes":5326},{"timestamp":"2026-02-28T07:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":11,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5326,"total_vectors":3320,"total_nodes":5326},{"timestamp":"2026-02-28T08:08:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":3,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5326,"total_vectors":3320,"total_nodes":5326},{"timestamp":"2026-02-28T08:18:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":4,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5326,"total_vectors":3320,"total_nodes":5326},{"timestamp":"2026-02-28T08:28:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5326,"total_vectors":3320,"total_nodes":5326},{"timestamp":"2026-02-28T08:38:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5326,"total_vectors":3320,"total_nodes":5326},{"timestamp":"2026-02-28T08:48:59Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":4,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5327,"total_vectors":3320,"total_nodes":5327},{"timestamp":"2026-02-28T08:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5327,"total_vectors":3320,"total_nodes":5327},{"timestamp":"2026-02-28T09:08:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5327,"total_vectors":3320,"total_nodes":5327},{"timestamp":"2026-02-28T09:19:52Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":2,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5328,"total_vectors":3320,"total_nodes":5328},{"timestamp":"2026-02-28T09:28:57Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5328,"total_vectors":3320,"total_nodes":5328},{"timestamp":"2026-02-28T09:38:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5328,"total_vectors":3320,"total_nodes":5328},{"timestamp":"2026-02-28T09:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":3,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5328,"total_vectors":3320,"total_nodes":5328},{"timestamp":"2026-02-28T09:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5328,"total_vectors":3320,"total_nodes":5328},{"timestamp":"2026-02-28T10:08:59Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":0,"new_vectors":2,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5329,"total_vectors":3322,"total_nodes":5329},{"timestamp":"2026-02-28T10:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":2,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5329,"total_vectors":3322,"total_nodes":5329},{"timestamp":"2026-02-28T10:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5329,"total_vectors":3322,"total_nodes":5329},{"timestamp":"2026-02-28T10:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5329,"total_vectors":3322,"total_nodes":5329},{"timestamp":"2026-02-28T10:48:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":3,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5329,"total_vectors":3322,"total_nodes":5329},{"timestamp":"2026-02-28T10:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5329,"total_vectors":3322,"total_nodes":5329},{"timestamp":"2026-02-28T11:08:59Z","period":"5m","new_docs":38,"new_nodes":38,"new_relations":110,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":1250,"ifixit":33},"new_vehicles":[],"total_docs":5367,"total_vectors":3322,"total_nodes":5367},{"timestamp":"2026-02-28T11:18:59Z","period":"5m","new_docs":56,"new_nodes":56,"new_relations":172,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5423,"total_vectors":3322,"total_nodes":5423},{"timestamp":"2026-02-28T11:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5423,"total_vectors":3322,"total_nodes":5423},{"timestamp":"2026-02-28T11:38:59Z","period":"5m","new_docs":15,"new_nodes":15,"new_relations":46,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5438,"total_vectors":3322,"total_nodes":5438},{"timestamp":"2026-02-28T11:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":6,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":1535,"ifixit":33},"new_vehicles":[],"total_docs":5438,"total_vectors":3322,"total_nodes":5438},{"timestamp":"2026-02-28T11:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5438,"total_vectors":3322,"total_nodes":5438},{"timestamp":"2026-02-28T12:08:58Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":4,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5439,"total_vectors":3322,"total_nodes":5439},{"timestamp":"2026-02-28T12:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":2,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5439,"total_vectors":3322,"total_nodes":5439},{"timestamp":"2026-02-28T12:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5439,"total_vectors":3322,"total_nodes":5439},{"timestamp":"2026-02-28T12:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5439,"total_vectors":3322,"total_nodes":5439},{"timestamp":"2026-02-28T12:48:58Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":5,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T12:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T13:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":2,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T13:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T13:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T13:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T13:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T13:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T14:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T14:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T14:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T14:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":1,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":3322,"total_nodes":5440},{"timestamp":"2026-02-28T14:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":2825,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6147,"total_nodes":5440},{"timestamp":"2026-02-28T14:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":178,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T15:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T15:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T15:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T15:38:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T15:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T15:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T16:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T16:18:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T16:28:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T16:38:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T16:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T16:58:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T17:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T17:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T17:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T17:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T17:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T17:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T18:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T18:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T18:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T18:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T18:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T18:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T19:08:58Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T19:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T19:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T19:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T19:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T19:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T20:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5440,"total_vectors":6325,"total_nodes":5440},{"timestamp":"2026-02-28T20:18:59Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":2,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T20:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T20:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T20:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T20:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T21:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T21:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T21:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T21:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T21:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T21:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T22:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T22:19:09Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T22:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T22:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T22:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T22:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T23:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T23:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T23:28:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T23:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":658,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T23:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-02-28T23:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T00:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T00:18:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T00:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T00:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T00:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T00:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T01:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T01:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T01:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T01:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T01:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":1,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T01:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T02:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T02:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T02:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T02:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T02:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T02:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5441,"total_vectors":6325,"total_nodes":5441},{"timestamp":"2026-03-01T03:08:59Z","period":"5m","new_docs":5,"new_nodes":5,"new_relations":2,"new_vectors":6,"errors_delta":0,"docs_by_source":{"nhtsa":628,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T03:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T03:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T03:38:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T03:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T03:58:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T04:08:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T04:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T04:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T04:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T04:48:59Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T04:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T05:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T05:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T05:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T05:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T05:49:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T05:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T06:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T06:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T06:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T06:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T06:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T06:59:03Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T07:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T07:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T07:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T07:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T07:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T07:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T08:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T08:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T08:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T08:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T08:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T08:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T09:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T09:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T09:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":576,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T09:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":1,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T09:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":959,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T09:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T10:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T10:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T10:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":2474,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T10:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":674,"ifixit":22},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T10:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T10:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T11:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T11:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T11:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T11:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T11:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T11:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T12:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T12:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T12:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T12:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5446,"total_vectors":6331,"total_nodes":5446},{"timestamp":"2026-03-01T12:49:00Z","period":"5m","new_docs":1,"new_nodes":1,"new_relations":2,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T12:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T13:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T13:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T13:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T13:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T13:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T13:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T14:09:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T14:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T14:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T14:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T14:49:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T14:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T15:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T15:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T15:29:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T15:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T15:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T15:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T16:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T16:19:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T16:29:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T16:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T16:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T16:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T17:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T17:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T17:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T17:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T17:49:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T17:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T18:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T18:19:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T18:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T18:39:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T18:49:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T18:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T19:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T19:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T19:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T19:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T19:49:03Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T19:59:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T20:09:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T20:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T20:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T20:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T20:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T20:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T21:09:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T21:19:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T21:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T21:39:03Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3102,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T21:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T21:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T22:09:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T22:19:03Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T22:29:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T22:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T22:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T22:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T23:09:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T23:19:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T23:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T23:39:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T23:49:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-01T23:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T00:09:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T00:19:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T00:29:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T00:39:00Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3148,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T00:49:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T00:59:01Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T01:09:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":3132,"ifixit":33},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447},{"timestamp":"2026-03-02T01:19:02Z","period":"5m","new_docs":0,"new_nodes":0,"new_relations":0,"new_vectors":0,"errors_delta":0,"docs_by_source":{"nhtsa":383,"ifixit":11},"new_vehicles":[],"total_docs":5447,"total_vectors":6331,"total_nodes":5447}]
+[
+  {
+    "timestamp": "2026-02-28T01:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T01:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T01:48:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T01:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T02:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T02:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T02:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T02:38:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T02:48:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T02:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T03:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T03:18:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T03:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T03:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 1,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T03:48:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T03:58:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T04:08:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T04:18:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T04:28:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T04:38:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T04:48:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T04:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T05:08:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T05:18:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T05:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T05:38:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T05:48:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T05:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T06:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T06:18:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T06:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T06:38:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T06:48:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T06:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T07:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T07:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T07:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T07:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 4865,
+    "total_vectors": 2712,
+    "total_nodes": 4865
+  },
+  {
+    "timestamp": "2026-02-28T07:48:59Z",
+    "period": "5m",
+    "new_docs": 461,
+    "new_nodes": 461,
+    "new_relations": 300,
+    "new_vectors": 608,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5326,
+    "total_vectors": 3320,
+    "total_nodes": 5326
+  },
+  {
+    "timestamp": "2026-02-28T07:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 11,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5326,
+    "total_vectors": 3320,
+    "total_nodes": 5326
+  },
+  {
+    "timestamp": "2026-02-28T08:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 3,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5326,
+    "total_vectors": 3320,
+    "total_nodes": 5326
+  },
+  {
+    "timestamp": "2026-02-28T08:18:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 4,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5326,
+    "total_vectors": 3320,
+    "total_nodes": 5326
+  },
+  {
+    "timestamp": "2026-02-28T08:28:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5326,
+    "total_vectors": 3320,
+    "total_nodes": 5326
+  },
+  {
+    "timestamp": "2026-02-28T08:38:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5326,
+    "total_vectors": 3320,
+    "total_nodes": 5326
+  },
+  {
+    "timestamp": "2026-02-28T08:48:59Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 4,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5327,
+    "total_vectors": 3320,
+    "total_nodes": 5327
+  },
+  {
+    "timestamp": "2026-02-28T08:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5327,
+    "total_vectors": 3320,
+    "total_nodes": 5327
+  },
+  {
+    "timestamp": "2026-02-28T09:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5327,
+    "total_vectors": 3320,
+    "total_nodes": 5327
+  },
+  {
+    "timestamp": "2026-02-28T09:19:52Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 2,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5328,
+    "total_vectors": 3320,
+    "total_nodes": 5328
+  },
+  {
+    "timestamp": "2026-02-28T09:28:57Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5328,
+    "total_vectors": 3320,
+    "total_nodes": 5328
+  },
+  {
+    "timestamp": "2026-02-28T09:38:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5328,
+    "total_vectors": 3320,
+    "total_nodes": 5328
+  },
+  {
+    "timestamp": "2026-02-28T09:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 3,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5328,
+    "total_vectors": 3320,
+    "total_nodes": 5328
+  },
+  {
+    "timestamp": "2026-02-28T09:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5328,
+    "total_vectors": 3320,
+    "total_nodes": 5328
+  },
+  {
+    "timestamp": "2026-02-28T10:08:59Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 0,
+    "new_vectors": 2,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
+  },
+  {
+    "timestamp": "2026-02-28T10:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 2,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
+  },
+  {
+    "timestamp": "2026-02-28T10:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
+  },
+  {
+    "timestamp": "2026-02-28T10:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
+  },
+  {
+    "timestamp": "2026-02-28T10:48:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 3,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
+  },
+  {
+    "timestamp": "2026-02-28T10:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5329,
+    "total_vectors": 3322,
+    "total_nodes": 5329
+  },
+  {
+    "timestamp": "2026-02-28T11:08:59Z",
+    "period": "5m",
+    "new_docs": 38,
+    "new_nodes": 38,
+    "new_relations": 110,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 1250,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5367,
+    "total_vectors": 3322,
+    "total_nodes": 5367
+  },
+  {
+    "timestamp": "2026-02-28T11:18:59Z",
+    "period": "5m",
+    "new_docs": 56,
+    "new_nodes": 56,
+    "new_relations": 172,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5423,
+    "total_vectors": 3322,
+    "total_nodes": 5423
+  },
+  {
+    "timestamp": "2026-02-28T11:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5423,
+    "total_vectors": 3322,
+    "total_nodes": 5423
+  },
+  {
+    "timestamp": "2026-02-28T11:38:59Z",
+    "period": "5m",
+    "new_docs": 15,
+    "new_nodes": 15,
+    "new_relations": 46,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5438,
+    "total_vectors": 3322,
+    "total_nodes": 5438
+  },
+  {
+    "timestamp": "2026-02-28T11:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 6,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 1535,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5438,
+    "total_vectors": 3322,
+    "total_nodes": 5438
+  },
+  {
+    "timestamp": "2026-02-28T11:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5438,
+    "total_vectors": 3322,
+    "total_nodes": 5438
+  },
+  {
+    "timestamp": "2026-02-28T12:08:58Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 4,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5439,
+    "total_vectors": 3322,
+    "total_nodes": 5439
+  },
+  {
+    "timestamp": "2026-02-28T12:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 2,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5439,
+    "total_vectors": 3322,
+    "total_nodes": 5439
+  },
+  {
+    "timestamp": "2026-02-28T12:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5439,
+    "total_vectors": 3322,
+    "total_nodes": 5439
+  },
+  {
+    "timestamp": "2026-02-28T12:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5439,
+    "total_vectors": 3322,
+    "total_nodes": 5439
+  },
+  {
+    "timestamp": "2026-02-28T12:48:58Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 5,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T12:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T13:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 2,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T13:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T13:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T13:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T13:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T13:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T14:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T14:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T14:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T14:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 1,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 3322,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T14:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 2825,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6147,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T14:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 178,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T15:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T15:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T15:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T15:38:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T15:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T15:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T16:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T16:18:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T16:28:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T16:38:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T16:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T16:58:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T17:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T17:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T17:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T17:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T17:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T17:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T18:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T18:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T18:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T18:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T18:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T18:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T19:08:58Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T19:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T19:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T19:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T19:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T19:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T20:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5440,
+    "total_vectors": 6325,
+    "total_nodes": 5440
+  },
+  {
+    "timestamp": "2026-02-28T20:18:59Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 2,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T20:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T20:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T20:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T20:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T21:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T21:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T21:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T21:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T21:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T21:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T22:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T22:19:09Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T22:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T22:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T22:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T22:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T23:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T23:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T23:28:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T23:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 658,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T23:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-02-28T23:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T00:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T00:18:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T00:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T00:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T00:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T00:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T01:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T01:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T01:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T01:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T01:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 1,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T01:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T02:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T02:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T02:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T02:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T02:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T02:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5441,
+    "total_vectors": 6325,
+    "total_nodes": 5441
+  },
+  {
+    "timestamp": "2026-03-01T03:08:59Z",
+    "period": "5m",
+    "new_docs": 5,
+    "new_nodes": 5,
+    "new_relations": 2,
+    "new_vectors": 6,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 628,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T03:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T03:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T03:38:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T03:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T03:58:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T04:08:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T04:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T04:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T04:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T04:48:59Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T04:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T05:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T05:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T05:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T05:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T05:49:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T05:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T06:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T06:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T06:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T06:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T06:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T06:59:03Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T07:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T07:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T07:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T07:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T07:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T07:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T08:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T08:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T08:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T08:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T08:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T08:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T09:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T09:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T09:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 576,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T09:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 1,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T09:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 959,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T09:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T10:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T10:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T10:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 2474,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T10:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 674,
+      "ifixit": 22
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T10:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T10:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T11:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T11:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T11:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T11:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T11:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T11:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T12:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T12:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T12:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T12:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5446,
+    "total_vectors": 6331,
+    "total_nodes": 5446
+  },
+  {
+    "timestamp": "2026-03-01T12:49:00Z",
+    "period": "5m",
+    "new_docs": 1,
+    "new_nodes": 1,
+    "new_relations": 2,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T12:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T13:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T13:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T13:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T13:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T13:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T13:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T14:09:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T14:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T14:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T14:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T14:49:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T14:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T15:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T15:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T15:29:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T15:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T15:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T15:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T16:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T16:19:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T16:29:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T16:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T16:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T16:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T17:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T17:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T17:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T17:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T17:49:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T17:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T18:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T18:19:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T18:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T18:39:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T18:49:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T18:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T19:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T19:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T19:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T19:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T19:49:03Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T19:59:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T20:09:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T20:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T20:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T20:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T20:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T20:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T21:09:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T21:19:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T21:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T21:39:03Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3102,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T21:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T21:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T22:09:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T22:19:03Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T22:29:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T22:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T22:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T22:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T23:09:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T23:19:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T23:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T23:39:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T23:49:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-01T23:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T00:09:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T00:19:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T00:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T00:39:00Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3148,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T00:49:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T00:59:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T01:09:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 3132,
+      "ifixit": 33
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T01:19:02Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {
+      "nhtsa": 383,
+      "ifixit": 11
+    },
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  },
+  {
+    "timestamp": "2026-03-02T01:29:01Z",
+    "period": "5m",
+    "new_docs": 0,
+    "new_nodes": 0,
+    "new_relations": 0,
+    "new_vectors": 0,
+    "errors_delta": 0,
+    "docs_by_source": {},
+    "new_vehicles": [],
+    "total_docs": 5447,
+    "total_vectors": 6331,
+    "total_nodes": 5447
+  }
+]
